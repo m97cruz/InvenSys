@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Ventanas;
+import javax.swing.*;
 
 /**
  *
@@ -63,12 +64,22 @@ public class Login extends javax.swing.JFrame {
         btnLogin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnLogin.setForeground(new java.awt.Color(255, 255, 255));
         btnLogin.setText("Iniciar Sesion");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 360, -1, -1));
 
         btnSalir.setBackground(new java.awt.Color(0, 0, 102));
         btnSalir.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnSalir.setForeground(new java.awt.Color(255, 255, 255));
         btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(239, 429, -1, -1));
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -81,6 +92,30 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        // TODO add your handling code here:
+        String pass1 = "admin", pass2 = "123", user1 = "user", usradmin = "admin";
+        String pfPasswd = new String(pfPass.getPassword());
+        
+        if (pfPasswd.equals(pass1) && (tfUser.getText()).equals(usradmin)){
+            Administracion interfaz = new Administracion();
+            interfaz.setVisible(true);
+            this.dispose();
+        
+        }else if (pfPasswd.equals(pass2) && (tfUser.getText()).equals(user1)){
+            Vendedor interfaz = new Vendedor();
+            interfaz.setVisible(true);
+            this.dispose();
+        }else{
+            JOptionPane.showMessageDialog(null, "El Usuario y la contraseña No Coinciden");
+        }
+    }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
      * @param args the command line arguments
