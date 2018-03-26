@@ -11,7 +11,7 @@ import javax.swing.*;
  * @author Alumno
  */
 public class Login extends javax.swing.JFrame {
-
+Funciones.Usuarios usuarios = new Funciones.Usuarios();
     /**
      * Creates new form Login
      */
@@ -101,15 +101,15 @@ public class Login extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
-        String pass1 = "admin", pass2 = "123", user1 = "user", usradmin = "admin";
         String pfPasswd = new String(pfPass.getPassword());
+        String usr = tfUser.getText();
         
-        if (pfPasswd.equals(pass1) && (tfUser.getText()).equals(usradmin)){
+        if (usuarios.getRol().equals("ADMIN")){
             Administracion interfaz = new Administracion();
             interfaz.setVisible(true);
             this.dispose();
         
-        }else if (pfPasswd.equals(pass2) && (tfUser.getText()).equals(user1)){
+        }else if (usuarios.getRol().equals("NORMAL")){
             Vendedor interfaz = new Vendedor();
             interfaz.setVisible(true);
             this.dispose();
