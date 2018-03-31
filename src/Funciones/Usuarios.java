@@ -78,7 +78,7 @@ public class Usuarios {
     
     public boolean login() throws SQLException{
         boolean login = false;
-        String sql = "SELECT * FROM `usuarios` WHERE `user`='"+user+"' AND pass='"+pass+"'";
+        String sql = "SELECT * FROM `usuarios` WHERE `user`='"+user+"' AND `passwd`='"+pass+"'";
         ResultSet result = funSQL.select(sql);
         while(result.next()){
             id = result.getInt("id");
@@ -93,14 +93,16 @@ public class Usuarios {
         String sql = "SELECT * FROM `usuarios` WHERE `id`="+id;
         ResultSet result = funSQL.select(sql);
         while(result.next()){
-            //Seleccion Full Duplex del Usuario
+            //Seleccion Full Duplex del Usuario_ Selecionamos todo, menos el Password
             id = result.getInt("id");
             nombre = result.getString("nombre");
             apellido = result.getString("apellido");
             telefono = result.getString("telefono");
-            
+            direccion = result.getString("direccion");
+            correo = result.getString("correo");
+            user = result.getString("user");
             rol = result.getString("rol");
-            
+            //Luego vemos qe mas le metemos
         }
     }
 }
