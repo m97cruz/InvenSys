@@ -5,17 +5,26 @@
  */
 package Ventanas;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Alumno
  */
 public class Vendedor extends javax.swing.JFrame {
-
+    Funciones.Usuarios usuarios = new Funciones.Usuarios();
+    Login login = new Login();
     /**
      * Creates new form Vendedor
      */
-    public Vendedor() {
+    public Vendedor() throws SQLException{
         initComponents();
+        this.setLocationRelativeTo(null);
+        usuarios.setId(login.usuarios.getId());
+        usuarios.selectUsr();
+        jLabel1.setText(usuarios.getNombre());
     }
 
     /**
@@ -27,18 +36,28 @@ public class Vendedor extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Ventas");
+
+        jLabel1.setText("jLabel1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 780, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(192, 192, 192)
+                .addComponent(jLabel1)
+                .addContainerGap(537, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 457, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(98, 98, 98)
+                .addComponent(jLabel1)
+                .addContainerGap(344, Short.MAX_VALUE))
         );
 
         pack();
@@ -74,11 +93,16 @@ public class Vendedor extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Vendedor().setVisible(true);
+                try {
+                    new Vendedor().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

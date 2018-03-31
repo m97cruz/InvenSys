@@ -5,17 +5,27 @@
  */
 package Ventanas;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Alumno
  */
 public class Administracion extends javax.swing.JFrame {
+    Funciones.Usuarios usuarios = new Funciones.Usuarios();
+    Login login = new Login();
 
     /**
      * Creates new form Administracion
      */
-    public Administracion() {
+    public Administracion() throws SQLException{
         initComponents();
+        this.setLocationRelativeTo(null);
+        usuarios.setId(login.usuarios.getId()); //Setea el ID del fjrame anterior en el nuevo Jfrme de Administracion.
+        usuarios.selectUsr();
+        jLabel1.setText(usuarios.getNombre());
     }
 
     /**
@@ -27,18 +37,57 @@ public class Administracion extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        menuArchivo = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        menuAdministrar = new javax.swing.JMenu();
+        optUsuarios = new javax.swing.JMenu();
+        optProductos = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Panel de Administracion");
+
+        jLabel1.setText("jLabel1");
+
+        menuArchivo.setText("Archivo");
+
+        jMenu2.setText("Salir");
+        menuArchivo.add(jMenu2);
+
+        jMenuBar1.add(menuArchivo);
+
+        menuAdministrar.setText("Administrar");
+
+        optUsuarios.setText("Usuarios");
+        menuAdministrar.add(optUsuarios);
+
+        optProductos.setText("Productos");
+        menuAdministrar.add(optProductos);
+
+        jMenuBar1.add(menuAdministrar);
+
+        jMenu1.setText("Ventas");
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 732, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(261, 261, 261)
+                .addComponent(jLabel1)
+                .addContainerGap(558, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 454, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(134, 134, 134)
+                .addComponent(jLabel1)
+                .addContainerGap(350, Short.MAX_VALUE))
         );
 
         pack();
@@ -74,11 +123,23 @@ public class Administracion extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Administracion().setVisible(true);
+                try {
+                    new Administracion().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu menuAdministrar;
+    private javax.swing.JMenu menuArchivo;
+    private javax.swing.JMenu optProductos;
+    private javax.swing.JMenu optUsuarios;
     // End of variables declaration//GEN-END:variables
 }

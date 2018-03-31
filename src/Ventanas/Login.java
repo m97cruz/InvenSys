@@ -4,6 +4,9 @@
  * and open the template in the editor.
  */
 package Ventanas;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -101,14 +104,17 @@ Funciones.Usuarios usuarios = new Funciones.Usuarios();
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
+        try {
         String pfPasswd = new String(pfPass.getPassword());
-        String usr = tfUser.getText();
+        usuarios.setPass(pfPasswd);
+        usuarios.setUser(tfUser.getText());
+        usuarios.login();
         
         if (usuarios.getRol().equals("ADMIN")){
             Administracion interfaz = new Administracion();
             interfaz.setVisible(true);
             this.dispose();
-        
+            
         }else if (usuarios.getRol().equals("NORMAL")){
             Vendedor interfaz = new Vendedor();
             interfaz.setVisible(true);
@@ -116,6 +122,9 @@ Funciones.Usuarios usuarios = new Funciones.Usuarios();
         }else{
             JOptionPane.showMessageDialog(null, "El Usuario y la contraseña No Coinciden");
         }
+        } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
