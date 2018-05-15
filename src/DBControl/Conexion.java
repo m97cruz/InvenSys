@@ -11,7 +11,7 @@ public class Conexion {
     public Connection conn(){
         String dbURL = "jdbc:mysql://localhost:3306/ferre_torres";
         String usr = "root";
-        String pass= "";
+        String pass= "root";
         Connection conn = null;
         
         try{

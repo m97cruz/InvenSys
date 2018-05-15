@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Ventanas;
+package Admin;
 
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -90,7 +90,6 @@ public class Administracion extends javax.swing.JFrame {
         optProductos = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
 
-        interModProd.setPreferredSize(new java.awt.Dimension(610, 464));
         interModProd.setSize(new java.awt.Dimension(610, 465));
 
         jLabel3.setText("Codigo: 001");
@@ -119,7 +118,7 @@ public class Administracion extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setText("Imagen de Refencia");
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/iconoHerramientas.png"))); // NOI18N
 
         jButton8.setText("Cambiar");
 
@@ -168,20 +167,20 @@ public class Administracion extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel12))
                     .addComponent(jLabel14))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jSpinner5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel14)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(5, 5, 5))
         );
 
         jLabel15.setText("Proveedor:");
@@ -227,6 +226,11 @@ public class Administracion extends javax.swing.JFrame {
                             .addComponent(jButton8)
                             .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(interModProdLayout.createSequentialGroup()
+                        .addGap(167, 167, 167)
+                        .addComponent(jButton10)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton11))
+                    .addGroup(interModProdLayout.createSequentialGroup()
                         .addGroup(interModProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(interModProdLayout.createSequentialGroup()
                                 .addGap(10, 10, 10)
@@ -254,12 +258,8 @@ public class Administracion extends javax.swing.JFrame {
                                 .addGap(6, 6, 6)
                                 .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(interModProdLayout.createSequentialGroup()
-                        .addGap(167, 167, 167)
-                        .addComponent(jButton10)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton11))))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
         interModProdLayout.setVerticalGroup(
             interModProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -289,10 +289,9 @@ public class Administracion extends javax.swing.JFrame {
                         .addComponent(jButton8)
                         .addGap(6, 6, 6)
                         .addComponent(jButton9)))
-                .addGap(11, 11, 11)
                 .addGroup(interModProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(interModProdLayout.createSequentialGroup()
-                        .addGap(4, 4, 4)
+                        .addGap(15, 15, 15)
                         .addGroup(interModProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -312,13 +311,15 @@ public class Administracion extends javax.swing.JFrame {
                             .addGroup(interModProdLayout.createSequentialGroup()
                                 .addGap(3, 3, 3)
                                 .addComponent(jLabel10))
-                            .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(25, 25, 25)
-                        .addGroup(interModProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel15)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                            .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(interModProdLayout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(7, 7, 7)
+                .addGroup(interModProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel15)
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addGroup(interModProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton10)
                     .addComponent(jButton11))

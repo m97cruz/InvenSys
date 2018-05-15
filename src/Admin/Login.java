@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Ventanas;
+package Admin;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -105,10 +105,7 @@ Funciones.Usuarios usuarios = new Funciones.Usuarios();
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
         try {
-        Administracion frame = new Administracion();
-        frame.setVisible(true);
-        this.dispose();
-        /*
+        
         String pfPasswd = new String(pfPass.getPassword());
         usuarios.setPass(pfPasswd);
         usuarios.setUser(tfUser.getText());
@@ -120,12 +117,12 @@ Funciones.Usuarios usuarios = new Funciones.Usuarios();
             this.dispose();
             
         }else if (usuarios.getRol().equals("NORMAL")){
-            Vendedor interfaz = new Vendedor();
+            Vendedor.Vendedor interfaz = new Vendedor.Vendedor();
             interfaz.setVisible(true);
             this.dispose();
         }else{
             JOptionPane.showMessageDialog(null, "El Usuario y la contraseña No Coinciden");
-        }*/
+        }
         } catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
