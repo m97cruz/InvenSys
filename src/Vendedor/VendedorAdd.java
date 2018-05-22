@@ -16,13 +16,13 @@ import javax.swing.JOptionPane;
  *
  * @author Alumno
  */
-public class Vendedor extends javax.swing.JFrame {
+public class VendedorAdd extends javax.swing.JFrame {
     Funciones.Usuarios usuarios = new Funciones.Usuarios();
     Admin.Login login = new Admin.Login();
     /**
      * Creates new form Vendedor
      */
-    public Vendedor() throws SQLException{
+    public VendedorAdd() throws SQLException{
         initComponents();
         this.setLocationRelativeTo(null);
         /*usuarios.setId(login.usuarios.getId());
@@ -131,7 +131,7 @@ public class Vendedor extends javax.swing.JFrame {
 
         jRadioButton2.setText("Codigo");
 
-        jButton2.setText("Nueva Ventana de Venta");
+        jButton2.setText("Cerrar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -243,17 +243,10 @@ public class Vendedor extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        ProdInfo frame = new ProdInfo();
-        frame.setVisible(true);
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        try {
-            VendedorAdd f = new VendedorAdd();
-            f.setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -273,23 +266,24 @@ public class Vendedor extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Vendedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VendedorAdd.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Vendedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VendedorAdd.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Vendedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VendedorAdd.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Vendedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VendedorAdd.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new Vendedor().setVisible(true);
+                    new VendedorAdd().setVisible(true);
                 } catch (SQLException ex) {
-                    Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(VendedorAdd.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });

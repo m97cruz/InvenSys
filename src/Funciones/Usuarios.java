@@ -77,15 +77,20 @@ public class Usuarios {
     
     
     public boolean login() throws SQLException{
+        rol = null;
+        id = 0;
         boolean login = false;
-        String sql = "SELECT * FROM `usuarios` WHERE `usr`='"+user+"' AND `passwd`='"+pass+"'";
+        String sql = "SELECT * FROM `usuarios` WHERE `usuario`='"+user+"' AND `passwd`='"+pass+"';";
         ResultSet result = funSQL.select(sql);
-        while(result.next()){
+        if (result != null){
+            while(result.next()){
             id = result.getInt("id");
             rol = result.getString("rol");
             login=true;
             //Lo que necesitamos por ahora :)
         }
+        }
+        
         return login;
     }
     

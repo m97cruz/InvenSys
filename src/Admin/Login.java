@@ -14,11 +14,7 @@ import javax.swing.*;
  * @author Alumno
  */
 public class Login extends javax.swing.JFrame {
-Funciones.Usuarios usuarios = new Funciones.Usuarios();
-    /**
-     * Creates new form Login
-     */
-    //Hola mundo
+Funciones.Usuarios fUser = new Funciones.Usuarios();
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -103,29 +99,34 @@ Funciones.Usuarios usuarios = new Funciones.Usuarios();
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+    try {
         // TODO add your handling code here:
-        try {
-        
         String pfPasswd = new String(pfPass.getPassword());
-        usuarios.setPass(pfPasswd);
-        usuarios.setUser(tfUser.getText());
-        usuarios.login();
+        fUser.setPass(pfPasswd);
+        fUser.setUser(tfUser.getText());
+        int idUsr = fUser.getId();
         
-        if (usuarios.getRol().equals("ADMIN")){
-            Administracion interfaz = new Administracion();
-            interfaz.setVisible(true);
-            this.dispose();
-            
-        }else if (usuarios.getRol().equals("NORMAL")){
-            Vendedor.Vendedor interfaz = new Vendedor.Vendedor();
-            interfaz.setVisible(true);
-            this.dispose();
-        }else{
-            JOptionPane.showMessageDialog(null, "El Usuario y la contraseña No Coinciden");
+        if(fUser.login() && (idUsr!=0)){
+        switch (fUser.getRol()){
+            case "ADMIN":
+                Administracion admin = new Administracion();
+                admin.setVisible(true);
+                this.dispose();
+                break;
+            case "NORMAL":
+                Vendedor.Vendedor vend = new Vendedor.Vendedor();
+                vend.setVisible(true);
+                this.dispose();
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "El Usuario o la contraseña No Coincide en los registros del sistema");
+                break;
         }
-        } catch (SQLException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+    }
+            
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
