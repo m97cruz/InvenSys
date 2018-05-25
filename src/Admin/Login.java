@@ -57,7 +57,7 @@ Funciones.Usuarios fUser = new Funciones.Usuarios();
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Contraseña :");
+        jLabel3.setText("Clave");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, -1, -1));
 
         btnLogin.setBackground(new java.awt.Color(0, 0, 102));
