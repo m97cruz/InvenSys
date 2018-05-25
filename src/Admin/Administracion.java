@@ -76,7 +76,6 @@ public class Administracion extends javax.swing.JFrame {
         jComboBox5 = new javax.swing.JComboBox<>();
         jLabel18 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
@@ -92,12 +91,12 @@ public class Administracion extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jButton12 = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        menuArchivo = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
-        menuAdministrar = new javax.swing.JMenu();
-        optUsuarios = new javax.swing.JMenu();
-        jMenu1 = new javax.swing.JMenu();
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         interModProd.setSize(new java.awt.Dimension(610, 465));
 
@@ -419,17 +418,17 @@ public class Administracion extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Codigo", "Nombre", "Marca", "Precio", "Disponible en Local", "Disponible en Bodega"
+                "Codigo", "Nombre", "Marca", "Precio C/U", "Precio por Paquete", "Disponible en Local", "Disponible en Bodega"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -565,39 +564,24 @@ public class Administracion extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        menuArchivo.setText("Archivo");
+        jMenu3.setText("Archivo");
 
-        jMenu2.setText("Salir");
-        jMenu2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu2ActionPerformed(evt);
-            }
-        });
-        menuArchivo.add(jMenu2);
+        jMenuItem2.setText("Salir");
+        jMenu3.add(jMenuItem2);
 
-        jMenuBar1.add(menuArchivo);
+        jMenuBar2.add(jMenu3);
 
-        menuAdministrar.setText("Administrar");
+        jMenu4.setText("Administrar");
 
-        optUsuarios.setText("Usuarios");
-        optUsuarios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                optUsuariosActionPerformed(evt);
-            }
-        });
-        menuAdministrar.add(optUsuarios);
+        jMenuItem1.setText("Ventas");
+        jMenu4.add(jMenuItem1);
 
-        jMenuBar1.add(menuAdministrar);
+        jMenuItem3.setText("Usuarios");
+        jMenu4.add(jMenuItem3);
 
-        jMenu1.setText("Ventas");
-        jMenu1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu1ActionPerformed(evt);
-            }
-        });
-        jMenuBar1.add(jMenu1);
+        jMenuBar2.add(jMenu4);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(jMenuBar2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -699,20 +683,6 @@ public class Administracion extends javax.swing.JFrame {
         interModProd.setVisible(false);
     }//GEN-LAST:event_jButton11ActionPerformed
 
-    private void optUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optUsuariosActionPerformed
-        
-    }//GEN-LAST:event_optUsuariosActionPerformed
-
-    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
-        
-    }//GEN-LAST:event_jMenu1ActionPerformed
-
-    private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
-        Login frame = new Login();
-        frame.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jMenu2ActionPerformed
-
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         Usuarios f = new Usuarios();
         f.setVisible(true);
@@ -802,9 +772,12 @@ public class Administracion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -817,13 +790,10 @@ public class Administracion extends javax.swing.JFrame {
     private javax.swing.JSpinner jSpinner3;
     private javax.swing.JSpinner jSpinner4;
     private javax.swing.JSpinner jSpinner5;
-    private javax.swing.JTable jTable1;
+    public static final javax.swing.JTable jTable1 = new javax.swing.JTable();
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JMenu menuAdministrar;
-    private javax.swing.JMenu menuArchivo;
-    private javax.swing.JMenu optUsuarios;
     // End of variables declaration//GEN-END:variables
 }
