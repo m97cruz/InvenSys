@@ -148,6 +148,8 @@ Funciones.Usuarios fUser = new Funciones.Usuarios();
     asi
     bien 
     Sukhulemthas*/
+    
+    /* Esta wea ya se puso buena*/
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
