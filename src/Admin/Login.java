@@ -136,6 +136,13 @@ Funciones.Usuarios fUser = new Funciones.Usuarios();
      */
     
     
+    
+    /*Estas Lineas se han Insertado ..
+    Se guardara y se hara un Pull solo 
+    para comprobar de que el texto se sincronize 
+    en lugar de reemplazar todo el archivo*/
+    
+    
     /*Holaaa mundo esta wea nico nico niii
     es una onda solamente para probar la funcionalidad
     del trabajo colaborativo, se que te estas aburriendo
