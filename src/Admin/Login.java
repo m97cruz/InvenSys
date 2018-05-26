@@ -9,10 +9,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 
+
+
+
 /**
  *
  * @author Alumno
  */
+
+/*Donde Caemos prro?
+Tumba la casa Mami
+La respuesta esta en tu Corazon <3 ♥♥♥*/
 public class Login extends javax.swing.JFrame {
 Funciones.Usuarios fUser = new Funciones.Usuarios();
     public Login() {
