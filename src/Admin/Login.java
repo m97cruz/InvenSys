@@ -42,6 +42,8 @@ Funciones.Usuarios fUser = new Funciones.Usuarios();
         setUndecorated(true);
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        tfUser.setText("La Wea Nico Nico Nii se ha recibido");
         getContentPane().add(tfUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 170, -1));
         getContentPane().add(pfPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, 170, -1));
 
@@ -57,7 +59,7 @@ Funciones.Usuarios fUser = new Funciones.Usuarios();
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Clave");
+        jLabel3.setText("Contraseña:");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, -1, -1));
 
         btnLogin.setBackground(new java.awt.Color(0, 0, 102));
@@ -132,6 +134,20 @@ Funciones.Usuarios fUser = new Funciones.Usuarios();
     /**
      * @param args the command line arguments
      */
+    
+    
+    /*Holaaa mundo esta wea nico nico niii
+    es una onda solamente para probar la funcionalidad
+    del trabajo colaborativo, se que te estas aburriendo
+    leyendo esto, pero no te preocupes que ya vas a 
+    acabar (federico.jpg) solo quiero 
+    agregar 
+    un 
+    par de 
+    lineas 
+    asi
+    bien 
+    Sukhulemthas*/
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
