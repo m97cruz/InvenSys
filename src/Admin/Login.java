@@ -17,9 +17,6 @@ import javax.swing.*;
  * @author Alumno
  */
 
-/*Donde Caemos prro?
-Tumba la casa Mami
-La respuesta esta en tu Corazon <3 ♥♥♥*/
 public class Login extends javax.swing.JFrame {
 Funciones.Usuarios fUser = new Funciones.Usuarios();
     public Login() {
@@ -142,28 +139,6 @@ Funciones.Usuarios fUser = new Funciones.Usuarios();
      * @param args the command line arguments
      */
     
-    
-    
-    /*Estas Lineas se han Insertado ..
-    Se guardara y se hara un Pull solo 
-    para comprobar de que el texto se sincronize 
-    en lugar de reemplazar todo el archivo*/
-    
-    
-    /*Holaaa mundo esta wea nico nico niii
-    es una onda solamente para probar la funcionalidad
-    del trabajo colaborativo, se que te estas aburriendo
-    leyendo esto, pero no te preocupes que ya vas a 
-    acabar (federico.jpg) solo quiero 
-    agregar 
-    un 
-    par de 
-    lineas 
-    asi
-    bien 
-    Sukhulemthas*/
-    
-    /* Esta wea ya se puso buena*/
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
