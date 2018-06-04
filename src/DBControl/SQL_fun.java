@@ -12,6 +12,7 @@ import java.sql.Statement;
 //Aqi se van a ingresar las funciones para poder ejecutar las funciones de SQL
 public class SQL_fun {
     Conexion conex = new Conexion();
+    
     public boolean ExecSQL(String sql) throws SQLException{
         boolean r; 
         Connection conn = conex.conn();
