@@ -19,6 +19,7 @@ public class Administracion extends javax.swing.JFrame {
     Funciones.Productos aProd = new Funciones.Productos();
     Funciones.Tablas tablas = new Funciones.Tablas();
     Login login = new Login();
+    boolean insertMode;
     
     //Variables para Realizar los procedimientos:
     float precioCompra, precioVenta, ganancia;
@@ -90,9 +91,9 @@ public class Administracion extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnAddProd = new javax.swing.JButton();
+        btnModProd = new javax.swing.JButton();
+        btnDelProd = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
@@ -111,7 +112,7 @@ public class Administracion extends javax.swing.JFrame {
 
         interModProd.setSize(new java.awt.Dimension(610, 465));
 
-        lblCodigo.setText("Codigo: 001");
+        lblCodigo.setText("Codigo:");
 
         jLabel4.setText("*Nombre:");
 
@@ -150,11 +151,11 @@ public class Administracion extends javax.swing.JFrame {
 
         jLabel7.setText("*Precio de Compra: $");
 
-        txtPreCompra.setText("0");
+        txtPreCompra.setText("0.0");
 
         jLabel8.setText("*Precio de Venta: $");
 
-        txtPreVenta.setText("0");
+        txtPreVenta.setText("0.0");
         txtPreVenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPreVentaActionPerformed(evt);
@@ -309,6 +310,8 @@ public class Administracion extends javax.swing.JFrame {
         jLabel19.setText("Unidades:");
 
         jLabel20.setText("Precio: $");
+
+        txtPrePack.setText("0.0");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -510,24 +513,24 @@ public class Administracion extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Añadir Producto");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnAddProd.setText("Añadir Producto");
+        btnAddProd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnAddProdActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Actualizar Producto");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnModProd.setText("Actualizar Producto");
+        btnModProd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnModProdActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Remover Producto");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnDelProd.setText("Remover Producto");
+        btnDelProd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnDelProdActionPerformed(evt);
             }
         });
 
@@ -653,9 +656,9 @@ public class Administracion extends javax.swing.JFrame {
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(86, 86, 86)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnDelProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnModProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnAddProd, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(99, 99, 99)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -682,11 +685,11 @@ public class Administracion extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(btnAddProd)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)
+                        .addComponent(btnModProd)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4))
+                        .addComponent(btnDelProd))
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
@@ -708,24 +711,26 @@ public class Administracion extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnDelProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelProdActionPerformed
         JOptionPane.showConfirmDialog(this, "¿Está seguro de Eliminar este producto?");
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btnDelProdActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         JOptionPane.showInputDialog("Nueva Marca:");
     }//GEN-LAST:event_jButton6ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnAddProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProdActionPerformed
         interModProd.doLayout();
         interModProd.setVisible(true);
         interModProd.setLocationRelativeTo(null);
-    }//GEN-LAST:event_jButton2ActionPerformed
+        insertMode = true;
+    }//GEN-LAST:event_btnAddProdActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnModProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModProdActionPerformed
         interModProd.setVisible(true);
         interModProd.setLocationRelativeTo(null);
-    }//GEN-LAST:event_jButton3ActionPerformed
+        insertMode = false;
+    }//GEN-LAST:event_btnModProdActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         JOptionPane.showMessageDialog(interModProd, "Hay productos registrados bajo esta marca... \nElimine primero estos productos antes de eliminar la Marca");
@@ -783,7 +788,7 @@ public class Administracion extends javax.swing.JFrame {
         
         
         if(!txtPreCompra.getText().equals("0") && !txtPreCompra.getText().equals("")){
-            aProd.setPreCompra(txtPreCompra.getText());
+            aProd.setPreCompra(Float.parseFloat(txtPreCompra.getText()));
         }else{
             campos += "\n*Precio de Compra";
             control = false;
@@ -791,7 +796,7 @@ public class Administracion extends javax.swing.JFrame {
         
             //Setear venta
         if(!txtPreVenta.getText().equals("0") && !txtPreVenta.getText().equals("")){
-            aProd.setPreVenta(txtPreVenta.getText());
+            aProd.setPreVenta(Float.parseFloat(txtPreVenta.getText()));
         }else{
             campos += "\n*Precio de Venta";
             control =false;
@@ -799,7 +804,7 @@ public class Administracion extends javax.swing.JFrame {
         
         
         if(!spinLocal.getValue().toString().equals("0") && !spinLocal.getValue().toString().equals("")){
-            aProd.setLocalCant(spinLocal.getValue().toString());
+            aProd.setLocalCant(Integer.parseInt(spinLocal.getValue().toString()));
         }else{
             campos += "\n*Existencias en Local";
             control = false;
@@ -807,34 +812,36 @@ public class Administracion extends javax.swing.JFrame {
         
         
         if(!spinRepos.getValue().toString().equals("0") && !spinRepos.getValue().toString().equals("")){
-            aProd.setRepo(spinRepos.getValue().toString());
+            aProd.setRepo(Integer.parseInt(spinRepos.getValue().toString()));
         }else{
             campos += "\n*Minimo de Reposición";
             control=false;
         }
         
         //Settear los Que no necesitan de Validacion.
-        aProd.setCantPack(spinPack.getValue().toString());
-        aProd.setPrePack(txtPrePack.getText());
+        aProd.setCantPack(Integer.parseInt(spinPack.getValue().toString()));
+        aProd.setPrePack(Float.parseFloat(txtPrePack.getText()));
         aProd.setMarca(comboMarca.getItemAt(comboMarca.getSelectedIndex()));
-        aProd.setPorceGan(spinGanancia.getValue().toString());
-        aProd.setBodegaCant(spinBodega.getValue().toString());
+        aProd.setPorceGan(Integer.parseInt(spinGanancia.getValue().toString()));
+        aProd.setBodegaCant(Integer.parseInt(spinBodega.getValue().toString()));
         aProd.setProv1(comboProv1.getItemAt(comboProv1.getSelectedIndex()));
         aProd.setProv2(comboProv2.getItemAt(comboProv2.getSelectedIndex()));
         aProd.setProv3(comboProv3.getItemAt(comboProv3.getSelectedIndex()));
         aProd.setProv4(comboProv4.getItemAt(comboProv4.getSelectedIndex()));
         boolean r=false;
-        
-        JOptionPane.showMessageDialog(interModProd, "::"+aProd.getProv1());
+        String res="";
         
         if (control){
             try {
-                r=aProd.addProd();
-                if (r){
-                    JOptionPane.showMessageDialog(interModProd, "¡Producto Registrado!");
-                }else{
-                    JOptionPane.showMessageDialog(interModProd, "No se pudo Registrar...\n Compruebe que los datos que ingresa son correctos");
-                }
+                
+               if(insertMode){
+                   r=aProd.addProd();
+                   res="¡Producto Registrado!";
+               }else{
+                   r=aProd.modProd();
+                   res="¡Producto Modificado!";
+               } 
+                        
             } catch (SQLException ex) {
                 Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -842,6 +849,11 @@ public class Administracion extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(interModProd, "Ha Olvidado llenar estos Campos Obligatorios:" + campos);
         }
         
+        if (r){
+            JOptionPane.showMessageDialog(interModProd, res);
+        }else{
+            JOptionPane.showMessageDialog(interModProd, "¡No se pudo Realizar la Consulta!...\n Compruebe que los datos que ingresa son correctos");
+        }
         
         
         //limpiarCampos();
@@ -867,6 +879,9 @@ public class Administracion extends javax.swing.JFrame {
         comboProv1.setSelectedIndex(0); comboProv2.setSelectedIndex(0);
         comboProv3.setSelectedIndex(0); comboProv4.setSelectedIndex(0);
                 
+    }
+    public void llenarCampos(){
+        
     }
     /**
      * @param args the command line arguments
@@ -908,7 +923,10 @@ public class Administracion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddProd;
     private javax.swing.JButton btnCancelModProd;
+    private javax.swing.JButton btnDelProd;
+    private javax.swing.JButton btnModProd;
     private javax.swing.JButton btnSaveModProd;
     private javax.swing.JComboBox<String> comboMarca;
     private javax.swing.JComboBox<String> comboProv1;
@@ -919,9 +937,6 @@ public class Administracion extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;

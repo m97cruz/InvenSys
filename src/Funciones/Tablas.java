@@ -37,7 +37,7 @@ public class Tablas {
             datos[0] = rs.getString(1); //codigo
             datos[1] = rs.getString(2); //nombre
             datos[2] = "$"+rs.getString(4); //Precio Unitario
-            datos[3] = "$"+rs.getString(5) + "("+rs.getString("")+" U)"; //Precio por Paquete ( $Precio(nUnidades) )
+            datos[3] = "$"+rs.getString(5) + " ("+rs.getString(6)+" U)"; //Precio por Paquete ( $Precio(nUnidades) )
             datos[4] = rs.getString(7); //nombre
             datos[5] = rs.getString(8); //nombre
             model.addRow(datos);
