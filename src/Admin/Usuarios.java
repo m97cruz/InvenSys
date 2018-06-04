@@ -59,6 +59,7 @@ public class Usuarios extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
 
+        InterAddModUsr.setTitle("Agregar usuario");
         InterAddModUsr.setSize(new java.awt.Dimension(285, 220));
 
         lbl_titulo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -75,6 +76,13 @@ public class Usuarios extends javax.swing.JFrame {
         jLabel2.setText("Apellido:");
 
         jLabel3.setText("Usuario:");
+
+        tfapellido.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        tfapellido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfapellidoActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Contraseña:");
 
@@ -115,45 +123,56 @@ public class Usuarios extends javax.swing.JFrame {
             .addGroup(InterAddModUsrLayout.createSequentialGroup()
                 .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(InterAddModUsrLayout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(btn_agregar))
+                        .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                                .addGap(57, 57, 57)
+                                .addComponent(btn_agregar))
+                            .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                                .addGap(70, 70, 70)
+                                .addComponent(lbl_titulo)))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(InterAddModUsrLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel1))
-                    .addGroup(InterAddModUsrLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, InterAddModUsrLayout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(28, 28, 28)
-                                .addComponent(tf_user, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, InterAddModUsrLayout.createSequentialGroup()
+                        .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(InterAddModUsrLayout.createSequentialGroup()
                                 .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel2))
-                                .addGap(27, 27, 27)
-                                .addComponent(tfnombre, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lbl_titulo)
-                                .addComponent(tfapellido, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(InterAddModUsrLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cb_rol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(tf_phone, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(tf_pass, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
-                                .addComponent(tf_address)
-                                .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btn_cancel)
-                                    .addComponent(tf_mail, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel6))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                                        .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(cb_rol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(tf_phone, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                                                .addGap(77, 77, 77)
+                                                .addComponent(btn_cancel)))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(tf_mail, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, InterAddModUsrLayout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(tf_pass, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(tf_address, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(tfapellido, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(tf_user, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(tfnombre, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(34, 34, 34))
         );
         InterAddModUsrLayout.setVerticalGroup(
             InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,7 +190,7 @@ public class Usuarios extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(tf_user, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tf_user, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -203,17 +222,17 @@ public class Usuarios extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Usuario", "Nombre y Apellido", "Rol"
+                "Usuario", "Nombre y Apellido", "Rol", "Telefono"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -221,6 +240,10 @@ public class Usuarios extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+            jTable1.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         jButton1.setText("Editar Usuario");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -250,7 +273,7 @@ public class Usuarios extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton5)
@@ -270,7 +293,7 @@ public class Usuarios extends javax.swing.JFrame {
                     .addComponent(jButton5))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(81, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -319,11 +342,13 @@ public class Usuarios extends javax.swing.JFrame {
             usuarios.setCorreo(this.tf_mail.getText());
             usuarios.setRol(this.cb_rol.getSelectedItem().toString());
             //usuarios.AddUser();
+            this.VaciarInterAddUsr();
         }
     }//GEN-LAST:event_btn_agregarActionPerformed
 
     private void btn_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelActionPerformed
         // TODO add your handling code here:
+        this.VaciarInterAddUsr();
         InterAddModUsr.setVisible(false);
     }//GEN-LAST:event_btn_cancelActionPerformed
 
@@ -334,6 +359,10 @@ public class Usuarios extends javax.swing.JFrame {
     private void tf_addressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_addressActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tf_addressActionPerformed
+
+    private void tfapellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfapellidoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfapellidoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -371,6 +400,16 @@ public class Usuarios extends javax.swing.JFrame {
         });
     }
 
+    public void VaciarInterAddUsr(){
+        this.tfnombre.setText("");
+        this.tfapellido.setText("");
+        this.tf_user.setText("");
+        this.tf_pass.setText("");
+        this.tf_phone.setText("");
+        this.tf_address.setText("");
+        this.tf_mail.setText("");
+        this.cb_rol.setSelectedIndex(0);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFrame InterAddModUsr;
     private javax.swing.JButton btn_agregar;
