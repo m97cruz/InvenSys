@@ -93,7 +93,12 @@ public class Usuarios {
         
         return login;
     }
-    
+    public ResultSet selectAll() throws SQLException{
+        ResultSet rs= null;
+        String sql= "Select * FROM usuarios";
+        rs = funSQL.select(sql);
+        return rs; 
+    }
     public void selectUsr() throws SQLException{
         String sql = "SELECT * FROM `usuarios` WHERE `id`="+id;
         ResultSet result = funSQL.select(sql);

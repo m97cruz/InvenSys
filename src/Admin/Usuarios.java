@@ -5,10 +5,12 @@
  */
 package Admin;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -220,7 +222,7 @@ public class Usuarios extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TableUsers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -239,10 +241,10 @@ public class Usuarios extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
+        jScrollPane1.setViewportView(TableUsers);
+        if (TableUsers.getColumnModel().getColumnCount() > 0) {
+            TableUsers.getColumnModel().getColumn(1).setResizable(false);
+            TableUsers.getColumnModel().getColumn(3).setResizable(false);
         }
 
         jButton1.setText("Editar Usuario");
@@ -410,8 +412,25 @@ public class Usuarios extends javax.swing.JFrame {
         this.tf_mail.setText("");
         this.cb_rol.setSelectedIndex(0);
     }
+    public void MostrarDatos() throws SQLException{
+        DefaultTableModel model = new DefaultTableModel();
+        ResultSet rs = usuarios.selectAll();
+        model.setColumnIdentifiers(new Object[]{"Usuario","Nombre y apellido","Rol","Telefono"});
+        if(rs!=null){
+            while(rs.next()){
+                model.addRow(new Object[]{
+                    rs.getString("Usuario"),
+                    rs.getString("Nombre") + rs.getString("Apellido"),
+                    rs.getString("rol"),
+                    rs.getString("telefono")
+                });
+            }
+        }
+        this.TableUsers.setModel(model);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFrame InterAddModUsr;
+    public static final javax.swing.JTable TableUsers = new javax.swing.JTable();
     private javax.swing.JButton btn_agregar;
     private javax.swing.JButton btn_cancel;
     private javax.swing.JComboBox<String> cb_rol;
@@ -427,7 +446,6 @@ public class Usuarios extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
-    public static final javax.swing.JTable jTable1 = new javax.swing.JTable();
     private javax.swing.JLabel lbl_titulo;
     private javax.swing.JTextField tf_address;
     private javax.swing.JTextField tf_mail;
