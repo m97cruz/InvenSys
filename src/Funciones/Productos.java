@@ -115,7 +115,8 @@ public class Productos {
         this.codigo = codigo;
     }//</editor-fold>
     
-    
+    String sql="";
+    ResultSet rs;
     //-------------- Metodos para hacer esto Mas Sukhulemtho---------------//
     
     //Metodo para retornar el ID de un proveedor de la base de datos
@@ -225,7 +226,7 @@ public class Productos {
         campo += ", proveedor3"; value += ", "+ dbProv3;
         campo += ", proveedor4"; value += ", "+ dbProv4;
         
-        String sql = "INSERT INTO productos("+campo+") VALUES("+value+")";
+        sql = "INSERT INTO productos("+campo+") VALUES("+value+")";
         
         return funcion.ExecSQL(sql);
     }
@@ -250,13 +251,20 @@ public class Productos {
         campo += ", proveedor3="+ dbProv3;
         campo += ", proveedor4="+ dbProv4;
         
-        String sql = "UPDATE productos SET "+campo+" WHERE codigo="+codigo;
+        sql = "UPDATE productos SET "+campo+" WHERE codigo="+codigo;
         return funcion.ExecSQL(sql);
     }
     
+    public boolean rmovProd() throws SQLException{
+        
+        
+        
+        return true;
+    }
+    
     public void selectProd() throws SQLException{
-        String sql ="SELECT * FROM productos WHERE codigo="+codigo;
-        ResultSet rs =funcion.select(sql);
+        sql ="SELECT * FROM productos WHERE codigo="+codigo;
+        rs =funcion.select(sql);
         //Dar el numero de la columna para que sea mas rapido, (enlugar de comparar nombres, compara numero de columna)
         while(rs.next()){
             nombre=rs.getString(2); //nombre
@@ -318,7 +326,6 @@ public class Productos {
     public void llenarComboMarcas() throws SQLException{
         DefaultComboBoxModel marcas = (DefaultComboBoxModel) Administracion.comboMarca.getModel();
         marcas.removeAllElements();
-        String sql;
         if(marcaDB!=0){
            sql="SELECT marca FROM marcas WHERE id="+marcaDB;
            ResultSet res = funcion.select(sql);
@@ -331,7 +338,7 @@ public class Productos {
         marcas.addElement("--No Especificado--");
         
         sql="SELECT marca FROM marcas";
-        ResultSet rs = funcion.select(sql);
+        rs = funcion.select(sql);
         while(rs.next()){
             marcas.addElement(rs.getString(1));
         }
@@ -349,7 +356,6 @@ public class Productos {
         comboProv3.removeAllElements(); 
         comboProv4.removeAllElements();
         
-        String sql;
         if(dbProv1!=0){
            sql="SELECT prov_nombre FROM proveedores WHERE id="+dbProv1;
            ResultSet res = funcion.select(sql);
@@ -385,7 +391,7 @@ public class Productos {
         comboProv4.addElement("--No Especificado--");
         
         sql="SELECT prov_nombre FROM proveedores";
-        ResultSet rs = funcion.select(sql);
+        rs = funcion.select(sql);
         while(rs.next()){
             comboProv1.addElement(rs.getString(1));
             comboProv2.addElement(rs.getString(1));
@@ -400,11 +406,11 @@ public class Productos {
     
     public boolean solicitarProd(String origen, String destino, int cant, String marcaSend) throws SQLException{
         
-        String sql="INSERT INTO prod_solicita VALUES("+codigo+", '"+nombre+"', '"+marcaSend+"', '"+origen+"', '"+destino+"', "+cant+", "+preCompra+")";
+        sql="INSERT INTO prod_solicita VALUES("+codigo+", '"+nombre+"', '"+marcaSend+"', '"+origen+"', '"+destino+"', "+cant+", "+preCompra+")";
         return funcion.ExecSQL(sql);
     }
     public int getSoliCant() throws SQLException{
-        ResultSet rs = funcion.select("SELECT cod_prod FROM prod_solicita");
+        rs = funcion.select("SELECT cod_prod FROM prod_solicita");
         int cont=0;
         while(rs.next()){
             cont++;
