@@ -5,15 +5,17 @@
  */
 package Funciones;
 
+import Admin.Administracion;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
  * @author Mauricio Cruz
  */
 public class Productos {
-    int rID;
+    int rID;// rID es solo para retornar el id Numerico de los proveedores y de las  marcas
     int codigo, marcaDB, localCant, bodegaCant, repo, porceGan, cantPack, dbProv1, dbProv2, dbProv3, dbProv4; //Todos los parametros
     String nombre, marca, prov1, prov2, prov3, prov4; //Estos parametros se reciben como String para Conertirse con el valor correspondiente de la llave primaria en la tabla
     float preCompra, preVenta, prePack;
@@ -115,7 +117,9 @@ public class Productos {
     
     
     //-------------- Metodos para hacer esto Mas Sukhulemtho---------------//
+    
     //Metodo para retornar el ID de un proveedor de la base de datos
+    //<editor-fold desc="Metodos para Obtener IDs y Nombre de Proveedor y marcas">
     private int getProvID(String prov) throws SQLException{ 
         String sql = "SELECT id FROM proveedores WHERE prov_nombre='"+prov+"'";
         
@@ -127,6 +131,15 @@ public class Productos {
         }
         return rID;
     }
+    private String getProvNombre(int id) throws SQLException{ 
+        String prov="",sql = "SELECT id FROM proveedores WHERE id="+id;
+        ResultSet rs = funcion.select(sql);
+        if(rs.next()){
+            prov = rs.getString("prov_nombre");
+        }
+        return prov;
+    }
+    
     private int getMarcaID(String marca) throws SQLException{ 
         String sql = "SELECT id FROM marcas WHERE marca='"+marca+"'";
         
@@ -138,9 +151,21 @@ public class Productos {
         }
         return rID;
     }
+    private String getMarcaNombre(int marca) throws SQLException{ 
+        String res ="", sql = "SELECT id FROM marcas WHERE marca='"+marca+"'";
+        
+        ResultSet rs = funcion.select(sql);
+        if(rs.next()){
+            res = rs.getString("nombre");
+        }else{
+            res="";
+        }
+        return res;
+    }//</editor-fold>
+    
     
     //Setear el id a todos los proveedores que se hayan enviado como parametros.
-    // Los ID se insertane el campo correspondiente de la tabla de productos (Llave Foranea)
+    //  Busca y setea los proveedores y las marcas
     private void setMarca_Prov() throws SQLException{ //Tambien incluye la marca ademas de los proveedores
         if(!prov1.equals("")){
             dbProv1 = getProvID(prov1);
@@ -208,24 +233,160 @@ public class Productos {
         String campo = "";
         campo += "nombre='"+nombre+"'";
         //Floats y Enteros no van entre comilla simple
-        campo += " pre_compra="+preCompra;
-        campo += " pre_venta="+preVenta;
-        campo += " pre_pack="+prePack;
+        campo += ", pre_compra="+preCompra;
+        campo += ", pre_venta="+preVenta;
+        campo += ", pre_pack="+prePack;
         
-        campo += " cant_pack="+cantPack;
-        campo += " local_cant="+localCant;
-        campo += " bodega_cant="+bodegaCant;
-        campo += " repo="+repo;
-        campo += " porceGan="+porceGan;
-        campo += " marca="+marcaDB; //si da valor cero (Sin marca) se establece en el metodo SetMarca_Prov
-        campo += " proveedor1="+ dbProv1;
-        campo += " proveedor2="+ dbProv2;
-        campo += " proveedor3="+ dbProv3;
-        campo += " proveedor4="+ dbProv4;
+        campo += ", cant_pack="+cantPack;
+        campo += ", local_cant="+localCant;
+        campo += ", bodega_cant="+bodegaCant;
+        campo += ", repo="+repo;
+        campo += ", porce_gan="+porceGan;
+        campo += ", marca="+marcaDB; //si da valor cero (Sin marca) se establece en el metodo SetMarca_Prov
+        campo += ", proveedor1="+ dbProv1;
+        campo += ", proveedor2="+ dbProv2;
+        campo += ", proveedor3="+ dbProv3;
+        campo += ", proveedor4="+ dbProv4;
         
-        String sql = "UPDATE productos SET "+campo+" WHERE id="+codigo;
+        String sql = "UPDATE productos SET "+campo+" WHERE codigo="+codigo;
         return funcion.ExecSQL(sql);
     }
+    
+    public void selectProd() throws SQLException{
+        String sql ="SELECT * FROM productos WHERE codigo="+codigo;
+        ResultSet rs =funcion.select(sql);
+        //Dar el numero de la columna para que sea mas rapido, (enlugar de comparar nombres, compara numero de columna)
+        while(rs.next()){
+            nombre=rs.getString(2); //nombre
+            preCompra = rs.getFloat(3);
+            preVenta = rs.getFloat(4);
+            prePack = rs.getFloat(5);
+            //Enteros;
+            cantPack =rs.getInt(6);
+            localCant =rs.getInt(7);
+            bodegaCant =rs.getInt(8);
+            repo =rs.getInt(9);
+            porceGan =rs.getInt(10);
+            marcaDB =rs.getInt(11);
+            dbProv1 =rs.getInt(12);
+            dbProv2 =rs.getInt(13);
+            dbProv3 =rs.getInt(14);
+            dbProv4 =rs.getInt(15);
+        }
+        //Si hay un proveedor, seleccionara su nombre en  la base de datos
+        if(dbProv1 != 0){
+            prov1 = getProvNombre(dbProv1);
+        }else{
+            prov1= "";
+        }
+        
+        if(dbProv2 != 0){
+            prov2 = getProvNombre(dbProv2);
+        }else{
+            prov2= "";
+        }
+        
+        if(dbProv3 != 0){
+            prov3 = getProvNombre(dbProv3);
+        }else{
+            prov3= "";
+        }
+        
+        if(dbProv4 != 0){
+            prov4 = getProvNombre(dbProv4);
+        }else{
+            prov4= "";
+        }
+        if(marcaDB != 0){
+            marca= getMarcaNombre(marcaDB);
+        }else{
+            marca="";
+        }
+        
+    }
+    
+    public void llenarComboMarcas() throws SQLException{
+        DefaultComboBoxModel marcas = (DefaultComboBoxModel) Administracion.comboMarca.getModel();
+        marcas.removeAllElements();
+        String sql;
+        if(marcaDB!=0){
+           sql="SELECT marca FROM marcas WHERE id="+marcaDB;
+           ResultSet res = funcion.select(sql);
+           while(res.next()){
+               marcas.addElement(res.getString(1));
+           }
+           
+        }
+        
+        marcas.addElement("--No Especificado--");
+        
+        sql="SELECT marca FROM marcas";
+        ResultSet rs = funcion.select(sql);
+        while(rs.next()){
+            marcas.addElement(rs.getString(1));
+        }
+        Administracion.comboMarca.setModel(marcas);
+    }
+    //--------------------------------//---------------------------//
+    public void llenarProvs() throws SQLException{
+        DefaultComboBoxModel comboProv1 = (DefaultComboBoxModel) Administracion.comboProv1.getModel();
+        DefaultComboBoxModel comboProv2 = (DefaultComboBoxModel) Administracion.comboProv2.getModel();
+        DefaultComboBoxModel comboProv3 = (DefaultComboBoxModel) Administracion.comboProv3.getModel();
+        DefaultComboBoxModel comboProv4 = (DefaultComboBoxModel) Administracion.comboProv4.getModel();
+        
+        comboProv1.removeAllElements(); comboProv2.removeAllElements(); comboProv3.removeAllElements(); comboProv4.removeAllElements();
+        
+        comboProv1.removeAllElements();
+        String sql;
+        if(dbProv1!=0){
+           sql="SELECT prov_nombre FROM proveedores WHERE id="+dbProv1;
+           ResultSet res = funcion.select(sql);
+           while(res.next()){
+               comboProv1.addElement(res.getString(1));
+           }
+        }
+        if(dbProv2!=0){
+           sql="SELECT prov_nombre FROM proveedores WHERE id="+dbProv2;
+           ResultSet res = funcion.select(sql);
+           while(res.next()){
+               comboProv2.addElement(res.getString(1));
+           }
+        }
+        if(dbProv3!=0){
+           sql="SELECT prov_nombre FROM proveedores WHERE id="+dbProv3;
+           ResultSet res = funcion.select(sql);
+           while(res.next()){
+               comboProv3.addElement(res.getString(1));
+           }
+        }
+        if(dbProv4!=0){
+           sql="SELECT prov_nombre FROM proveedores WHERE id="+dbProv4;
+           ResultSet res = funcion.select(sql);
+           while(res.next()){
+               comboProv4.addElement(res.getString(1));
+           }
+        }
+        
+        comboProv1.addElement("--No Especificado--");
+        comboProv2.addElement("--No Especificado--");
+        comboProv3.addElement("--No Especificado--");
+        comboProv4.addElement("--No Especificado--");
+        
+        sql="SELECT prov_nombre FROM proveedores";
+        ResultSet rs = funcion.select(sql);
+        while(rs.next()){
+            comboProv1.addElement(rs.getString(1));
+            comboProv2.addElement(rs.getString(1));
+            comboProv3.addElement(rs.getString(1));
+            comboProv4.addElement(rs.getString(1));
+        }
+        Administracion.comboProv1.setModel(comboProv1);
+        Administracion.comboProv2.setModel(comboProv2);
+        Administracion.comboProv3.setModel(comboProv3);
+        Administracion.comboProv4.setModel(comboProv4);
+    }
+    
+    
     
     
 }

@@ -46,8 +46,6 @@ Funciones.Usuarios fUser = new Funciones.Usuarios();
         setUndecorated(true);
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        tfUser.setText("La Wea Nico Nico Nii se ha recibido");
         getContentPane().add(tfUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 170, -1));
         getContentPane().add(pfPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, 170, -1));
 

@@ -5,10 +5,15 @@
  */
 package Admin;
 
+import java.awt.Event;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -50,7 +55,6 @@ public class Administracion extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txtProdNombre = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        comboMarca = new javax.swing.JComboBox<>();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
@@ -74,13 +78,9 @@ public class Administracion extends javax.swing.JFrame {
         btnSaveModProd = new javax.swing.JButton();
         btnCancelModProd = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
-        comboProv1 = new javax.swing.JComboBox<>();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        comboProv2 = new javax.swing.JComboBox<>();
         jLabel17 = new javax.swing.JLabel();
-        comboProv3 = new javax.swing.JComboBox<>();
-        comboProv4 = new javax.swing.JComboBox<>();
         jLabel18 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
@@ -118,8 +118,6 @@ public class Administracion extends javax.swing.JFrame {
 
         jLabel5.setText("Marca:");
 
-        comboMarca.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-Sin Especificar-", "IMACASA", "PRETUL", "ATLAS" }));
-
         jButton6.setFont(new java.awt.Font("Consolas", 0, 11)); // NOI18N
         jButton6.setText("+");
         jButton6.setMargin(new java.awt.Insets(2, 2, 2, 2));
@@ -152,6 +150,11 @@ public class Administracion extends javax.swing.JFrame {
         jLabel7.setText("*Precio de Compra: $");
 
         txtPreCompra.setText("0.0");
+        txtPreCompra.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPreCompraKeyTyped(evt);
+            }
+        });
 
         jLabel8.setText("*Precio de Venta: $");
 
@@ -159,6 +162,11 @@ public class Administracion extends javax.swing.JFrame {
         txtPreVenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPreVentaActionPerformed(evt);
+            }
+        });
+        txtPreVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPreVentaKeyTyped(evt);
             }
         });
 
@@ -229,6 +237,11 @@ public class Administracion extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Proveedores de Producto"));
 
         comboProv1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-Sin Especificar-", "Proveedor 1", "Proveedor 2", "Proveedor 3" }));
+        comboProv1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboProv1ActionPerformed(evt);
+            }
+        });
 
         jLabel15.setText("Proveedor 1:");
 
@@ -312,6 +325,11 @@ public class Administracion extends javax.swing.JFrame {
         jLabel20.setText("Precio: $");
 
         txtPrePack.setText("0.0");
+        txtPrePack.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrePackKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -485,7 +503,7 @@ public class Administracion extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Codigo", "Nombre", "Precio C/U", "Precio por Paquete", "Disponible en Local", "Disponible en Bodega"
+                "Codigo", "Nombre", "Precio C/U", "Precio por Paquete", "Dispon. Local", "Dispon. Bodega"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -727,9 +745,23 @@ public class Administracion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddProdActionPerformed
 
     private void btnModProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModProdActionPerformed
-        interModProd.setVisible(true);
-        interModProd.setLocationRelativeTo(null);
-        insertMode = false;
+        
+        if(tablaProd.isRowSelected(tablaProd.getSelectedRow())){
+            DefaultTableModel model = (DefaultTableModel) tablaProd.getModel();
+            int idProd = Integer.parseInt(model.getValueAt(tablaProd.getSelectedRow(), 0).toString());
+            aProd.setCodigo(idProd);
+            try {
+                aProd.selectProd();
+                llenarCampos();
+            } catch (SQLException ex) {
+                Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            interModProd.setVisible(true);
+            interModProd.setLocationRelativeTo(null);
+            insertMode = false;
+        }
+        
+        
     }//GEN-LAST:event_btnModProdActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -786,9 +818,14 @@ public class Administracion extends javax.swing.JFrame {
             control=false;
         }
         
-        
+        //Validacion para los precios de tipo Floats
         if(!txtPreCompra.getText().equals("0") && !txtPreCompra.getText().equals("")){
-            aProd.setPreCompra(Float.parseFloat(txtPreCompra.getText()));
+            if(txtPreCompra.getText().contains(".")){
+                aProd.setPreCompra(Float.parseFloat(txtPreCompra.getText()));
+            }else{
+                aProd.setPreCompra(Float.parseFloat(txtPreCompra.getText()+".0"));
+            }
+            
         }else{
             campos += "\n*Precio de Compra";
             control = false;
@@ -796,13 +833,27 @@ public class Administracion extends javax.swing.JFrame {
         
             //Setear venta
         if(!txtPreVenta.getText().equals("0") && !txtPreVenta.getText().equals("")){
-            aProd.setPreVenta(Float.parseFloat(txtPreVenta.getText()));
+            if(txtPreVenta.getText().contains(".")){
+                aProd.setPreVenta(Float.parseFloat(txtPreVenta.getText()));
+            }else{
+                aProd.setPreVenta(Float.parseFloat(txtPreVenta.getText()+".0"));
+            }
+            
+            
         }else{
             campos += "\n*Precio de Venta";
             control =false;
         }
         
+        if(!txtPrePack.getText().equals("")){
+            if(txtPrePack.getText().contains(".")){
+                aProd.setPrePack(Float.parseFloat(txtPrePack.getText()));
+            }else{
+                aProd.setPrePack(Float.parseFloat(txtPrePack.getText()+".00"));
+            }
+        }
         
+        //Validaion para los Spinner
         if(!spinLocal.getValue().toString().equals("0") && !spinLocal.getValue().toString().equals("")){
             aProd.setLocalCant(Integer.parseInt(spinLocal.getValue().toString()));
         }else{
@@ -818,9 +869,10 @@ public class Administracion extends javax.swing.JFrame {
             control=false;
         }
         
+        
+        
         //Settear los Que no necesitan de Validacion.
         aProd.setCantPack(Integer.parseInt(spinPack.getValue().toString()));
-        aProd.setPrePack(Float.parseFloat(txtPrePack.getText()));
         aProd.setMarca(comboMarca.getItemAt(comboMarca.getSelectedIndex()));
         aProd.setPorceGan(Integer.parseInt(spinGanancia.getValue().toString()));
         aProd.setBodegaCant(Integer.parseInt(spinBodega.getValue().toString()));
@@ -840,30 +892,47 @@ public class Administracion extends javax.swing.JFrame {
                }else{
                    r=aProd.modProd();
                    res="¡Producto Modificado!";
-               } 
-                        
+               }
+               
+               JOptionPane.showMessageDialog(interModProd, res);
+                                        
             } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(interModProd, "¡No se pudo Realizar la Consulta!...\n Compruebe que los datos que ingresa son correctos");
                 Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else{
             JOptionPane.showMessageDialog(interModProd, "Ha Olvidado llenar estos Campos Obligatorios:" + campos);
         }
         
-        if (r){
-            JOptionPane.showMessageDialog(interModProd, res);
-        }else{
-            JOptionPane.showMessageDialog(interModProd, "¡No se pudo Realizar la Consulta!...\n Compruebe que los datos que ingresa son correctos");
+        limpiarCampos();
+        interModProd.dispose();
+        try {
+            tablas.TablaProductos();
+        } catch (SQLException ex) {
+            Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        //limpiarCampos();
-        //interModProd.dispose();
     }//GEN-LAST:event_btnSaveModProdActionPerformed
+
+    private void txtPreCompraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPreCompraKeyTyped
+        validaNum(evt);
+    }//GEN-LAST:event_txtPreCompraKeyTyped
+
+    private void txtPreVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPreVentaKeyTyped
+        validaNum(evt);
+    }//GEN-LAST:event_txtPreVentaKeyTyped
+
+    private void txtPrePackKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrePackKeyTyped
+        validaNum(evt);
+    }//GEN-LAST:event_txtPrePackKeyTyped
+
+    private void comboProv1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboProv1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboProv1ActionPerformed
 
     
     
     
-    
+    //-------------------------------Campos para -------------------------------------//
     public void limpiarCampos(){
         txtProdNombre.setText("");
         lblCodigo.setText("Codigo: ");
@@ -880,9 +949,30 @@ public class Administracion extends javax.swing.JFrame {
         comboProv3.setSelectedIndex(0); comboProv4.setSelectedIndex(0);
                 
     }
-    public void llenarCampos(){
+    public void llenarCampos() throws SQLException{
+        aProd.llenarComboMarcas();
+        aProd.llenarProvs();
+        txtProdNombre.setText(aProd.getNombre());
+        lblCodigo.setText("Codigo: "+aProd.getCodigo());
+        txtPreCompra.setText(String.valueOf(aProd.getPreCompra()));
+        txtPreVenta.setText(String.valueOf(aProd.getPreVenta()));
+        spinGanancia.setValue(aProd.getPorceGan());
+        spinPack.setValue(aProd.getCantPack());
+        txtPrePack.setText(String.valueOf(aProd.getPrePack()));
+        spinLocal.setValue(aProd.getLocalCant());
+        spinBodega.setValue(aProd.getBodegaCant());
+        spinRepos.setValue(aProd.getRepo());
         
     }
+    //Validacion para que no se puedan ingresar letras al jTextField
+    private void validaNum(java.awt.event.KeyEvent evt){
+        char val=evt.getKeyChar();
+        if (Character.isLetter(val)){
+            getToolkit().beep();
+            evt.consume();
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -928,11 +1018,11 @@ public class Administracion extends javax.swing.JFrame {
     private javax.swing.JButton btnDelProd;
     private javax.swing.JButton btnModProd;
     private javax.swing.JButton btnSaveModProd;
-    private javax.swing.JComboBox<String> comboMarca;
-    private javax.swing.JComboBox<String> comboProv1;
-    private javax.swing.JComboBox<String> comboProv2;
-    private javax.swing.JComboBox<String> comboProv3;
-    private javax.swing.JComboBox<String> comboProv4;
+    public static final javax.swing.JComboBox<String> comboMarca = new javax.swing.JComboBox<>();
+    public static final javax.swing.JComboBox<String> comboProv1 = new javax.swing.JComboBox<>();
+    public static final javax.swing.JComboBox<String> comboProv2 = new javax.swing.JComboBox<>();
+    public static final javax.swing.JComboBox<String> comboProv3 = new javax.swing.JComboBox<>();
+    public static final javax.swing.JComboBox<String> comboProv4 = new javax.swing.JComboBox<>();
     private javax.swing.JFrame interModProd;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton12;
