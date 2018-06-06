@@ -796,7 +796,12 @@ public class Administracion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelModProdActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        Usuarios f = new Usuarios();
+        Usuarios f;
+        try {
+            f = new Usuarios();
+        } catch (SQLException ex) {
+            Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+        }
         f.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton12ActionPerformed

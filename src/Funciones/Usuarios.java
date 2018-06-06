@@ -115,4 +115,8 @@ public class Usuarios {
             //Luego vemos qe mas le metemos
         }
     }
+    public void addUser()throws SQLException {
+        String sql="INSERT into usuarios VALUES ('"+this.user+"','"+this.nombre+"','"+this.pass+"','"+this.rol+"','"+this.apellido+"','"+this.apellido+"','"+this.direccion+"');";
+        funSQL.ExecSQL(sql);
+    }
 }

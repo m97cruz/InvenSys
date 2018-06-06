@@ -22,9 +22,12 @@ public class Usuarios extends javax.swing.JFrame {
      * Creates new form Estadisticas
      */
     Funciones.Usuarios usuarios = new Funciones.Usuarios();
-    public Usuarios() {
+    public Usuarios() throws SQLException {
         initComponents();
         this.setLocationRelativeTo(null);
+        MostrarDatos();
+        this.InterAddModUsr.setLocationRelativeTo(null);
+        this.InterAddModUsr.setSize(350,500);
     }
 
     /**
@@ -221,6 +224,7 @@ public class Usuarios extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Administracion de usuarios");
 
         TableUsers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -343,8 +347,14 @@ public class Usuarios extends javax.swing.JFrame {
             usuarios.setTelefono(this.tf_phone.getText());
             usuarios.setCorreo(this.tf_mail.getText());
             usuarios.setRol(this.cb_rol.getSelectedItem().toString());
-            //usuarios.AddUser();
-            this.VaciarInterAddUsr();
+            try {
+                usuarios.addUser();
+                this.VaciarInterAddUsr();
+                this.MostrarDatos();
+            } catch (SQLException ex) {
+                Logger.getLogger(Usuarios.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, ex);
+            }
         }
     }//GEN-LAST:event_btn_agregarActionPerformed
 
@@ -397,7 +407,11 @@ public class Usuarios extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Usuarios().setVisible(true);
+                try {
+                    new Usuarios().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Usuarios.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -415,14 +429,16 @@ public class Usuarios extends javax.swing.JFrame {
     public void MostrarDatos() throws SQLException{
         DefaultTableModel model = new DefaultTableModel();
         ResultSet rs = usuarios.selectAll();
-        model.setColumnIdentifiers(new Object[]{"Usuario","Nombre y apellido","Rol","Telefono"});
+        model.setColumnIdentifiers(new Object[]{"Usuario","Nombre y apellido","Rol","Telefono","Direccion","Correo"});
         if(rs!=null){
             while(rs.next()){
                 model.addRow(new Object[]{
                     rs.getString("Usuario"),
                     rs.getString("Nombre") + rs.getString("Apellido"),
                     rs.getString("rol"),
-                    rs.getString("telefono")
+                    rs.getString("telefono"),
+                    rs.getString("direccion"),
+                    rs.getString("correo"),
                 });
             }
         }
