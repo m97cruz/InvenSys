@@ -125,17 +125,19 @@ public class Productos {
         
         ResultSet rs = funcion.select(sql);
         if(rs.next()){
-            rID = rs.getInt("id");
+            rID = rs.getInt(1);
         }else{
             rID=0;
         }
         return rID;
     }
     private String getProvNombre(int id) throws SQLException{ 
-        String prov="",sql = "SELECT id FROM proveedores WHERE id="+id;
+        String prov="",sql = "SELECT prov_nombre FROM proveedores WHERE id="+id;
         ResultSet rs = funcion.select(sql);
         if(rs.next()){
-            prov = rs.getString("prov_nombre");
+            prov = rs.getString(1);
+        }else{
+            prov = "-Sin Proveedor-";
         }
         return prov;
     }
@@ -274,35 +276,43 @@ public class Productos {
             dbProv4 =rs.getInt(15);
         }
         //Si hay un proveedor, seleccionara su nombre en  la base de datos
-        if(dbProv1 != 0){
+        if(dbProv1 > 0){
             prov1 = getProvNombre(dbProv1);
         }else{
-            prov1= "";
+            prov1= "-Sin Especificar-";
         }
         
-        if(dbProv2 != 0){
+        if(dbProv2 > 0){
             prov2 = getProvNombre(dbProv2);
         }else{
-            prov2= "";
+            prov2= "-Sin Especificar-";
         }
         
-        if(dbProv3 != 0){
+        if(dbProv3 > 0){
             prov3 = getProvNombre(dbProv3);
         }else{
-            prov3= "";
+            prov3= "-Sin Especificar-";
         }
         
-        if(dbProv4 != 0){
+        if(dbProv4 > 0){
             prov4 = getProvNombre(dbProv4);
         }else{
-            prov4= "";
+            prov4= "-Sin Especificar-";
         }
-        if(marcaDB != 0){
+        if(marcaDB > 0){
             marca= getMarcaNombre(marcaDB);
         }else{
-            marca="";
+            marca="-Sin Especificar-";
         }
         
+    }
+    
+    public void deselectProd() {
+        bodegaCant = 0;
+        cantPack = 0;
+        codigo=0;
+        marcaDB=0;
+        dbProv1 =0; dbProv2=0; dbProv3=0; dbProv4=0;
     }
     
     public void llenarComboMarcas() throws SQLException{
@@ -334,9 +344,11 @@ public class Productos {
         DefaultComboBoxModel comboProv3 = (DefaultComboBoxModel) Administracion.comboProv3.getModel();
         DefaultComboBoxModel comboProv4 = (DefaultComboBoxModel) Administracion.comboProv4.getModel();
         
-        comboProv1.removeAllElements(); comboProv2.removeAllElements(); comboProv3.removeAllElements(); comboProv4.removeAllElements();
-        
         comboProv1.removeAllElements();
+        comboProv2.removeAllElements(); 
+        comboProv3.removeAllElements(); 
+        comboProv4.removeAllElements();
+        
         String sql;
         if(dbProv1!=0){
            sql="SELECT prov_nombre FROM proveedores WHERE id="+dbProv1;
@@ -386,7 +398,18 @@ public class Productos {
         Administracion.comboProv4.setModel(comboProv4);
     }
     
-    
-    
+    public boolean solicitarProd(String origen, String destino, int cant, String marcaSend) throws SQLException{
+        
+        String sql="INSERT INTO prod_solicita VALUES("+codigo+", '"+nombre+"', '"+marcaSend+"', '"+origen+"', '"+destino+"', "+cant+", "+preCompra+")";
+        return funcion.ExecSQL(sql);
+    }
+    public int getSoliCant() throws SQLException{
+        ResultSet rs = funcion.select("SELECT cod_prod FROM prod_solicita");
+        int cont=0;
+        while(rs.next()){
+            cont++;
+        }
+        return cont;
+    }
     
 }
