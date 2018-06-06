@@ -6,9 +6,11 @@
 package Funciones;
 
 import Admin.Administracion;
+import Admin.ProdSolicita;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -257,9 +259,8 @@ public class Productos {
     
     public boolean rmovProd() throws SQLException{
         
-        
-        
-        return true;
+        sql ="DELETE FROM productos WHERE codigo="+codigo;
+        return funcion.ExecSQL(sql);
     }
     
     public void selectProd() throws SQLException{
@@ -405,10 +406,17 @@ public class Productos {
     }
     
     public boolean solicitarProd(String origen, String destino, int cant, String marcaSend) throws SQLException{
-        
-        sql="INSERT INTO prod_solicita VALUES("+codigo+", '"+nombre+"', '"+marcaSend+"', '"+origen+"', '"+destino+"', "+cant+", "+preCompra+")";
+        sql ="SELECT cantidad FROM prod_solicita WHERE cod_prod="+codigo+" AND destino='"+destino+"'";
+        rs = funcion.select(sql);
+        if (rs.next()){            
+            sql = "UPDATE prod_solicita SET cantidad="+(rs.getInt(1)+cant)+" WHERE cod_prod="+codigo + " AND destino='"+destino+"'";
+        }else{
+            sql="INSERT INTO prod_solicita VALUES("+codigo+", '"+nombre+"', '"+marcaSend+"', '"+origen+"', '"+destino+"', "+cant+", "+(preCompra*cant)+")";
+        }
         return funcion.ExecSQL(sql);
     }
+    
+    
     public int getSoliCant() throws SQLException{
         rs = funcion.select("SELECT cod_prod FROM prod_solicita");
         int cont=0;
@@ -416,6 +424,46 @@ public class Productos {
             cont++;
         }
         return cont;
+    }
+    
+    public boolean rmovSoliProc(String destino) throws SQLException{
+        
+        sql = "DELETE FROM prod_solicita WHERE cod_prod="+codigo + " AND destino='"+destino+"'";
+        return funcion.ExecSQL(sql);
+    }
+    
+    public boolean confirmPedido(String destino) throws SQLException{ // Para cofirmar en Tabla Prod Solicita
+        //Extraer la cantidad actual para luego sumarle
+        boolean r=false;
+        String sqlUpd = "";
+        int exisBodega =0, exisLocal=0, cantidad=0;
+        sql="SELECT cantidad FROM prod_solicita WHERE cod_prod="+codigo + " AND destino='"+destino+"'";
+        rs = funcion.select(sql);
+        while(rs.next()){
+            cantidad = rs.getInt(1);
+        }
+        
+        //Determinar tipo de movimiento
+        //Creara una consulta para cada uno
+        if (destino.equals("Local")){
+            
+            if(bodegaCant>=cantidad){
+                sqlUpd="UPDATE productos SET local_cant="+(localCant+cantidad)+", bodega_cant="+(bodegaCant-cantidad) + " WHERE codigo="+codigo;
+                r = funcion.ExecSQL(sqlUpd);
+                rmovSoliProc(destino);
+            }else{
+                ProdSolicita.mensaje="¡La Peticion Supera las Existencias en Bodega!";
+            }
+            
+        }else{//Si es de Porveedor a Bodega
+            
+            sqlUpd="UPDATE productos SET bodega_cant="+(bodegaCant+cantidad) + " WHERE codigo="+codigo;
+            r=funcion.ExecSQL(sqlUpd);
+            rmovSoliProc(destino);
+        }
+        
+        
+        return r;
     }
     
 }

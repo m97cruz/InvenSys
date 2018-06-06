@@ -109,6 +109,7 @@ public class Administracion extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
 
         interModProd.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        interModProd.setMinimumSize(new java.awt.Dimension(610, 465));
         interModProd.setSize(new java.awt.Dimension(610, 465));
 
         lblCodigo.setText("Codigo:");
@@ -502,7 +503,7 @@ public class Administracion extends javax.swing.JFrame {
             }
         });
 
-        btnProdSolicita.setText("Solicitudes Pendientes(3)");
+        btnProdSolicita.setText("Solicitudes Pendientes()");
         btnProdSolicita.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProdSolicitaActionPerformed(evt);
@@ -539,7 +540,7 @@ public class Administracion extends javax.swing.JFrame {
 
         jLabel1.setText("Cantidad:");
 
-        spinCantSolicita.setValue(5);
+        spinCantSolicita.setValue(0);
 
         btnSolicitarProd.setText("Solicitar");
         btnSolicitarProd.addActionListener(new java.awt.event.ActionListener() {
@@ -738,7 +739,27 @@ public class Administracion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnProdSolicitaActionPerformed
 
     private void btnDelProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelProdActionPerformed
-        JOptionPane.showConfirmDialog(this, "¿Está seguro de Eliminar este producto?");
+        boolean r=false;
+        if(tablaProd.isRowSelected(tablaProd.getSelectedRow())){
+            
+            DefaultTableModel model = (DefaultTableModel) tablaProd.getModel();
+            int idProd = Integer.parseInt(model.getValueAt(tablaProd.getSelectedRow(), 0).toString());
+            int conf = JOptionPane.showConfirmDialog(this, "¿Está seguro de Eliminar este producto?");
+            if(conf == 0){
+                aProd.setCodigo(idProd);
+                try {
+                    r = aProd.rmovProd();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        if (r){
+            JOptionPane.showMessageDialog(this, "Producto Eliminado Correctamente!");
+        }else{
+            JOptionPane.showMessageDialog(this, "No se Pudo Eliminar el Producto!");
+        }
+        
     }//GEN-LAST:event_btnDelProdActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -952,6 +973,7 @@ public class Administracion extends javax.swing.JFrame {
     
     
     //-------------------------------Campos para -------------------------------------//
+    //<editor-fold desc="Metodos limpiar, rellenar y validar campos">
     public void limpiarCampos(){
         txtProdNombre.setText("");
         lblCodigo.setText("Codigo: ");
@@ -982,7 +1004,7 @@ public class Administracion extends javax.swing.JFrame {
         spinBodega.setValue(aProd.getBodegaCant());
         spinRepos.setValue(aProd.getRepo());
         
-    }
+    }//</editor-fold>
     //Validacion para que no se puedan ingresar letras al jTextField
     private void validaNum(java.awt.event.KeyEvent evt){
         char val=evt.getKeyChar();
@@ -1030,7 +1052,7 @@ public class Administracion extends javax.swing.JFrame {
             }
         });
     }
-
+//<editor-fold desc="Declaracion de Variables">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddProd;
     private javax.swing.JButton btnCancelModProd;
@@ -1097,4 +1119,5 @@ public class Administracion extends javax.swing.JFrame {
     private javax.swing.JTextField txtPreVenta;
     private javax.swing.JTextField txtProdNombre;
     // End of variables declaration//GEN-END:variables
+    //</editor-fold>
 }
