@@ -84,4 +84,7 @@ public class Tablas {
         ProdSolicita.tablaProdSolicita.setModel(model);
     }
 
+    public void tablaProdVendedor() throws  SQLException{
+        
+    }
 }
