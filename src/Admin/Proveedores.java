@@ -16,12 +16,14 @@ import javax.swing.JOptionPane;
  */
 public class Proveedores extends javax.swing.JFrame {
 
+    Funciones.Tablas tablas = new Funciones.Tablas();
     /**
      * Creates new form Proveedores
      */
-    public Proveedores() {
+    public Proveedores() throws SQLException {
         initComponents();
         this.setLocationRelativeTo(null);
+        tablas.tablaProveedor();
     }
 
     /**
@@ -99,26 +101,26 @@ public class Proveedores extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaProvs.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Nombre", "Telefono", "Direccion", "Proveedor de"
+                "Codigo", "Nombre", "Telefono", "Direccion", "Correo"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tablaProvs);
 
         jButton1.setText("Añadir Proveedor");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -267,7 +269,11 @@ public class Proveedores extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Proveedores().setVisible(true);
+                try {
+                    new Proveedores().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Proveedores.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -290,12 +296,12 @@ public class Proveedores extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
-    public static final javax.swing.JTable jTable1 = new javax.swing.JTable();
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
+    public static final javax.swing.JTable tablaProvs = new javax.swing.JTable();
     // End of variables declaration//GEN-END:variables
 }

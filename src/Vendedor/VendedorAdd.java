@@ -19,12 +19,14 @@ import javax.swing.JOptionPane;
 public class VendedorAdd extends javax.swing.JFrame {
     Funciones.Usuarios usuarios = new Funciones.Usuarios();
     Admin.Login login = new Admin.Login();
+    Funciones.Tablas tablas = new Funciones.Tablas();
     /**
      * Creates new form Vendedor
      */
     public VendedorAdd() throws SQLException{
         initComponents();
         this.setLocationRelativeTo(null);
+        tablas.tablaProdVendAdd();
         /*usuarios.setId(login.usuarios.getId());
         usuarios.selectUsr();*/
     }
@@ -61,31 +63,31 @@ public class VendedorAdd extends javax.swing.JFrame {
 
         jLabel2.setText("Buscar:");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaProd.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Codigo", "Nombre", "Precio", "Disponibles en Local"
+                "Codigo", "Nombre", "Marca", "Precio (Unitario)", "Precio (Paquete)", "Disp. Local", "Disp. Bodega"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+        tablaProd.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable1MouseClicked(evt);
+                tablaProdMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tablaProd);
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -240,8 +242,8 @@ public class VendedorAdd extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-    }//GEN-LAST:event_jTable1MouseClicked
+    private void tablaProdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaProdMouseClicked
+    }//GEN-LAST:event_tablaProdMouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.dispose();
@@ -304,8 +306,8 @@ public class VendedorAdd extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    public static final javax.swing.JTable jTable1 = new javax.swing.JTable();
     public static final javax.swing.JTable jTable2 = new javax.swing.JTable();
     private javax.swing.JTextField jTextField1;
+    public static final javax.swing.JTable tablaProd = new javax.swing.JTable();
     // End of variables declaration//GEN-END:variables
 }

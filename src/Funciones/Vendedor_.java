@@ -9,6 +9,6 @@ package Funciones;
  *
  * @author Mauricio Cruz
  */
-public class Vendedor {
+public class Vendedor_ {
     
 }
