@@ -116,7 +116,7 @@ public class Usuarios {
         }
     }
     public void addUser()throws SQLException {
-        String sql="INSERT into usuarios VALUES ('"+this.user+"','"+this.nombre+"','"+this.pass+"','"+this.rol+"','"+this.apellido+"','"+this.apellido+"','"+this.direccion+"');";
+        String sql="INSERT into usuarios VALUES (NULL,'"+this.user+"','"+this.nombre+"','"+this.pass+"','"+this.rol+"','"+this.apellido+"','"+this.direccion+"','"+this.telefono+"','"+this.correo+"');";
         funSQL.ExecSQL(sql);
     }
 }
