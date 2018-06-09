@@ -119,4 +119,12 @@ public class Usuarios {
         String sql="INSERT into usuarios VALUES (NULL,'"+this.user+"','"+this.nombre+"','"+this.pass+"','"+this.rol+"','"+this.apellido+"','"+this.direccion+"','"+this.telefono+"','"+this.correo+"');";
         funSQL.ExecSQL(sql);
     }
+    public void updateUser(int id)throws SQLException {
+        String sql="UPDATE usuarios SET usuario='"+this.user+"', nombre='"+this.nombre+"',rol='"+this.rol+"',apellido='"+this.apellido+"',direccion='"+this.direccion+"',telefono='"+this.telefono+"',correo='"+this.correo+"' Where id="+id+";";
+        funSQL.ExecSQL(sql);
+    }
+    public void updatePass(int id)throws SQLException {
+        String sql="UPDATE usuarios SET passwd='"+this.pass+"'Where id="+id+";";
+        funSQL.ExecSQL(sql);
+    }
 }

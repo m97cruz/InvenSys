@@ -22,12 +22,13 @@ public class Usuarios extends javax.swing.JFrame {
      * Creates new form Estadisticas
      */
     Funciones.Usuarios usuarios = new Funciones.Usuarios();
+    
     public Usuarios() throws SQLException {
         initComponents();
         this.setLocationRelativeTo(null);
         MostrarDatos();
         this.InterAddModUsr.setLocationRelativeTo(null);
-        this.InterAddModUsr.setSize(350,500);
+        this.InterAddModUsr.setSize(400,550);
     }
 
     /**
@@ -48,7 +49,6 @@ public class Usuarios extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         nombre = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        tf_pass = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         tf_address = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -57,15 +57,27 @@ public class Usuarios extends javax.swing.JFrame {
         tf_mail = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         cb_rol = new javax.swing.JComboBox<>();
-        btn_agregar = new javax.swing.JButton();
+        btn_accion = new javax.swing.JButton();
         btn_cancel = new javax.swing.JButton();
+        tf_pass = new javax.swing.JPasswordField();
+        lblid = new javax.swing.JLabel();
+        tf_id = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
 
         InterAddModUsr.setTitle("Agregar usuario");
+        InterAddModUsr.setResizable(false);
         InterAddModUsr.setSize(new java.awt.Dimension(285, 220));
+        InterAddModUsr.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                InterAddModUsrWindowClosed(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                InterAddModUsrWindowClosing(evt);
+            }
+        });
 
         lbl_titulo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lbl_titulo.setText("Agregar usuario");
@@ -107,10 +119,10 @@ public class Usuarios extends javax.swing.JFrame {
 
         cb_rol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Vendedor", "Administrador" }));
 
-        btn_agregar.setText("Agregar");
-        btn_agregar.addActionListener(new java.awt.event.ActionListener() {
+        btn_accion.setText("Agregar");
+        btn_accion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_agregarActionPerformed(evt);
+                btn_accionActionPerformed(evt);
             }
         });
 
@@ -121,67 +133,77 @@ public class Usuarios extends javax.swing.JFrame {
             }
         });
 
+        lblid.setText("id:");
+
+        tf_id.setEnabled(false);
+
         javax.swing.GroupLayout InterAddModUsrLayout = new javax.swing.GroupLayout(InterAddModUsr.getContentPane());
         InterAddModUsr.getContentPane().setLayout(InterAddModUsrLayout);
         InterAddModUsrLayout.setHorizontalGroup(
             InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(InterAddModUsrLayout.createSequentialGroup()
-                        .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(InterAddModUsrLayout.createSequentialGroup()
-                                .addGap(57, 57, 57)
-                                .addComponent(btn_agregar))
-                            .addGroup(InterAddModUsrLayout.createSequentialGroup()
-                                .addGap(70, 70, 70)
-                                .addComponent(lbl_titulo)))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(47, 47, 47)
+                        .addComponent(btn_accion)
+                        .addGap(62, 62, 62))
+                    .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                            .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel4)
+                                .addComponent(jLabel7)
+                                .addComponent(jLabel6))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                                    .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(cb_rol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(tf_phone, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                                            .addGap(77, 77, 77)
+                                            .addComponent(btn_cancel)))
+                                    .addGap(0, 90, Short.MAX_VALUE))
+                                .addComponent(tf_mail)))
+                        .addComponent(jLabel8)
+                        .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                            .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel1))
+                            .addGap(23, 23, 23)
+                            .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(apellido, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(tf_user, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                            .addComponent(jLabel5)
+                            .addGap(18, 18, 18)
+                            .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(tf_pass)
+                                .addComponent(tf_address, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+            .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(InterAddModUsrLayout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addComponent(lbl_titulo))
                     .addGroup(InterAddModUsrLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(InterAddModUsrLayout.createSequentialGroup()
-                                .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel6))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tf_mail, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(InterAddModUsrLayout.createSequentialGroup()
-                                        .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(cb_rol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(tf_phone, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(InterAddModUsrLayout.createSequentialGroup()
-                                                .addGap(77, 77, 77)
-                                                .addComponent(btn_cancel))
-                                            .addComponent(tf_pass, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(0, 0, Short.MAX_VALUE))))
-                            .addGroup(InterAddModUsrLayout.createSequentialGroup()
-                                .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addGroup(InterAddModUsrLayout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(tf_address, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(InterAddModUsrLayout.createSequentialGroup()
-                                        .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel3)
-                                            .addComponent(jLabel2)
-                                            .addComponent(jLabel1))
-                                        .addGap(23, 23, 23)
-                                        .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(apellido, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(tf_user, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(0, 26, Short.MAX_VALUE)))))
-                .addGap(34, 34, 34))
+                        .addComponent(lblid)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tf_id, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         InterAddModUsrLayout.setVerticalGroup(
             InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(InterAddModUsrLayout.createSequentialGroup()
                 .addGap(4, 4, 4)
                 .addComponent(lbl_titulo)
-                .addGap(18, 18, 18)
+                .addGap(19, 19, 19)
+                .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblid)
+                    .addComponent(tf_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -215,9 +237,9 @@ public class Usuarios extends javax.swing.JFrame {
                     .addComponent(cb_rol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(InterAddModUsrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_agregar)
+                    .addComponent(btn_accion)
                     .addComponent(btn_cancel))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addGap(26, 26, 26))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -303,13 +325,34 @@ public class Usuarios extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        InterAddModUsr.setVisible(true);
+        int fila = this.TableUsers.getSelectedRow();
+        if(fila>=0){
+            this.btn_accion.setText("Actualizar");
+            this.tf_id.setText(TableUsers.getValueAt(fila,0).toString());
+            this.nombre.setText(TableUsers.getValueAt(fila,1).toString());
+            this.apellido.setText(TableUsers.getValueAt(fila,2).toString());
+            this.tf_user.setText(TableUsers.getValueAt(fila,3).toString());
+            this.tf_phone.setText(TableUsers.getValueAt(fila,5).toString());
+            this.tf_address.setText(TableUsers.getValueAt(fila,6).toString());
+            this.tf_mail.setText(TableUsers.getValueAt(fila,7).toString());
+            String rol = TableUsers.getValueAt(fila,4).toString();
+            if(rol.equals("ADMIN")){
+                this.cb_rol.setSelectedIndex(1);
+            }else{
+                this.cb_rol.setSelectedIndex(0);
+            
+            }
+            InterAddModUsr.setVisible(true);       
+
+        } else{
+            JOptionPane.showMessageDialog(this,"Ninguna fila se ha selecionado","Aviso",JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
-        InterAddModUsr.setVisible(true); 
-        
+        this.btn_accion.setText("Guardar");
+        this.VaciarInterAddUsr();
+        InterAddModUsr.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -322,42 +365,91 @@ public class Usuarios extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void btn_agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregarActionPerformed
+    private void btn_accionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_accionActionPerformed
         // verificar que los campos no esten vacion
-        boolean[] validar= new boolean[6];
+        boolean[] validar= new boolean[7];
         validar[0] = this.apellido.getText().isEmpty();
         validar[1] = this.nombre.getText().isEmpty();
         validar[2] = this.tf_user.getText().isEmpty();
-        validar[3] = this.tf_pass.getText().isEmpty();
+        char pass[]=this.tf_pass.getPassword();
+        validar[3] = new String(pass).isEmpty();
         validar[4] = this.tf_address.getText().isEmpty();
         validar[5] = this.tf_phone.getText().isEmpty();
-        //se verifica que ningun campo este vacio
-        if(validar[0]||validar[1]||validar[2]||validar[3]||validar[4]||validar[5]){
-            JOptionPane.showMessageDialog(this,"Debe ingresar todos los datos","Aviso",JOptionPane.INFORMATION_MESSAGE);
-        } else{
-            //Se registrara el nuevo usuario
-            usuarios.setNombre(this.nombre.getText());
-            usuarios.setApellido(this.apellido.getText());
-            usuarios.setUser(this.tf_user.getText());
-            usuarios.setPass(this.tf_pass.getText());
-            usuarios.setDireccion(this.tf_address.getText());
-            usuarios.setTelefono(this.tf_phone.getText());
-            usuarios.setCorreo(this.tf_mail.getText());
-            String rol="NORMAL";
-            if(this.cb_rol.getSelectedItem().toString().equals("Administrador")){
-                rol="ADMIN";
+        validar[6] = this.tf_mail.getText().isEmpty();
+        if(this.btn_accion.getText().equals("Guardar")){
+            if(validar[0]||validar[1]||validar[2]||validar[3]||validar[4]||validar[5]){
+                JOptionPane.showMessageDialog(this,"Debe ingresar todos los datos","Aviso",JOptionPane.INFORMATION_MESSAGE);
+            } else{
+                //Se registrara el nuevo usuario
+                usuarios.setNombre(this.nombre.getText());
+                usuarios.setApellido(this.apellido.getText());
+                usuarios.setUser(this.tf_user.getText());
+                
+                usuarios.setDireccion(this.tf_address.getText());
+                usuarios.setTelefono(this.tf_phone.getText());
+                usuarios.setCorreo(this.tf_mail.getText());
+                String rol="NORMAL";
+                if(this.cb_rol.getSelectedItem().toString().equals("Administrador")){
+                    rol="ADMIN";
+                }
+                usuarios.setRol(rol);
+                usuarios.setPass(new String(pass));
+                try {
+                    usuarios.addUser();
+                    this.VaciarInterAddUsr();
+                    this.InterAddModUsr.setVisible(false);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Usuarios.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(this, ex);
+                }
+                
             }
-            usuarios.setRol(rol);
-            try {
-                usuarios.addUser();
+        } else if(this.btn_accion.getText().equals("Actualizar")){
+            
+                usuarios.setNombre(this.nombre.getText());
+                usuarios.setApellido(this.apellido.getText());
+                usuarios.setUser(this.tf_user.getText());
+                usuarios.setDireccion(this.tf_address.getText());
+                usuarios.setTelefono(this.tf_phone.getText());
+                usuarios.setCorreo(this.tf_mail.getText());
+                String rol="NORMAL";
+                if(this.cb_rol.getSelectedItem().toString().equals("Administrador")){
+                    rol="ADMIN";
+                }
+                usuarios.setRol(rol);
+                usuarios.setPass(new String(pass));
+                int id=Integer.valueOf(this.tf_id.getText());
+                if(validar[3]){
+                    try {
+                        usuarios.updateUser(id);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Usuarios.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(this,ex,"",JOptionPane.INFORMATION_MESSAGE);
+
+                    }
+                        JOptionPane.showMessageDialog(this,"Contraseña sin modificar","",JOptionPane.INFORMATION_MESSAGE);
+
+                } else{
+                    try {
+                        usuarios.updatePass(id);
+                        usuarios.updateUser(id);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Usuarios.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(this,ex,"",JOptionPane.INFORMATION_MESSAGE);
+
+                    }
+                        JOptionPane.showMessageDialog(this,"COntraseña modificada","",JOptionPane.INFORMATION_MESSAGE);
+                }
                 this.VaciarInterAddUsr();
-                this.MostrarDatos();
-            } catch (SQLException ex) {
-                Logger.getLogger(Usuarios.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, ex);
-            }
+                this.InterAddModUsr.setVisible(false);
         }
-    }//GEN-LAST:event_btn_agregarActionPerformed
+        
+        try {
+            this.MostrarDatos();
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuarios.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btn_accionActionPerformed
 
     private void btn_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelActionPerformed
         // TODO add your handling code here:
@@ -376,6 +468,17 @@ public class Usuarios extends javax.swing.JFrame {
     private void nombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_nombreActionPerformed
+
+    private void InterAddModUsrWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_InterAddModUsrWindowClosed
+        // TODO add your handling code here:
+        this.VaciarInterAddUsr();
+    }//GEN-LAST:event_InterAddModUsrWindowClosed
+
+    private void InterAddModUsrWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_InterAddModUsrWindowClosing
+         // TODO add your handling code here:
+                 this.VaciarInterAddUsr();
+
+    }//GEN-LAST:event_InterAddModUsrWindowClosing
 
     /**
      * @param args the command line arguments
@@ -430,12 +533,14 @@ public class Usuarios extends javax.swing.JFrame {
     public void MostrarDatos() throws SQLException{
         DefaultTableModel model = new DefaultTableModel();
         ResultSet rs = usuarios.selectAll();
-        model.setColumnIdentifiers(new Object[]{"Usuario","Nombre y apellido","Rol","Telefono","Direccion","Correo"});
+        model.setColumnIdentifiers(new Object[]{"Nº","Nombre","apellido","Usuario","Rol","Telefono","Direccion","Correo"});
         if(rs!=null){
             while(rs.next()){
                 model.addRow(new Object[]{
+                    rs.getString("id"),
+                    rs.getString("Nombre"),
+                    rs.getString("Apellido"),
                     rs.getString("Usuario"),
-                    rs.getString("Nombre") + rs.getString("Apellido"),
                     rs.getString("rol"),
                     rs.getString("telefono"),
                     rs.getString("direccion"),
@@ -449,7 +554,7 @@ public class Usuarios extends javax.swing.JFrame {
     private javax.swing.JFrame InterAddModUsr;
     public static final javax.swing.JTable TableUsers = new javax.swing.JTable();
     private javax.swing.JTextField apellido;
-    private javax.swing.JButton btn_agregar;
+    private javax.swing.JButton btn_accion;
     private javax.swing.JButton btn_cancel;
     private javax.swing.JComboBox<String> cb_rol;
     private javax.swing.JButton jButton1;
@@ -465,10 +570,12 @@ public class Usuarios extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbl_titulo;
+    private javax.swing.JLabel lblid;
     private javax.swing.JTextField nombre;
     private javax.swing.JTextField tf_address;
+    private javax.swing.JTextField tf_id;
     private javax.swing.JTextField tf_mail;
-    private javax.swing.JTextField tf_pass;
+    private javax.swing.JPasswordField tf_pass;
     private javax.swing.JTextField tf_phone;
     private javax.swing.JTextField tf_user;
     // End of variables declaration//GEN-END:variables
