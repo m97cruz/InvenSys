@@ -27,7 +27,8 @@ public class Tablas {
     public void TablaProductos() throws SQLException{
         DefaultTableModel model = (DefaultTableModel) Administracion.tablaProd.getModel(); //Obtiene el Modelo
         model.setRowCount(0); //Reinicia el Contador de Filas
-        sql ="SELECT * FROM productos"; String query;
+        sql ="SELECT * FROM productos"; 
+        String query;
         
         String[] datos = new String[7];
         ResultSet rsMarca;
@@ -94,7 +95,7 @@ public class Tablas {
 
         rs = funcion.select(sql);
         if(!rs.isBeforeFirst()){
-            JOptionPane.showMessageDialog(null, "La tabla no contiene ningun valor!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "La tabla no contiene algun valor!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
         while(rs.next()){
             datos[0] = rs.getString(1); //codigo
