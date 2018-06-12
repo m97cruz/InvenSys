@@ -124,6 +124,11 @@ public class Vendedor extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tbl_list.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tbl_listKeyPressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(tbl_list);
 
         lbl_lista.setText("Lista de Compra:");
@@ -307,19 +312,22 @@ public class Vendedor extends javax.swing.JFrame {
          if(fila<0){
              JOptionPane.showMessageDialog(this, "No se ha seleccionado algun producto","Aviso",JOptionPane.INFORMATION_MESSAGE);
          } else{
-             int cantidad=Integer.valueOf(JOptionPane.showInputDialog(this,"Cantidad de productos:","Ingrese la cantidad",JOptionPane.QUESTION_MESSAGE));
-             if(cantidad>0){
-                 String codigo = tablaProds.getValueAt(fila,0).toString();
-                 String nombre = tablaProds.getValueAt(fila,1).toString();
-                 String precioUni = tablaProds.getValueAt(fila,3).toString();
-                 modelo.addRow(new Object[]{
-                     codigo,
-                     nombre,
-                     precioUni,
-                     String.valueOf(cantidad)
-                 });
-                 //modelo.setColumnIdentifiers(new Object[]{"Codigo","Nombre","Precio unitario","Cantidad","Total"});
-                 tbl_list.setModel(modelo);
+            try{
+                int cantidad=Integer.valueOf(JOptionPane.showInputDialog(this,"Cantidad de productos:","Ingrese la cantidad",JOptionPane.QUESTION_MESSAGE));
+                if(cantidad>0){
+                    String codigo = tablaProds.getValueAt(fila,0).toString();
+                    String nombre = tablaProds.getValueAt(fila,1).toString();
+                    String precioUni = tablaProds.getValueAt(fila,3).toString();
+                    modelo.addRow(new Object[]{
+                        codigo,
+                        nombre,
+                        precioUni,
+                        String.valueOf(cantidad)
+                    });
+                    tbl_list.setModel(modelo);
+                }
+             }catch(Exception e){
+                JOptionPane.showMessageDialog(this, e.toString(),"Aviso",JOptionPane.INFORMATION_MESSAGE);
              }
          }
         }
@@ -340,10 +348,31 @@ public class Vendedor extends javax.swing.JFrame {
 
     private void btn_removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_removeActionPerformed
         // TODO add your handling code here:
-        int fila= this.tbl_list.getSelectedRow();
-        DefaultTableModel modelList = (DefaultTableModel) this.tbl_list.getModel();
-        modelList.removeRow(fila);      
+        try{
+            int fila= this.tbl_list.getSelectedRow();
+            DefaultTableModel modelList = (DefaultTableModel) this.tbl_list.getModel();
+            modelList.removeRow(fila);
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(this,"Error");        
+        }
     }//GEN-LAST:event_btn_removeActionPerformed
+
+    private void tbl_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbl_listKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==KeyEvent.VK_DELETE){
+            int fila=tbl_list.getSelectedRow();
+            if(fila<0){
+                JOptionPane.showMessageDialog(this, "No se ha seleccionado algun producto","Aviso",JOptionPane.INFORMATION_MESSAGE);
+            } else{
+                DefaultTableModel modelList = (DefaultTableModel) this.tbl_list.getModel();
+                try{
+                    modelList.removeRow(fila);
+                }catch(Exception e){
+                    JOptionPane.showMessageDialog(this,"Error");
+                }
+            }
+        }
+    }//GEN-LAST:event_tbl_listKeyPressed
     public void llenarTabla(){
         
     }
