@@ -7,6 +7,7 @@ package Vendedor;
  */
 
 
+import Admin.Administracion;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
@@ -28,6 +29,7 @@ public class Vendedor extends javax.swing.JFrame {
     Admin.Login login = new Admin.Login();
     Funciones.Tablas tablas = new Funciones.Tablas();
     private TableRowSorter filtro;
+    DefaultTableModel modelo;
 
     /**
      * Creates new form Vendedor
@@ -36,6 +38,7 @@ public class Vendedor extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         tablas.tablaProdVendedor();
+         modelo= (DefaultTableModel) Vendedor.tbl_list.getModel(); //Obtiene el Modelo
         /*usuarios.setId(login.usuarios.getId());
         usuarios.selectUsr();*/
     }
@@ -98,11 +101,6 @@ public class Vendedor extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tablaProds.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tablaProdsMouseClicked(evt);
-            }
-        });
         tablaProds.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tablaProdsKeyPressed(evt);
@@ -112,10 +110,7 @@ public class Vendedor extends javax.swing.JFrame {
 
         tbl_list.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Codigo", "Nombre", "Precio Unitario", "Cantidad", "Total"
@@ -155,6 +150,11 @@ public class Vendedor extends javax.swing.JFrame {
 
         btn_remove.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         btn_remove.setText("↑");
+        btn_remove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_removeActionPerformed(evt);
+            }
+        });
 
         btn_add.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         btn_add.setText("↓");
@@ -269,11 +269,6 @@ public class Vendedor extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void tablaProdsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaProdsMouseClicked
-        ProdInfo frame = new ProdInfo();
-        frame.setVisible(true);
-    }//GEN-LAST:event_tablaProdsMouseClicked
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
             VendedorAdd f = new VendedorAdd();
@@ -289,26 +284,45 @@ public class Vendedor extends javax.swing.JFrame {
          if(fila<0){
              JOptionPane.showMessageDialog(this, "No se ha seleccionado algun producto","Aviso",JOptionPane.INFORMATION_MESSAGE);
          } else{
-             int cantidad=Integer.valueOf(JOptionPane.showInputDialog(this,"Cantida de productos:","Ingrese la cantidad",JOptionPane.OK_OPTION));
+             int cantidad=Integer.valueOf(JOptionPane.showInputDialog(this,"Cantidad de productos:","Ingrese la cantidad",JOptionPane.QUESTION_MESSAGE));
              if(cantidad>0){
                  String codigo = tablaProds.getValueAt(fila,0).toString();
                  String nombre = tablaProds.getValueAt(fila,1).toString();
                  String precioUni = tablaProds.getValueAt(fila,3).toString();
-                 DefaultTableModel modelo = new DefaultTableModel();
                  modelo.addRow(new Object[]{
                      codigo,
                      nombre,
                      precioUni,
                      String.valueOf(cantidad)
                  });
-                 modelo.setColumnIdentifiers(new Object[]{"Codigo","Nombre","Precio unitario","Cantidad","Total"});
+                 //modelo.setColumnIdentifiers(new Object[]{"Codigo","Nombre","Precio unitario","Cantidad","Total"});
                  tbl_list.setModel(modelo);
              }
          }
     }//GEN-LAST:event_btn_addActionPerformed
 
     private void tablaProdsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tablaProdsKeyPressed
-      
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+             int fila=tablaProds.getSelectedRow();
+         if(fila<0){
+             JOptionPane.showMessageDialog(this, "No se ha seleccionado algun producto","Aviso",JOptionPane.INFORMATION_MESSAGE);
+         } else{
+             int cantidad=Integer.valueOf(JOptionPane.showInputDialog(this,"Cantidad de productos:","Ingrese la cantidad",JOptionPane.QUESTION_MESSAGE));
+             if(cantidad>0){
+                 String codigo = tablaProds.getValueAt(fila,0).toString();
+                 String nombre = tablaProds.getValueAt(fila,1).toString();
+                 String precioUni = tablaProds.getValueAt(fila,3).toString();
+                 modelo.addRow(new Object[]{
+                     codigo,
+                     nombre,
+                     precioUni,
+                     String.valueOf(cantidad)
+                 });
+                 //modelo.setColumnIdentifiers(new Object[]{"Codigo","Nombre","Precio unitario","Cantidad","Total"});
+                 tbl_list.setModel(modelo);
+             }
+         }
+        }
     }//GEN-LAST:event_tablaProdsKeyPressed
 
     private void txf_buscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txf_buscarKeyTyped
@@ -323,6 +337,13 @@ public class Vendedor extends javax.swing.JFrame {
         filtro = new TableRowSorter(this.tablaProds.getModel());
         this.tablaProds.setRowSorter(filtro);
     }//GEN-LAST:event_txf_buscarKeyTyped
+
+    private void btn_removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_removeActionPerformed
+        // TODO add your handling code here:
+        int fila= this.tbl_list.getSelectedRow();
+        DefaultTableModel modelList = (DefaultTableModel) this.tbl_list.getModel();
+        modelList.removeRow(fila);      
+    }//GEN-LAST:event_btn_removeActionPerformed
     public void llenarTabla(){
         
     }
