@@ -18,7 +18,7 @@ public class Usuarios {
         - No se que mas poner aqi xD*/
     public static int id;
     public static String nombre, apellido, user, pass, direccion, telefono, correo, rol;
-        //Getters y Setters
+        //<editor-fold desc="Getters y Setters">
     public static String getNombre() {
         return nombre;
     }
@@ -72,7 +72,7 @@ public class Usuarios {
     }
     public static void setRol(String rol) {
         Usuarios.rol = rol;
-    }
+    }//</editor-fold>
     
     
     

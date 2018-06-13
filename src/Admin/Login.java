@@ -123,7 +123,7 @@ Funciones.Usuarios fUser = new Funciones.Usuarios();
                 this.dispose();
                 break;
             default:
-                JOptionPane.showMessageDialog(null, "El Usuario o la contraseña No Coincide en los registros del sistema");
+                JOptionPane.showMessageDialog(this, "El Usuario o la contraseña No Coincide en los registros del sistema");
                 break;
         }
         }
