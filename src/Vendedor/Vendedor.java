@@ -18,6 +18,8 @@ import javafx.scene.input.KeyCode;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -30,7 +32,7 @@ public class Vendedor extends javax.swing.JFrame {
     Admin.Login login = new Admin.Login();
     Funciones.Tablas tablas = new Funciones.Tablas();
     private TableRowSorter filtro;
-    DefaultTableModel modelo;
+    DefaultTableModel  modelo;
 
     /**
      * Creates new form Vendedor
@@ -40,6 +42,7 @@ public class Vendedor extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         tablas.tablaProdVendedor();
          modelo= (DefaultTableModel) Vendedor.tbl_list.getModel(); //Obtiene el Modelo
+         //Crear el escuchador del evento Table changed 
         /*usuarios.setId(login.usuarios.getId());
         usuarios.selectUsr();*/
     }
@@ -401,7 +404,15 @@ public class Vendedor extends javax.swing.JFrame {
                        String.valueOf(cantidad),
                        total
                    });
-                   tbl_list.setModel(modelo);
+                   //tbl_list.setModel(modelo);
+                    modelo.addTableModelListener(new TableModelListener(){
+                    @Override
+                        public void tableChanged(TableModelEvent e) {
+                            if(e.getType()==TableModelEvent.UPDATE){
+                                JOptionPane.showMessageDialog(Vendedor.this, "algo");
+                            }
+                        }
+                    });
                    setTotal();
                }
             }
@@ -415,6 +426,7 @@ public class Vendedor extends javax.swing.JFrame {
             DefaultTableModel modelList = (DefaultTableModel) this.tbl_list.getModel();
             try{
                 modelList.removeRow(fila);
+                setTotal();
             }catch(Exception e){
                 JOptionPane.showMessageDialog(this,"Error");
             }
@@ -424,11 +436,10 @@ public class Vendedor extends javax.swing.JFrame {
         int filas=modelo.getRowCount();
         float total=0.00f;
         for(int i=0;i<=filas-1;i++){
-            float precio=Float.valueOf(modelo.getValueAt(i, 4).toString());
+            float precio=Float.valueOf(Vendedor.this.modelo.getValueAt(i, 4).toString());
             total+=precio;
         }
         this.lbl_total.setText(String.valueOf(total));
-
     }
     /**
      * @param args the command line arguments
