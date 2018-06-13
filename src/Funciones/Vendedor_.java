@@ -10,5 +10,9 @@ package Funciones;
  * @author Mauricio Cruz
  */
 public class Vendedor_ {
-    
+    public boolean procesarVenta(){
+        boolean venta=false;
+        
+        return venta;
+    }
 }

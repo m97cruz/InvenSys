@@ -121,7 +121,50 @@ public class Tablas {
             model.addRow(datos);
         }
     }
-    
+    public float getTotal(String codigo,int cantidad,boolean check) throws SQLException{
+       float total=0.0f;
+       int cantPack=0;
+       float precioPack=0.00f;
+       float precioUni=0.00f;
+       //Obtener la cantidad considerada como paquete para este producto
+       sql="SELECT cant_pack from productos WHERE codigo='"+codigo+"'";
+       rs=funcion.select(sql);
+       if(rs!=null){
+           while(rs.next()){
+               cantPack=rs.getInt(1);
+           }
+       }
+        sql="SELECT pre_venta from productos WHERE codigo='"+codigo+"'";
+        rs=funcion.select(sql);
+        if(rs!=null){
+            while(rs.next()){
+                precioUni=rs.getFloat(1);
+            }
+        }
+       //Si cant_Pack es igual a 0 se aplicara precio unitario
+       if(cantPack==0){
+            total=cantidad*precioUni;
+       } else{
+           //Se verifica la si la cantidad solicitada es igual
+            //O mayor a la cantidad por paquetes
+            if(cantidad>=cantPack){
+                //Se aplican operacionescon precio por paquete
+                //Obtener el precio por paquete
+                System.out.println("Operaciones por paquete");
+                 sql="SELECT pre_pack from productos WHERE codigo='"+codigo+"'";
+                 rs=funcion.select(sql);
+                 if(rs!=null){
+                     while(rs.next()){
+                         precioPack=rs.getFloat(1);
+                     }
+                 }
+            } else{
+                //Se aplican operacions con precio normal de venta
+                total=cantidad*precioUni;
+            }
+       }
+       return total;
+    }
     public void tablaProveedor() throws SQLException{
         DefaultTableModel model = (DefaultTableModel) Admin.Proveedores.tablaProvs.getModel();
         model.setRowCount(0);
