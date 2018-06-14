@@ -374,7 +374,7 @@ public class Administracion extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        this.dispose();
     }//GEN-LAST:event_btnAddProdActionPerformed
 
     private void btnModProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModProdActionPerformed
@@ -387,11 +387,14 @@ public class Administracion extends javax.swing.JFrame {
             Admin.AlterAddProd frame = new Admin.AlterAddProd();
             insertMode = false;
             frame.setVisible(true);
+            this.dispose();
             
         } catch (SQLException ex) {
             Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
         }
            
+        }else{
+            JOptionPane.showMessageDialog(this, "¡Selecione Un Producto!");
         }
         
     }//GEN-LAST:event_btnModProdActionPerformed

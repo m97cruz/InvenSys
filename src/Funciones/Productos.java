@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -346,7 +347,42 @@ public class Productos {
     }
     
     
-    
+    public DefaultTableModel llenarProvs_(DefaultTableModel model) throws SQLException{
+        model.setRowCount(0);
+        sql="SELECT id, prov_nombre FROM proveedores";
+        rs=funcion.select(sql);
+        String datos[] = new String[2];
+        while(rs.next()){
+            datos[0] = rs.getString(1);
+            datos[1] = rs.getString(2);
+            model.addRow(datos);
+        }
+        
+        return model;
+    }
+    public DefaultTableModel provSelList(DefaultTableModel model) throws SQLException{
+        model.setRowCount(0);
+        String prov="";
+        sql="SELECT proveedor1 FROM productos WHERE codigo="+codigo;
+        rs=funcion.select(sql);
+        while(rs.next()){
+            prov = rs.getString(1);
+            String datos[]= prov.split(",");
+            for (int i=0; i<datos.length;i++){
+                sql="SELECT id, prov_nombre FROM proveedores WHERE id="+datos[i];
+                rs=funcion.select(sql);
+                String datosProv[] = new String[2];
+                while(rs.next()){
+                    datosProv[0] = rs.getString(1);
+                    datosProv[1] = rs.getString(2);
+                    model.addRow(datos);
+                }
+                
+            }
+        }
+        
+        return model;
+    }
     
     
     
