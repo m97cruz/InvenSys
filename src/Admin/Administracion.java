@@ -378,10 +378,10 @@ public class Administracion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddProdActionPerformed
 
     private void btnModProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModProdActionPerformed
-        
-        if(tablaProd.isRowSelected(tablaProd.getSelectedRow())){
+        int fila = tablaProd.getSelectedRow();
+        if(fila >=0){
             DefaultTableModel model = (DefaultTableModel) tablaProd.getModel();
-            idProd = Integer.parseInt(model.getValueAt(tablaProd.getSelectedRow(), 0).toString());
+            idProd = Integer.parseInt(model.getValueAt(fila, 0).toString());
             
             try {
             Admin.AlterAddProd frame = new Admin.AlterAddProd();

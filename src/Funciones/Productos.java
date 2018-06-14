@@ -135,7 +135,7 @@ public class Productos {
         }
         return rID;
     }
-    private String getProvNombre(int id) throws SQLException{ 
+    public String getProvNombre(int id) throws SQLException{ 
         String prov="",sql = "SELECT prov_nombre FROM proveedores WHERE id="+id;
         ResultSet rs = funcion.select(sql);
         if(rs.next()){
@@ -174,7 +174,7 @@ public class Productos {
     //  Busca y setea los proveedores y las marcas
     private void setMarca_Prov() throws SQLException{ //Tambien incluye la marca ademas de los proveedores
         if(!prov1.equals("")){
-            dbProv1 = getProvID(prov1);
+            dbProv1 = Integer.parseInt(prov1);
         }else{
             dbProv1 = 0;
         }
@@ -289,25 +289,25 @@ public class Productos {
         if(dbProv1 > 0){
             prov1 = getProvNombre(dbProv1);
         }else{
-            prov1= "-Sin Especificar-";
+            prov1= "-Sin Proveedor-";
         }
         
         if(dbProv2 > 0){
             prov2 = getProvNombre(dbProv2);
         }else{
-            prov2= "-Sin Especificar-";
+            prov2= "-Sin Proveedor-";
         }
         
         if(dbProv3 > 0){
             prov3 = getProvNombre(dbProv3);
         }else{
-            prov3= "-Sin Especificar-";
+            prov3= "-Sin Proveedor-";
         }
         
         if(dbProv4 > 0){
             prov4 = getProvNombre(dbProv4);
         }else{
-            prov4= "-Sin Especificar-";
+            prov4= "-Sin Proveedor-";
         }
         if(marcaDB > 0){
             marca= getMarcaNombre(marcaDB);
@@ -367,15 +367,18 @@ public class Productos {
         rs=funcion.select(sql);
         while(rs.next()){
             prov = rs.getString(1);
+            
             String datos[]= prov.split(",");
             for (int i=0; i<datos.length;i++){
-                sql="SELECT id, prov_nombre FROM proveedores WHERE id="+datos[i];
-                rs=funcion.select(sql);
+                String sql2="SELECT id, prov_nombre FROM proveedores WHERE id="+datos[i];
+                ResultSet rs2=funcion.select(sql2);
+                
                 String datosProv[] = new String[2];
-                while(rs.next()){
-                    datosProv[0] = rs.getString(1);
-                    datosProv[1] = rs.getString(2);
-                    model.addRow(datos);
+                
+                while(rs2.next()){
+                    datosProv[0] = rs2.getString(1);
+                    datosProv[1] = rs2.getString(2);
+                    model.addRow(datosProv);
                 }
                 
             }
