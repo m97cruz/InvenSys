@@ -111,21 +111,23 @@ Funciones.Usuarios fUser = new Funciones.Usuarios();
         int idUsr = fUser.getId();
         
         if(fUser.login() && (idUsr!=0)){
-        switch (fUser.getRol()){
-            case "ADMIN":
-                Administracion admin = new Administracion();
-                admin.setVisible(true);
-                this.dispose();
-                break;
-            case "NORMAL":
-                Vendedor.Vendedor vend = new Vendedor.Vendedor();
-                vend.setVisible(true);
-                this.dispose();
-                break;
-            default:
-                JOptionPane.showMessageDialog(this, "El Usuario o la contraseña No Coincide en los registros del sistema");
-                break;
-        }
+            switch (fUser.getRol()){
+                case "ADMIN":
+                    Administracion admin = new Administracion();
+                    admin.setVisible(true);
+                    this.dispose();
+                    break;
+                case "NORMAL":
+                    Vendedor.Vendedor vend = new Vendedor.Vendedor();
+                    vend.setVisible(true);
+                    this.dispose();
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(this, "El Usuario o la contraseña No Coincide en los registros del sistema");
+                    break;
+            }
+        } else{
+            JOptionPane.showMessageDialog(this, "El Usuario o la contraseña No Coincide en los registros del sistema");
         }
     } catch (SQLException ex) {
         Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);

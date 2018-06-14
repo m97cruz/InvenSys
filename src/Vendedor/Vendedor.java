@@ -41,8 +41,8 @@ public class Vendedor extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         tablas.tablaProdVendedor();
-         modelo= (DefaultTableModel) Vendedor.tbl_list.getModel(); //Obtiene el Modelo
-         //Crear el escuchador del evento Table changed 
+        modelo= (DefaultTableModel) Vendedor.tbl_list.getModel(); //Obtiene el Modelo
+
         /*usuarios.setId(login.usuarios.getId());
         usuarios.selectUsr();*/
     }
@@ -61,19 +61,22 @@ public class Vendedor extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         lbl_lista = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        lbl_vendedor = new javax.swing.JLabel();
+        jcboc_vendedor = new javax.swing.JComboBox<>();
         btn_success = new javax.swing.JButton();
         lbl_total_venta = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btn_nVenta = new javax.swing.JButton();
         btn_remove = new javax.swing.JButton();
         btn_add = new javax.swing.JButton();
         cb_filtro = new javax.swing.JComboBox<>();
         lbl_total = new javax.swing.JLabel();
+        btn_limpiar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Ventas");
@@ -84,6 +87,7 @@ public class Vendedor extends javax.swing.JFrame {
         lbl_search.setText("Filtrar por:");
 
         txf_buscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txf_buscar.setNextFocusableComponent(tablaProds);
         txf_buscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txf_buscarKeyTyped(evt);
@@ -116,6 +120,13 @@ public class Vendedor extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(tablaProds);
+        if (tablaProds.getColumnModel().getColumnCount() > 0) {
+            tablaProds.getColumnModel().getColumn(0).setMinWidth(40);
+            tablaProds.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tablaProds.getColumnModel().getColumn(0).setMaxWidth(60);
+            tablaProds.getColumnModel().getColumn(1).setMinWidth(150);
+            tablaProds.getColumnModel().getColumn(1).setMaxWidth(350);
+        }
 
         tbl_list.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tbl_list.setModel(new javax.swing.table.DefaultTableModel(
@@ -127,7 +138,7 @@ public class Vendedor extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, true, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -140,17 +151,26 @@ public class Vendedor extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(tbl_list);
+        if (tbl_list.getColumnModel().getColumnCount() > 0) {
+            tbl_list.getColumnModel().getColumn(0).setMinWidth(40);
+            tbl_list.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tbl_list.getColumnModel().getColumn(0).setMaxWidth(60);
+            tbl_list.getColumnModel().getColumn(1).setMinWidth(150);
+            tbl_list.getColumnModel().getColumn(1).setPreferredWidth(200);
+            tbl_list.getColumnModel().getColumn(1).setMaxWidth(250);
+            tbl_list.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         lbl_lista.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lbl_lista.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/icon_list.png"))); // NOI18N
         lbl_lista.setText("Lista de Compra:");
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/user_icon.png"))); // NOI18N
-        jLabel1.setText("Vendedor:");
+        lbl_vendedor.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lbl_vendedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/user_icon.png"))); // NOI18N
+        lbl_vendedor.setText("Vendedor:");
 
-        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Vendedor 1", "Vendedor 2", "Vendedor 3", "Vendedor 4" }));
+        jcboc_vendedor.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jcboc_vendedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Vendedor 1", "Vendedor 2", "Vendedor 3", "Vendedor 4" }));
 
         btn_success.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btn_success.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/ok_icon.png"))); // NOI18N
@@ -165,12 +185,12 @@ public class Vendedor extends javax.swing.JFrame {
         lbl_total_venta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/money_icon.png"))); // NOI18N
         lbl_total_venta.setText("Total en esta Venta:");
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/plus2.png"))); // NOI18N
-        jButton2.setText("Nueva Ventana de Venta");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btn_nVenta.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btn_nVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/plus2.png"))); // NOI18N
+        btn_nVenta.setText("Nueva Ventana de Venta");
+        btn_nVenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btn_nVentaActionPerformed(evt);
             }
         });
 
@@ -194,9 +214,18 @@ public class Vendedor extends javax.swing.JFrame {
         cb_filtro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Codigo", "Nombre", "Marca" }));
         cb_filtro.setSelectedIndex(1);
 
-        lbl_total.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        lbl_total.setFont(new java.awt.Font("Tahoma", 0, 56)); // NOI18N
         lbl_total.setText("0.00");
 
+        btn_limpiar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btn_limpiar.setText("Limpiar");
+        btn_limpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_limpiarActionPerformed(evt);
+            }
+        });
+
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/icon_list.png"))); // NOI18N
         jMenu1.setText("Opciones");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0));
@@ -219,6 +248,24 @@ public class Vendedor extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem2);
 
+        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem3.setText("Procesar venta");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem3);
+
+        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem4.setText("Limpiar lista");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem4);
+
         jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
@@ -231,45 +278,49 @@ public class Vendedor extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(lbl_search)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txf_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(2, 2, 2)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lbl_search)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txf_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jButton2))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addGap(24, 24, 24)
-                                                .addComponent(jLabel1)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addGap(9, 9, 9)
-                                                .addComponent(btn_success)))
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(lbl_total_venta)
-                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                    .addComponent(lbl_total)
-                                                    .addGap(27, 27, 27)))))))))
-                    .addComponent(lbl_lista)
+                                                .addComponent(lbl_vendedor)
+                                                .addGap(10, 10, 10)
+                                                .addComponent(jcboc_vendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(btn_nVenta)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(230, 230, 230)
+                                .addComponent(btn_remove)
+                                .addGap(18, 18, 18)
+                                .addComponent(btn_add)))
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(230, 230, 230)
-                        .addComponent(btn_remove)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_add))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(80, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lbl_lista)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btn_limpiar))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(lbl_total_venta)
+                                .addGap(38, 38, 38))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btn_success)
+                                .addGap(42, 42, 42))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(lbl_total)
+                                .addGap(65, 65, 65))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -280,29 +331,30 @@ public class Vendedor extends javax.swing.JFrame {
                     .addComponent(txf_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addGap(188, 188, 188)
+                        .addComponent(btn_nVenta)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                            .addComponent(lbl_vendedor)
+                            .addComponent(jcboc_vendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(18, 29, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_add)
                     .addComponent(btn_remove))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbl_lista)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lbl_lista)
+                    .addComponent(btn_limpiar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lbl_total_venta)
-                        .addGap(35, 35, 35)
+                        .addGap(44, 44, 44)
                         .addComponent(lbl_total)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_success)
-                        .addGap(40, 40, 40))
+                        .addComponent(btn_success))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
@@ -310,7 +362,7 @@ public class Vendedor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_successActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_successActionPerformed
-        JOptionPane.showMessageDialog(this, "Total De Commpra: \n Estado: OK");
+        procesarVenta();
     }//GEN-LAST:event_btn_successActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -319,14 +371,14 @@ public class Vendedor extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btn_nVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nVentaActionPerformed
         try {
             VendedorAdd f = new VendedorAdd();
             f.setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btn_nVentaActionPerformed
 
     private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
         try {
@@ -381,39 +433,57 @@ public class Vendedor extends javax.swing.JFrame {
             Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        procesarVenta();
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        limpiarLista();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void btn_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpiarActionPerformed
+        // TODO add your handling code here:
+        //limpiarLista();
+        int sobrante = 8 % 7;
+        System.out.println(sobrante);
+    }//GEN-LAST:event_btn_limpiarActionPerformed
     public void llenarTbl_List() throws SQLException{
         int fila=tablaProds.getSelectedRow();
         if(fila<0){
+            //Si no hay un producto de la lista seleccionado
             JOptionPane.showMessageDialog(this, "No se ha seleccionado algun producto","Aviso",JOptionPane.INFORMATION_MESSAGE);
         } else{
-            int cantDisponible=Integer.valueOf(tablaProds.getValueAt(fila,5).toString());            
+            //Si hay un producto de la lista seleccionado
+            int cantDisponible=Integer.valueOf(tablaProds.getValueAt(fila,5).toString()); //Cantidad disponilbe segun tabla            
+            //Preguntar la cantidad de producto que se desea
             int cantidad=Integer.valueOf(JOptionPane.showInputDialog(this,"Cantidad de productos:","Ingrese la cantidad",JOptionPane.QUESTION_MESSAGE));
+            //verificar que la cantidad solicitada no exceda la cantidad disponible
             if(cantidad>cantDisponible){
+                //si se excede la cantidad disponible
                 JOptionPane.showMessageDialog(this, "Se excede la cantidad disponible en el local","Aviso",JOptionPane.INFORMATION_MESSAGE);
             } else{
+                //Si la cantidad solicitada es valida
+                //verificar si la cantidad solicitada es mayor a cero 
                 if(cantidad>0){
-
-                   String codigo = tablaProds.getValueAt(fila,0).toString();
-                   String nombre = tablaProds.getValueAt(fila,1).toString();
-                   String precioUni = tablaProds.getValueAt(fila,3).toString();
-                   float total=tablas.getTotal(codigo, cantidad, true);
-                   modelo.addRow(new Object[]{
+                    //si la cantidad solicitada es mayor a cero
+                   String codigo = tablaProds.getValueAt(fila,0).toString();//codigo de producto
+                   String nombre = tablaProds.getValueAt(fila,1).toString();//nombre de producto
+                   String precioUni = tablaProds.getValueAt(fila,3).toString();//precio unitario de producto
+                   float total=0.00f;//total por producto
+                   total=tablas.getTotal(codigo, cantidad, false);//obtener el total por producto,con metodo getTotal(,,)
+                    //anadir producto a la lista de producto
+                    modelo.addRow(new Object[]{
                        codigo,
                        nombre,
                        precioUni,
                        String.valueOf(cantidad),
                        total
                    });
-                   //tbl_list.setModel(modelo);
-                    modelo.addTableModelListener(new TableModelListener(){
-                    @Override
-                        public void tableChanged(TableModelEvent e) {
-                            if(e.getType()==TableModelEvent.UPDATE){
-                                JOptionPane.showMessageDialog(Vendedor.this, "algo");
-                            }
-                        }
-                    });
-                   setTotal();
+                    //Setear el total a pagar debido al ingreso de otro producto a la lista
+                    setTotal();
                }
             }
         }
@@ -423,23 +493,54 @@ public class Vendedor extends javax.swing.JFrame {
         if(fila<0){
             JOptionPane.showMessageDialog(this, "No se ha seleccionado algun producto","Aviso",JOptionPane.INFORMATION_MESSAGE);
         } else{
-            DefaultTableModel modelList = (DefaultTableModel) this.tbl_list.getModel();
             try{
-                modelList.removeRow(fila);
+                modelo.removeRow(fila);
                 setTotal();
             }catch(Exception e){
                 JOptionPane.showMessageDialog(this,"Error");
             }
         }
     }
+    private void limpiarLista(){
+        if(modelo.getRowCount()>0){
+            int filas=modelo.getRowCount();
+            for(int i=0;i<=filas-1;i++){
+                modelo.removeRow(0);
+            }
+            setTotal();
+        } else{
+            JOptionPane.showMessageDialog(this, "Lista de venta vacia","Aviso",JOptionPane.INFORMATION_MESSAGE);       
+        }
+    }
     private void setTotal() {
         int filas=modelo.getRowCount();
         float total=0.00f;
-        for(int i=0;i<=filas-1;i++){
-            float precio=Float.valueOf(Vendedor.this.modelo.getValueAt(i, 4).toString());
-            total+=precio;
+        float precio=0.00f;
+        if(filas>0){
+            for(int i=0;i<=filas-1;i++){
+                precio=Float.valueOf(Vendedor.this.modelo.getValueAt(i, 4).toString());
+                total+=precio;
+            }
         }
         this.lbl_total.setText(String.valueOf(total));
+    }
+    private void procesarVenta(){
+        if(modelo.getRowCount()>0){
+            String lista="";
+            int filas=modelo.getRowCount();
+            for(int i=0;i<=filas-1;i++){
+                lista+=Vendedor.this.modelo.getValueAt(i,1).toString()+"---"+Vendedor.this.modelo.getValueAt(i, 3).toString()+"---"+Vendedor.this.modelo.getValueAt(i, 4).toString()+"\n";
+            }
+            lista+="\nTOTAL: $ " + this.lbl_total.getText();
+            if(JOptionPane.showConfirmDialog(this,"LISTA DE VENTA \n"+ lista,"CONFIRMAR VENTA", JOptionPane.OK_CANCEL_OPTION)==0){
+                limpiarLista();
+                JOptionPane.showMessageDialog(this, "Venta procesada","Aviso",JOptionPane.INFORMATION_MESSAGE);       
+            } else{
+                JOptionPane.showMessageDialog(this, "Venta cancelada","Aviso",JOptionPane.INFORMATION_MESSAGE);       
+            }
+        } else{
+            JOptionPane.showMessageDialog(this, "Lista de venta vacia","Aviso",JOptionPane.INFORMATION_MESSAGE);       
+        }
     }
     /**
      * @param args the command line arguments
@@ -482,22 +583,25 @@ public class Vendedor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_add;
+    private javax.swing.JButton btn_limpiar;
+    private javax.swing.JButton btn_nVenta;
     private javax.swing.JButton btn_remove;
     private javax.swing.JButton btn_success;
     private javax.swing.JComboBox<String> cb_filtro;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JComboBox<String> jcboc_vendedor;
     private javax.swing.JLabel lbl_lista;
     private javax.swing.JLabel lbl_search;
     private javax.swing.JLabel lbl_total;
     private javax.swing.JLabel lbl_total_venta;
+    private javax.swing.JLabel lbl_vendedor;
     public static final javax.swing.JTable tablaProds = new javax.swing.JTable();
     public static final javax.swing.JTable tbl_list = new javax.swing.JTable();
     private javax.swing.JTextField txf_buscar;
