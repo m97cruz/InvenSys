@@ -8,8 +8,10 @@ package Vendedor;
 
 
 import Admin.Administracion;
+import java.awt.MenuComponent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -218,7 +220,7 @@ public class Vendedor extends javax.swing.JFrame {
         lbl_total.setText("0.00");
 
         btn_limpiar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btn_limpiar.setText("Limpiar");
+        btn_limpiar.setText("Limpiar lista");
         btn_limpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_limpiarActionPerformed(evt);
@@ -362,7 +364,11 @@ public class Vendedor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_successActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_successActionPerformed
-        procesarVenta();
+        try {
+            procesarVenta();
+        } catch (SQLException ex) {
+            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_successActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -391,7 +397,7 @@ public class Vendedor extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_addActionPerformed
 
     private void tablaProdsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tablaProdsKeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+        if(evt.getKeyCode()==KeyEvent.VK_SPACE){
             try {
                 this.llenarTbl_List();
             } catch (SQLException ex) {
@@ -435,8 +441,12 @@ public class Vendedor extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
-        procesarVenta();
+        try {
+            // TODO add your handling code here:
+            procesarVenta();
+        } catch (SQLException ex) {
+            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
@@ -446,9 +456,7 @@ public class Vendedor extends javax.swing.JFrame {
 
     private void btn_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpiarActionPerformed
         // TODO add your handling code here:
-        //limpiarLista();
-        int sobrante = 8 % 7;
-        System.out.println(sobrante);
+        limpiarLista();
     }//GEN-LAST:event_btn_limpiarActionPerformed
     public void llenarTbl_List() throws SQLException{
         int fila=tablaProds.getSelectedRow();
@@ -524,7 +532,7 @@ public class Vendedor extends javax.swing.JFrame {
         }
         this.lbl_total.setText(String.valueOf(total));
     }
-    private void procesarVenta(){
+    private void procesarVenta() throws SQLException{
         if(modelo.getRowCount()>0){
             String lista="";
             int filas=modelo.getRowCount();
@@ -533,8 +541,18 @@ public class Vendedor extends javax.swing.JFrame {
             }
             lista+="\nTOTAL: $ " + this.lbl_total.getText();
             if(JOptionPane.showConfirmDialog(this,"LISTA DE VENTA \n"+ lista,"CONFIRMAR VENTA", JOptionPane.OK_CANCEL_OPTION)==0){
-                limpiarLista();
-                JOptionPane.showMessageDialog(this, "Venta procesada","Aviso",JOptionPane.INFORMATION_MESSAGE);       
+                float efectivo=0.00f;
+                efectivo=Float.valueOf(JOptionPane.showInputDialog(this,"Efectivo: ",JOptionPane.QUESTION_MESSAGE));
+                if(efectivo<Float.valueOf(this.lbl_total.getText())){
+                
+                } else{
+                    float cambio=efectivo-Float.valueOf(this.lbl_total.getText());
+                    JOptionPane.showMessageDialog(this, "Cambio: " +cambio,"Cambio",JOptionPane.INFORMATION_MESSAGE);  
+                    limpiarLista();
+                    JOptionPane.showMessageDialog(this, "Venta procesada","Aviso",JOptionPane.INFORMATION_MESSAGE);  
+                    tablas.tablaProdVendedor();
+                }
+                
             } else{
                 JOptionPane.showMessageDialog(this, "Venta cancelada","Aviso",JOptionPane.INFORMATION_MESSAGE);       
             }
