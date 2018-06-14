@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -324,8 +325,7 @@ public class Productos {
         dbProv1 =0; dbProv2=0; dbProv3=0; dbProv4=0;
     }
     
-    public void llenarComboMarcas() throws SQLException{
-        DefaultComboBoxModel marcas = (DefaultComboBoxModel) Administracion.comboMarca.getModel();
+    public DefaultComboBoxModel llenarComboMarcas(DefaultComboBoxModel marcas) throws SQLException{
         marcas.removeAllElements();
         if(marcaDB!=0){
            sql="SELECT marca FROM marcas WHERE id="+marcaDB;
@@ -343,66 +343,71 @@ public class Productos {
         while(rs.next()){
             marcas.addElement(rs.getString(1));
         }
-        Administracion.comboMarca.setModel(marcas);
+        return marcas;
     }
-    //--------------------------------//---------------------------//
-    public void llenarProvs() throws SQLException{
-        DefaultComboBoxModel comboProv1 = (DefaultComboBoxModel) Administracion.comboProv1.getModel();
-        DefaultComboBoxModel comboProv2 = (DefaultComboBoxModel) Administracion.comboProv2.getModel();
-        DefaultComboBoxModel comboProv3 = (DefaultComboBoxModel) Administracion.comboProv3.getModel();
-        DefaultComboBoxModel comboProv4 = (DefaultComboBoxModel) Administracion.comboProv4.getModel();
+    
+    
+    public DefaultTableModel llenarProvs_(DefaultTableModel model) throws SQLException{
+        model.setRowCount(0);
+        sql="SELECT id, prov_nombre FROM proveedores";
+        rs=funcion.select(sql);
+        String datos[] = new String[2];
+        while(rs.next()){
+            datos[0] = rs.getString(1);
+            datos[1] = rs.getString(2);
+            model.addRow(datos);
+        }
         
-        comboProv1.removeAllElements();
-        comboProv2.removeAllElements(); 
-        comboProv3.removeAllElements(); 
-        comboProv4.removeAllElements();
+        return model;
+    }
+    public DefaultTableModel provSelList(DefaultTableModel model) throws SQLException{
+        model.setRowCount(0);
+        String prov="";
+        sql="SELECT proveedor1 FROM productos WHERE codigo="+codigo;
+        rs=funcion.select(sql);
+        while(rs.next()){
+            prov = rs.getString(1);
+            String datos[]= prov.split(",");
+            for (int i=0; i<datos.length;i++){
+                sql="SELECT id, prov_nombre FROM proveedores WHERE id="+datos[i];
+                rs=funcion.select(sql);
+                String datosProv[] = new String[2];
+                while(rs.next()){
+                    datosProv[0] = rs.getString(1);
+                    datosProv[1] = rs.getString(2);
+                    model.addRow(datos);
+                }
+                
+            }
+        }
+        
+        return model;
+    }
+    
+    
+    
+    
+    //--------------------------------//---------------------------//
+    public DefaultComboBoxModel llenarProvs(DefaultComboBoxModel comboProv) throws SQLException{
+        
+        comboProv.removeAllElements();
         
         if(dbProv1!=0){
            sql="SELECT prov_nombre FROM proveedores WHERE id="+dbProv1;
            ResultSet res = funcion.select(sql);
            while(res.next()){
-               comboProv1.addElement(res.getString(1));
-           }
-        }
-        if(dbProv2!=0){
-           sql="SELECT prov_nombre FROM proveedores WHERE id="+dbProv2;
-           ResultSet res = funcion.select(sql);
-           while(res.next()){
-               comboProv2.addElement(res.getString(1));
-           }
-        }
-        if(dbProv3!=0){
-           sql="SELECT prov_nombre FROM proveedores WHERE id="+dbProv3;
-           ResultSet res = funcion.select(sql);
-           while(res.next()){
-               comboProv3.addElement(res.getString(1));
-           }
-        }
-        if(dbProv4!=0){
-           sql="SELECT prov_nombre FROM proveedores WHERE id="+dbProv4;
-           ResultSet res = funcion.select(sql);
-           while(res.next()){
-               comboProv4.addElement(res.getString(1));
+               comboProv.addElement(res.getString(1));
            }
         }
         
-        comboProv1.addElement("--No Especificado--");
-        comboProv2.addElement("--No Especificado--");
-        comboProv3.addElement("--No Especificado--");
-        comboProv4.addElement("--No Especificado--");
+        comboProv.addElement("--No Especificado--");
         
         sql="SELECT prov_nombre FROM proveedores";
         rs = funcion.select(sql);
         while(rs.next()){
-            comboProv1.addElement(rs.getString(1));
-            comboProv2.addElement(rs.getString(1));
-            comboProv3.addElement(rs.getString(1));
-            comboProv4.addElement(rs.getString(1));
+            comboProv.addElement(rs.getString(1));
         }
-        Administracion.comboProv1.setModel(comboProv1);
-        Administracion.comboProv2.setModel(comboProv2);
-        Administracion.comboProv3.setModel(comboProv3);
-        Administracion.comboProv4.setModel(comboProv4);
+        return comboProv;
     }
     
     public boolean solicitarProd(String origen, String destino, int cant, String marcaSend) throws SQLException{
