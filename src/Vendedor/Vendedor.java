@@ -13,17 +13,20 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.input.KeyCode;
 import javax.swing.Icon;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import javax.swing.text.NumberFormatter;
 
 /**
  *
@@ -73,6 +76,10 @@ public class Vendedor extends javax.swing.JFrame {
         cb_filtro = new javax.swing.JComboBox<>();
         lbl_total = new javax.swing.JLabel();
         btn_limpiar = new javax.swing.JButton();
+        lbl_efectivo = new javax.swing.JLabel();
+        jt_efectivo = new javax.swing.JTextField();
+        lbl_cambio = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -183,9 +190,8 @@ public class Vendedor extends javax.swing.JFrame {
             }
         });
 
-        lbl_total_venta.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_total_venta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/money_icon.png"))); // NOI18N
-        lbl_total_venta.setText("Total en esta Venta:");
+        lbl_total_venta.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lbl_total_venta.setText("Total de venta:");
 
         btn_nVenta.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btn_nVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/plus2.png"))); // NOI18N
@@ -216,7 +222,7 @@ public class Vendedor extends javax.swing.JFrame {
         cb_filtro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Codigo", "Nombre", "Marca" }));
         cb_filtro.setSelectedIndex(1);
 
-        lbl_total.setFont(new java.awt.Font("Tahoma", 0, 56)); // NOI18N
+        lbl_total.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
         lbl_total.setText("0.00");
 
         btn_limpiar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -226,6 +232,25 @@ public class Vendedor extends javax.swing.JFrame {
                 btn_limpiarActionPerformed(evt);
             }
         });
+
+        lbl_efectivo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lbl_efectivo.setText("Efectivo:");
+
+        jt_efectivo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jt_efectivo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jt_efectivoKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jt_efectivoKeyTyped(evt);
+            }
+        });
+
+        lbl_cambio.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lbl_cambio.setText("Cambio:");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        jLabel2.setText("0.00");
 
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/icon_list.png"))); // NOI18N
         jMenu1.setText("Opciones");
@@ -312,17 +337,28 @@ public class Vendedor extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btn_limpiar))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(lbl_efectivo)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jt_efectivo, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                            .addComponent(lbl_total_venta)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(lbl_total)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lbl_cambio)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel2)))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(lbl_total_venta)
-                                .addGap(38, 38, 38))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btn_success)
-                                .addGap(42, 42, 42))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(lbl_total)
-                                .addGap(65, 65, 65))))))
+                                .addGap(41, 41, 41))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -341,7 +377,7 @@ public class Vendedor extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lbl_vendedor)
                             .addComponent(jcboc_vendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 29, Short.MAX_VALUE)
+                .addGap(18, 36, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_add)
                     .addComponent(btn_remove))
@@ -350,12 +386,20 @@ public class Vendedor extends javax.swing.JFrame {
                     .addComponent(lbl_lista)
                     .addComponent(btn_limpiar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lbl_total_venta)
-                        .addGap(44, 44, 44)
-                        .addComponent(lbl_total)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbl_total_venta)
+                            .addComponent(lbl_total))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbl_efectivo)
+                            .addComponent(jt_efectivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbl_cambio)
+                            .addComponent(jLabel2))
+                        .addGap(26, 26, 26)
                         .addComponent(btn_success))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
@@ -458,6 +502,19 @@ public class Vendedor extends javax.swing.JFrame {
         // TODO add your handling code here:
         limpiarLista();
     }//GEN-LAST:event_btn_limpiarActionPerformed
+
+    private void jt_efectivoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jt_efectivoKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jt_efectivoKeyPressed
+
+    private void jt_efectivoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jt_efectivoKeyTyped
+        // TODO add your handling code here:
+        char val=evt.getKeyChar();
+        if (Character.isLetter(val)){
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_jt_efectivoKeyTyped
     public void llenarTbl_List() throws SQLException{
         int fila=tablaProds.getSelectedRow();
         if(fila<0){
@@ -606,6 +663,7 @@ public class Vendedor extends javax.swing.JFrame {
     private javax.swing.JButton btn_remove;
     private javax.swing.JButton btn_success;
     private javax.swing.JComboBox<String> cb_filtro;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -615,6 +673,9 @@ public class Vendedor extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JComboBox<String> jcboc_vendedor;
+    private javax.swing.JTextField jt_efectivo;
+    private javax.swing.JLabel lbl_cambio;
+    private javax.swing.JLabel lbl_efectivo;
     private javax.swing.JLabel lbl_lista;
     private javax.swing.JLabel lbl_search;
     private javax.swing.JLabel lbl_total;

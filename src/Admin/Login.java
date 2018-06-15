@@ -118,7 +118,7 @@ Funciones.Usuarios fUser = new Funciones.Usuarios();
                     this.dispose();
                     break;
                 case "NORMAL":
-                    Vendedor.Vendedor vend = new Vendedor.Vendedor();
+                     Vendedor.Vendedor vend = new Vendedor.Vendedor();
                     vend.setVisible(true);
                     this.dispose();
                     break;
