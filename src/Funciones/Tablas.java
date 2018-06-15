@@ -122,18 +122,19 @@ public class Tablas {
         }
     }
     public float getTotal(String codigo,int cantidad,boolean check) throws SQLException{
-       float total=0.0f;
-       int cantPack=0;
-       float precioPack=0.00f;
-       float precioUni=0.00f;
-       //Obtener la cantidad considerada como paquete para este producto
-       sql="SELECT cant_pack from productos WHERE codigo='"+codigo+"'";
-       rs=funcion.select(sql);
-       if(rs!=null){
-           while(rs.next()){
-               cantPack=rs.getInt(1);
-           }
-       }
+        float total=0.0f;//total a pagar por este producto
+        int cantPack=0;//cantidad considerada como paquete
+        float precioPack=0.00f;//precio por paquete
+        float precioUni=0.00f;//precio unitario
+        //Obtener la cantidad considerada como paquete para este producto
+        sql="SELECT cant_pack from productos WHERE codigo='"+codigo+"'";
+        rs=funcion.select(sql);
+        if(rs!=null){
+            while(rs.next()){
+                cantPack=rs.getInt(1);
+            }
+        }
+        //obtener el precio de venta unitario para este producto
         sql="SELECT pre_venta from productos WHERE codigo='"+codigo+"'";
         rs=funcion.select(sql);
         if(rs!=null){
@@ -141,25 +142,39 @@ public class Tablas {
                 precioUni=rs.getFloat(1);
             }
         }
-       //Si cant_Pack es igual a 0 se aplicara precio unitario
+       //Si cantidad considerada como paquete es igual a cero se aplicara precio unitario
        if(cantPack==0){
             total=cantidad*precioUni;
        } else{
-           //Se verifica la si la cantidad solicitada es igual
+            //Se verifica la si la cantidad solicitada es igual
             //O mayor a la cantidad por paquetes
             if(cantidad>=cantPack){
-                //Se aplican operacionescon precio por paquete
+                //Se aplican operaciones con precio por paquete
                 //Obtener el precio por paquete
                 System.out.println("Operaciones por paquete");
-                 sql="SELECT pre_pack from productos WHERE codigo='"+codigo+"'";
-                 rs=funcion.select(sql);
-                 if(rs!=null){
-                     while(rs.next()){
-                         precioPack=rs.getFloat(1);
-                     }
-                 }
+                sql="SELECT pre_pack from productos WHERE codigo='"+codigo+"'";
+                rs=funcion.select(sql);
+                if(rs!=null){
+                    while(rs.next()){
+                        precioPack=rs.getFloat(1);
+                    }
+                }
+                //variable check indica si se aplicara precio por paquete todos los productos
+                //verificar si esta activado
+                if(check==true){
+                //aplicar precio por paquete a todos los productos
+                } else{
+                    //aplicar precio por paquete unicamente a los paquetes formados
+                    int sobrante = cantidad % cantPack;
+                    if(sobrante==0){
+                        total=cantidad*precioPack;
+                    } else{
+                        total+=(cantidad-sobrante)*precioPack;
+                        total+=sobrante*precioUni;
+                    }
+                }
             } else{
-                //Se aplican operacions con precio normal de venta
+                //Se aplican operaciones con precio normal de venta
                 total=cantidad*precioUni;
             }
        }
