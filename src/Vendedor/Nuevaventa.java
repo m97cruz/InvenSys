@@ -49,7 +49,6 @@ public class Nuevaventa extends javax.swing.JFrame {
     public Nuevaventa() throws SQLException, ParseException{
         initComponents();
         this.setLocationRelativeTo(null);
-        tablas.tablaProdVendAdd();
         modelo= (DefaultTableModel) Nuevaventa.tbl_list.getModel(); //Obtiene el Modelo
         this.txf_buscar.requestFocus();
         model=(DefaultTableModel) Nuevaventa.tablaProds.getModel();
@@ -82,6 +81,7 @@ public class Nuevaventa extends javax.swing.JFrame {
         lbl_cam = new javax.swing.JLabel();
         lbl_cambio = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        chbx_mayoreo = new javax.swing.JCheckBox();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -251,6 +251,10 @@ public class Nuevaventa extends javax.swing.JFrame {
             }
         });
 
+        chbx_mayoreo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chbx_mayoreo.setText("Mayoreo");
+        chbx_mayoreo.setToolTipText("Aplicar precio por mayoreo a todos los producos");
+
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/icon_list.png"))); // NOI18N
         jMenu1.setText("Opciones");
 
@@ -304,13 +308,6 @@ public class Nuevaventa extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(lbl_search)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txf_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(260, 260, 260)
                         .addComponent(btn_remove)
                         .addGap(18, 18, 18)
@@ -326,7 +323,17 @@ public class Nuevaventa extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btn_success))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(2, 2, 2)
+                                    .addComponent(lbl_search)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txf_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(chbx_mayoreo))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(layout.createSequentialGroup()
@@ -353,12 +360,13 @@ public class Nuevaventa extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_search)
                     .addComponent(txf_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chbx_mayoreo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_add)
                     .addComponent(btn_remove))
@@ -450,7 +458,7 @@ public class Nuevaventa extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         try {
             // TODO add your handling code here:
-            tablas.tablaProdVendedor();
+            tablas.tablaProdVend(model);
         } catch (SQLException ex) {
             Logger.getLogger(Nuevaventa.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -529,7 +537,7 @@ public class Nuevaventa extends javax.swing.JFrame {
                    String nombre = tablaProds.getValueAt(fila,1).toString();//nombre de producto
                    String precioUni = tablaProds.getValueAt(fila,3).toString();//precio unitario de producto
                    float total=0.00f;//total por producto
-                   total=tablas.getTotal(codigo, cantidad, false);//obtener el total por producto,con metodo getTotal(,,)
+                   total=tablas.getTotal(codigo, cantidad, this.chbx_mayoreo.isSelected());//obtener el total por producto,con metodo getTotal(,,)
                     //anadir producto a la lista de producto
                     modelo.addRow(new Object[]{
                        codigo,
@@ -670,6 +678,7 @@ public class Nuevaventa extends javax.swing.JFrame {
     private javax.swing.JButton btn_remove;
     private javax.swing.JButton btn_success;
     private javax.swing.JComboBox<String> cb_filtro;
+    private javax.swing.JCheckBox chbx_mayoreo;
     private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;

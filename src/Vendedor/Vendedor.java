@@ -50,7 +50,6 @@ public class Vendedor extends javax.swing.JFrame {
     public Vendedor() throws SQLException, ParseException{
         initComponents();
         this.setLocationRelativeTo(null);
-        tablas.tablaProdVendedor();
         modelo= (DefaultTableModel) Vendedor.tbl_list.getModel(); //Obtiene el Modelo
         this.txf_buscar.requestFocus();
         model=(DefaultTableModel) Vendedor.tablaProds.getModel();
@@ -83,6 +82,7 @@ public class Vendedor extends javax.swing.JFrame {
         jt_efectivo = new javax.swing.JTextField();
         lbl_cam = new javax.swing.JLabel();
         lbl_cambio = new javax.swing.JLabel();
+        chbx_mayoreo = new javax.swing.JCheckBox();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -253,6 +253,15 @@ public class Vendedor extends javax.swing.JFrame {
         lbl_cambio.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
         lbl_cambio.setText("0.00");
 
+        chbx_mayoreo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chbx_mayoreo.setText("Mayoreo");
+        chbx_mayoreo.setToolTipText("Aplicar precio por mayoreo a todos los producos");
+        chbx_mayoreo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chbx_mayoreoActionPerformed(evt);
+            }
+        });
+
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/icon_list.png"))); // NOI18N
         jMenu1.setText("Opciones");
 
@@ -306,19 +315,12 @@ public class Vendedor extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(lbl_search)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txf_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(260, 260, 260)
                         .addComponent(btn_remove)
                         .addGap(18, 18, 18)
                         .addComponent(btn_add))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(lbl_lista)
@@ -327,9 +329,19 @@ public class Vendedor extends javax.swing.JFrame {
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btn_success))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(2, 2, 2)
+                                    .addComponent(lbl_search)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txf_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(chbx_mayoreo))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 652, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(18, 18, 18)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(lbl_cam)
@@ -353,12 +365,13 @@ public class Vendedor extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_search)
                     .addComponent(txf_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chbx_mayoreo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_nVenta))
-                .addGap(18, 33, Short.MAX_VALUE)
+                .addGap(18, 32, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_add)
                     .addComponent(btn_remove))
@@ -450,7 +463,7 @@ public class Vendedor extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         try {
             // TODO add your handling code here:
-            tablas.tablaProdVendedor();
+            tablas.tablaProdVend(model);
         } catch (SQLException ex) {
             Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -512,6 +525,10 @@ public class Vendedor extends javax.swing.JFrame {
             this.tablaProds.requestFocus();
         }
     }//GEN-LAST:event_txf_buscarKeyPressed
+
+    private void chbx_mayoreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbx_mayoreoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chbx_mayoreoActionPerformed
     public void llenarTbl_List() throws SQLException{
         int fila=tablaProds.getSelectedRow();
         if(fila<0){
@@ -535,7 +552,7 @@ public class Vendedor extends javax.swing.JFrame {
                    String nombre = tablaProds.getValueAt(fila,1).toString();//nombre de producto
                    String precioUni = tablaProds.getValueAt(fila,3).toString();//precio unitario de producto
                    float total=0.00f;//total por producto
-                   total=tablas.getTotal(codigo, cantidad, false);//obtener el total por producto,con metodo getTotal(,,)
+                   total=tablas.getTotal(codigo, cantidad, this.chbx_mayoreo.isSelected());//obtener el total por producto,con metodo getTotal(,,)
                     //anadir producto a la lista de producto
                     modelo.addRow(new Object[]{
                        codigo,
@@ -616,7 +633,6 @@ public class Vendedor extends javax.swing.JFrame {
                         float cambio=efectivo-Float.valueOf(this.lbl_total.getText());
                         this.lbl_cambio.setText(String.valueOf(cambio));
                         JOptionPane.showMessageDialog(this, "Venta procesada\n Cambio $ "+String.valueOf(cambio),"Aviso",JOptionPane.INFORMATION_MESSAGE);  
-
                         limpiarLista();
                         tablas.tablaProdVend(model);
                     } else{
@@ -676,6 +692,7 @@ public class Vendedor extends javax.swing.JFrame {
     private javax.swing.JButton btn_remove;
     private javax.swing.JButton btn_success;
     private javax.swing.JComboBox<String> cb_filtro;
+    private javax.swing.JCheckBox chbx_mayoreo;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
