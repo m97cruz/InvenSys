@@ -235,5 +235,42 @@ public class Tablas {
             model.addRow(datos);
         }
     }
-    
+    public void tablaProdVend(DefaultTableModel model) throws  SQLException{
+        model.setRowCount(0); //Reinicia el Contador de Filas
+        sql ="SELECT * FROM productos"; String query;
+        
+        String[] datos = new String[7];
+        ResultSet rsMarca;
+
+        rs = funcion.select(sql);
+        if(!rs.isBeforeFirst()){
+            JOptionPane.showMessageDialog(null, "La tabla no contiene ningun valor!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+        }
+        while(rs.next()){
+            datos[0] = rs.getString(1); //codigo
+            datos[1] = rs.getString(2); //nombre
+            datos[2] = "---";
+            if(rs.getInt(11) > 0){
+                query = "SELECT marca FROM marcas WHERE id="+rs.getInt(11);
+                rsMarca = funcion.select(query);
+                if(rsMarca.next()){
+                    datos[2] = rsMarca.getString(1);
+                }
+            }
+            
+            datos[3] = "$"+rs.getString(4); //Precio Unitario
+            
+            if(rs.getInt(6) > 0){
+                datos[4] = "$"+rs.getString(5) + " ("+rs.getString(6)+" U)"; //Precio por Paquete ( $Precio(nUnidades) )
+            }else{
+                datos[4] = "";
+            }
+            
+            
+            datos[5] = rs.getString(7); //nombre
+            datos[6] = rs.getString(8); //nombre
+            model.addRow(datos);
+        }
+        //return model;
+    }
 }
