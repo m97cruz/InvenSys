@@ -12,11 +12,9 @@ import java.awt.MenuComponent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,21 +34,21 @@ import javax.swing.text.NumberFormatter;
  *
  * @author Alumno
  */
-public class Vendedor extends javax.swing.JFrame {
+public class NuevaVenta extends javax.swing.JFrame {
     Funciones.Usuarios usuarios = new Funciones.Usuarios();
     Admin.Login login = new Admin.Login();
     Funciones.Tablas tablas = new Funciones.Tablas();
     private TableRowSorter filtro;
     DefaultTableModel  modelo;
-    Funciones.Vendedor_ funVendedor =new Funciones.Vendedor_();
+
     /**
      * Creates new form Vendedor
      */
-    public Vendedor() throws SQLException, ParseException{
+    public NuevaVenta() throws SQLException, ParseException{
         initComponents();
         this.setLocationRelativeTo(null);
         tablas.tablaProdVendedor();
-        modelo= (DefaultTableModel) Vendedor.tbl_list.getModel(); //Obtiene el Modelo
+        modelo= (DefaultTableModel) NuevaVenta.tbl_list.getModel(); //Obtiene el Modelo
         this.txf_buscar.requestFocus();
         /*usuarios.setId(login.usuarios.getId());
         usuarios.selectUsr();*/
@@ -74,7 +72,6 @@ public class Vendedor extends javax.swing.JFrame {
         jcboc_vendedor = new javax.swing.JComboBox<>();
         btn_success = new javax.swing.JButton();
         lbl_total_venta = new javax.swing.JLabel();
-        btn_nVenta = new javax.swing.JButton();
         btn_remove = new javax.swing.JButton();
         btn_add = new javax.swing.JButton();
         cb_filtro = new javax.swing.JComboBox<>();
@@ -84,6 +81,7 @@ public class Vendedor extends javax.swing.JFrame {
         jt_efectivo = new javax.swing.JTextField();
         lbl_cam = new javax.swing.JLabel();
         lbl_cambio = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -197,15 +195,6 @@ public class Vendedor extends javax.swing.JFrame {
         lbl_total_venta.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lbl_total_venta.setText("Total de venta:");
 
-        btn_nVenta.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btn_nVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/plus2.png"))); // NOI18N
-        btn_nVenta.setText("Nueva Ventana de Venta");
-        btn_nVenta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_nVentaActionPerformed(evt);
-            }
-        });
-
         btn_remove.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btn_remove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/send_up.png"))); // NOI18N
         btn_remove.addActionListener(new java.awt.event.ActionListener() {
@@ -256,8 +245,16 @@ public class Vendedor extends javax.swing.JFrame {
         lbl_cambio.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
         lbl_cambio.setText("0.00");
 
+        jButton1.setText("Cerrar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/icon_list.png"))); // NOI18N
         jMenu1.setText("Opciones");
+        jMenu1.setEnabled(false);
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0));
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/logout.png"))); // NOI18N
@@ -312,22 +309,21 @@ public class Vendedor extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(2, 2, 2)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(lbl_search)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txf_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(txf_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButton1))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(lbl_vendedor)
-                                                .addGap(10, 10, 10)
-                                                .addComponent(jcboc_vendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(btn_nVenta)))))
+                                        .addComponent(lbl_vendedor)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(jcboc_vendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(230, 230, 230)
                                 .addComponent(btn_remove)
@@ -371,17 +367,15 @@ public class Vendedor extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_search)
                     .addComponent(txf_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btn_nVenta)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lbl_vendedor)
-                            .addComponent(jcboc_vendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 36, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lbl_vendedor)
+                        .addComponent(jcboc_vendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 34, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_add)
                     .addComponent(btn_remove))
@@ -415,7 +409,7 @@ public class Vendedor extends javax.swing.JFrame {
         try {
             procesarVenta();
         } catch (SQLException ex) {
-            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NuevaVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btn_successActionPerformed
 
@@ -430,7 +424,7 @@ public class Vendedor extends javax.swing.JFrame {
             // TODO add your handling code here:
             this.llenarTbl_List();
         } catch (SQLException ex) {
-            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NuevaVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }//GEN-LAST:event_btn_addActionPerformed
@@ -440,7 +434,7 @@ public class Vendedor extends javax.swing.JFrame {
             try {
                 this.llenarTbl_List();
             } catch (SQLException ex) {
-                Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(NuevaVenta.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_tablaProdsKeyPressed
@@ -475,7 +469,7 @@ public class Vendedor extends javax.swing.JFrame {
             // TODO add your handling code here:
             tablas.tablaProdVendedor();
         } catch (SQLException ex) {
-            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NuevaVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
@@ -484,7 +478,7 @@ public class Vendedor extends javax.swing.JFrame {
             // TODO add your handling code here:
             procesarVenta();
         } catch (SQLException ex) {
-            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NuevaVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
@@ -513,21 +507,15 @@ public class Vendedor extends javax.swing.JFrame {
             try {
                 procesarVenta();
             } catch (SQLException ex) {
-                Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(NuevaVenta.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_jt_efectivoKeyPressed
 
-    private void btn_nVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nVentaActionPerformed
-        try {
-            NuevaVenta f = new NuevaVenta();
-            f.setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btn_nVentaActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
     public void llenarTbl_List() throws SQLException{
         int fila=tablaProds.getSelectedRow();
         if(fila<0){
@@ -603,7 +591,7 @@ public class Vendedor extends javax.swing.JFrame {
         float precio=0.00f;
         if(filas>0){
             for(int i=0;i<=filas-1;i++){
-                precio=Float.valueOf(Vendedor.this.modelo.getValueAt(i, 4).toString());
+                precio=Float.valueOf(NuevaVenta.this.modelo.getValueAt(i, 4).toString());
                 total+=precio;
             }
         }
@@ -621,20 +609,11 @@ public class Vendedor extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this,"Efectivo insuficiente","Aviso",JOptionPane.INFORMATION_MESSAGE);
                 } else{
                     if(JOptionPane.showConfirmDialog(this,"CONFIRMAR VENTA","CONFIRMACION" ,JOptionPane.OK_CANCEL_OPTION)==0){
-                        for(int i=0;i<modelo.getRowCount();i++){
-                            funVendedor.setFecha(LocalDate.now().toString());
-                            funVendedor.setCantidad(Integer.valueOf(modelo.getValueAt(i,3).toString()));
-                            funVendedor.setTotal(Float.valueOf(modelo.getValueAt(i,4).toString()));
-                            funVendedor.setProducto(modelo.getValueAt(i,1).toString());
-                            funVendedor.setId(Integer.valueOf(modelo.getValueAt(i,0).toString()));
-                            funVendedor.procesarVenta();
-                        }
-                        float cambio=efectivo-Float.valueOf(this.lbl_total.getText());
-                        this.lbl_cambio.setText(String.valueOf(cambio));
-                        JOptionPane.showMessageDialog(this, "Venta procesada\n Cambio $ "+String.valueOf(cambio),"Aviso",JOptionPane.INFORMATION_MESSAGE);  
-
-                        limpiarLista();
-                        tablas.tablaProdVendedor();
+                            float cambio=efectivo-Float.valueOf(this.lbl_total.getText());
+                            this.lbl_cambio.setText(String.valueOf(cambio));
+                            JOptionPane.showMessageDialog(this, "Venta procesada\n Cambio $ "+String.valueOf(cambio),"Aviso",JOptionPane.INFORMATION_MESSAGE);  
+                            limpiarLista();
+                            tablas.tablaProdVendedor();
                     } else{
                         JOptionPane.showMessageDialog(this, "Venta cancelada","Aviso",JOptionPane.INFORMATION_MESSAGE);       
                     }
@@ -661,25 +640,26 @@ public class Vendedor extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Vendedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NuevaVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Vendedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NuevaVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Vendedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NuevaVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Vendedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NuevaVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new Vendedor().setVisible(true);
+                    new NuevaVenta().setVisible(true);
                 } catch (SQLException ex) {
-                    Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(NuevaVenta.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ParseException ex) {
-                    Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(NuevaVenta.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -688,10 +668,10 @@ public class Vendedor extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_add;
     private javax.swing.JButton btn_limpiar;
-    private javax.swing.JButton btn_nVenta;
     private javax.swing.JButton btn_remove;
     private javax.swing.JButton btn_success;
     private javax.swing.JComboBox<String> cb_filtro;
+    private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;

@@ -5,6 +5,7 @@
  */
 package Admin;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -130,6 +131,8 @@ Funciones.Usuarios fUser = new Funciones.Usuarios();
             JOptionPane.showMessageDialog(this, "El Usuario o la contraseña No Coincide en los registros del sistema");
         }
     } catch (SQLException ex) {
+        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (ParseException ex) {
         Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
     }
             
