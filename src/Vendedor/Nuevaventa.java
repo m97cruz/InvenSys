@@ -80,7 +80,7 @@ public class Nuevaventa extends javax.swing.JFrame {
         jt_efectivo = new javax.swing.JTextField();
         lbl_cam = new javax.swing.JLabel();
         lbl_cambio = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btn_cerrar = new javax.swing.JButton();
         chbx_mayoreo = new javax.swing.JCheckBox();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -243,11 +243,11 @@ public class Nuevaventa extends javax.swing.JFrame {
         lbl_cambio.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
         lbl_cambio.setText("0.00");
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton1.setText("Cerrar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btn_cerrar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btn_cerrar.setText("Cerrar");
+        btn_cerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btn_cerrarActionPerformed(evt);
             }
         });
 
@@ -350,7 +350,7 @@ public class Nuevaventa extends javax.swing.JFrame {
                                     .addComponent(jt_efectivo))
                                 .addGroup(layout.createSequentialGroup()
                                     .addGap(37, 37, 37)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(btn_cerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -365,7 +365,7 @@ public class Nuevaventa extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_cerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_add)
@@ -510,10 +510,10 @@ public class Nuevaventa extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txf_buscarKeyPressed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btn_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cerrarActionPerformed
         // TODO add your handling code here:
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btn_cerrarActionPerformed
     public void llenarTbl_List() throws SQLException{
         int fila=tablaProds.getSelectedRow();
         if(fila<0){
@@ -674,12 +674,12 @@ public class Nuevaventa extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_add;
+    private javax.swing.JButton btn_cerrar;
     private javax.swing.JButton btn_limpiar;
     private javax.swing.JButton btn_remove;
     private javax.swing.JButton btn_success;
     private javax.swing.JComboBox<String> cb_filtro;
     private javax.swing.JCheckBox chbx_mayoreo;
-    private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;

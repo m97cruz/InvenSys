@@ -216,4 +216,21 @@ public class Tablas {
         }
         //return model;
     }
+    public void EstadVentas(DefaultTableModel model,String fecha1,String fecha2) throws SQLException{
+        model.setRowCount(0);
+        if(fecha1.equals("") && fecha2.equals("")){
+            sql="SELECT * FROM ventas";
+        } else{
+            sql="SELECT * FROM ventas WHERE fecha BETWEEN '"+fecha1+"' and '"+fecha2+"'";
+        }
+        rs=funcion.select(sql);
+        String datos[]= new String[4];
+            while(rs.next()){
+                datos[0]=rs.getString("producto");
+                datos[1]=rs.getString("cantidad");
+                datos[2]=rs.getString("total");
+                datos[3]=rs.getString("fecha");
+                model.addRow(datos);
+            }
+    }
 }

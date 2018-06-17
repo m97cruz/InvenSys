@@ -249,6 +249,11 @@ public class Administracion extends javax.swing.JFrame {
         jMenu2.setText("Administrar");
 
         jMenuItem4.setText("Compras y Ventas");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem4);
 
         optUsuarios.setText("Usuarios");
@@ -465,8 +470,14 @@ public class Administracion extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        Estadisticas f = new Estadisticas();
-        f.setVisible(true);
+        Estadisticas f;
+        try {
+            f = new Estadisticas();
+            f.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         this.dispose();
     }//GEN-LAST:event_jButton13ActionPerformed
 
@@ -508,6 +519,10 @@ public class Administracion extends javax.swing.JFrame {
             Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_optProveedoresActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+         // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     
     /**

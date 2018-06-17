@@ -100,6 +100,11 @@ public class Vendedor extends javax.swing.JFrame {
 
         txf_buscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txf_buscar.setNextFocusableComponent(tablaProds);
+        txf_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txf_buscarActionPerformed(evt);
+            }
+        });
         txf_buscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txf_buscarKeyPressed(evt);
@@ -109,7 +114,9 @@ public class Vendedor extends javax.swing.JFrame {
             }
         });
 
-        tablaProds.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jScrollPane1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        tablaProds.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         tablaProds.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
@@ -529,6 +536,10 @@ public class Vendedor extends javax.swing.JFrame {
     private void chbx_mayoreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbx_mayoreoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_chbx_mayoreoActionPerformed
+
+    private void txf_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txf_buscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txf_buscarActionPerformed
     public void llenarTbl_List() throws SQLException{
         int fila=tablaProds.getSelectedRow();
         if(fila<0){
