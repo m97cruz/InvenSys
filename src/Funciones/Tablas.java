@@ -216,7 +216,7 @@ public class Tablas {
         }
         //return model;
     }
-    public void EstadVentas(DefaultTableModel model,String fecha1,String fecha2) throws SQLException{
+     public void EstadVentas(DefaultTableModel model,String fecha1,String fecha2) throws SQLException{
         model.setRowCount(0);
         if(fecha1.equals("") && fecha2.equals("")){
             sql="SELECT * FROM ventas";
@@ -233,4 +233,5 @@ public class Tablas {
                 model.addRow(datos);
             }
     }
+   
 }
