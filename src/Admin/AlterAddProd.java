@@ -5,12 +5,17 @@
  */
 package Admin;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.math.RoundingMode;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -22,36 +27,51 @@ public class AlterAddProd extends javax.swing.JFrame {
     Funciones.Productos aProd = new Funciones.Productos();
     Funciones.Tablas tablas = new Funciones.Tablas();
     Login login = new Login();
-    public static boolean insertMode;
-    public static int idProd=0;
+    public boolean insertMode;
+    public int idProd;
     float precioCompra, precioVenta, ganancia;
+    DecimalFormat df= new DecimalFormat("####.##");
+    private TableRowSorter filtro;
+    private boolean p1=false, p2=false, p3=false, p4=false, marka=false;
+
+    public void setIdProd(int idProd) {
+        this.idProd = idProd;
+    }
+    public void setInsertMode(boolean insertMode) {
+        this.insertMode = insertMode;
+    }
     
     
     
+    //<editor-fold defaultstate="collapsed" desc="METODO CONSTRUCTOR">
     public AlterAddProd() throws SQLException {
         initComponents();
+        df.setRoundingMode(RoundingMode.UP);
         Admin.Administracion frame = new Admin.Administracion();
-        this.insertMode = frame.insertMode;
         this.idProd = frame.idProd;
-        this.setLocationRelativeTo(null);
-        DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
-        DefaultTableModel modelProvSel = (DefaultTableModel) tablaProvLista.getModel();
+        this.insertMode = frame.insertMode;
         
-        if(idProd>0){
+        FrameMarcas.setVisible(false);
+        this.setLocationRelativeTo(null);
+        
+        DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
+        tablaProvLista.getColumnModel().getColumn(0).setMaxWidth(0); //Ocultar la Columna de ID
+        
+        if(insertMode){
+            lblCodigo.setText("Codigo: --Nuevo Registro--");
+            DefaultTableModel tblMarcaModel = (DefaultTableModel) tablaMarcas.getModel();
+            tablaMarcas.setModel(aProd.llenarMarcas(tblMarcaModel));
+            this.tablaProvLista.setModel(aProd.llenarProvs_(model));
+            
+        }else{
             aProd.setCodigo(idProd);
             aProd.selectProd();
             llenarCampos();
-            this.tablaProvLista.setModel(aProd.llenarProvs_(model));
-            this.tablaProvSelect.setModel(aProd.provSelList(modelProvSel));
-            
-        }else{
-            
             tablaProvLista.setModel(aProd.llenarProvs_(model));
-        }
-        
-        
-        
-    }
+            DefaultTableModel tblMarcaModel = (DefaultTableModel) tablaMarcas.getModel();
+            tablaMarcas.setModel(aProd.llenarMarcas(tblMarcaModel));
+        }      
+    }//</editor-fold>
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -62,12 +82,18 @@ public class AlterAddProd extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        FrameMarcas = new javax.swing.JFrame();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tablaMarcas = new javax.swing.JTable();
+        txtFindMarca = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        btnMarcaOk = new javax.swing.JButton();
+        btnMarCancel = new javax.swing.JButton();
         lblCodigo = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txtProdNombre = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        lblMarca = new javax.swing.JLabel();
+        btnMarca = new javax.swing.JButton();
         txtPreVenta = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txtPreCompra = new javax.swing.JTextField();
@@ -79,11 +105,21 @@ public class AlterAddProd extends javax.swing.JFrame {
         spinBodega = new javax.swing.JSpinner();
         jLabel11 = new javax.swing.JLabel();
         spinRepos = new javax.swing.JSpinner();
+        btnCancelModProd = new javax.swing.JButton();
+        btnSaveModProd = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablaProvLista = new javax.swing.JTable();
+        txtProvFind = new javax.swing.JTextField();
+        btnProv1 = new javax.swing.JButton();
+        btnProv2 = new javax.swing.JButton();
+        btnProv3 = new javax.swing.JButton();
+        btnProv4 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        lblProv1 = new javax.swing.JLabel();
+        lblProv2 = new javax.swing.JLabel();
+        lblProv3 = new javax.swing.JLabel();
+        lblProv4 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
@@ -94,13 +130,91 @@ public class AlterAddProd extends javax.swing.JFrame {
         spinGanancia = new javax.swing.JSpinner();
         lblSugPrecio = new javax.swing.JLabel();
         lblDiferencia = new javax.swing.JLabel();
-        btnSaveModProd = new javax.swing.JButton();
-        btnCancelModProd = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        btnAddProv = new javax.swing.JButton();
-        btnRemovProv = new javax.swing.JButton();
-        btnRefrescar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+
+        FrameMarcas.setMinimumSize(new java.awt.Dimension(429, 300));
+
+        tablaMarcas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "ID", "Marca"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tablaMarcas);
+        if (tablaMarcas.getColumnModel().getColumnCount() > 0) {
+            tablaMarcas.getColumnModel().getColumn(0).setResizable(false);
+            tablaMarcas.getColumnModel().getColumn(1).setResizable(false);
+        }
+
+        txtFindMarca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtFindMarcaKeyTyped(evt);
+            }
+        });
+
+        jLabel2.setText("Buscar:");
+
+        btnMarcaOk.setText("Seleccionar");
+        btnMarcaOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMarcaOkActionPerformed(evt);
+            }
+        });
+
+        btnMarCancel.setText("Cancelar");
+        btnMarCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMarCancelActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout FrameMarcasLayout = new javax.swing.GroupLayout(FrameMarcas.getContentPane());
+        FrameMarcas.getContentPane().setLayout(FrameMarcasLayout);
+        FrameMarcasLayout.setHorizontalGroup(
+            FrameMarcasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(FrameMarcasLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(FrameMarcasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(FrameMarcasLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtFindMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(FrameMarcasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnMarcaOk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnMarCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
+        );
+        FrameMarcasLayout.setVerticalGroup(
+            FrameMarcasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(FrameMarcasLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(FrameMarcasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtFindMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(FrameMarcasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(FrameMarcasLayout.createSequentialGroup()
+                        .addComponent(btnMarcaOk)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnMarCancel))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -109,23 +223,15 @@ public class AlterAddProd extends javax.swing.JFrame {
 
         jLabel4.setText("*Nombre:");
 
-        jLabel5.setText("Marca:");
+        lblMarca.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblMarca.setText(" ");
 
-        jButton6.setFont(new java.awt.Font("Consolas", 0, 11)); // NOI18N
-        jButton6.setText("+");
-        jButton6.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        btnMarca.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        btnMarca.setText("Seleccionar");
+        btnMarca.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnMarca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
-            }
-        });
-
-        jButton7.setFont(new java.awt.Font("Consolas", 0, 11)); // NOI18N
-        jButton7.setText("-");
-        jButton7.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                btnMarcaActionPerformed(evt);
             }
         });
 
@@ -189,83 +295,143 @@ public class AlterAddProd extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        btnCancelModProd.setText("Cancelar");
+        btnCancelModProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelModProdActionPerformed(evt);
+            }
+        });
+
+        btnSaveModProd.setText("Guardar");
+        btnSaveModProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveModProdActionPerformed(evt);
+            }
+        });
+
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Proveedores de Producto"));
 
-        comboProv1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-Sin Especificar-", "Proveedor 1", "Proveedor 2", "Proveedor 3" }));
+        tablaProvLista.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
 
-        jLabel15.setText("Proveedor 1:");
+            },
+            new String [] {
+                "ID", "Proveedor"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
 
-        jLabel16.setText("Proveedor 2:");
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tablaProvLista);
+        if (tablaProvLista.getColumnModel().getColumnCount() > 0) {
+            tablaProvLista.getColumnModel().getColumn(0).setResizable(false);
+        }
 
-        comboProv2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-Sin Especificar-", "Proveedor 1", "Proveedor 2", "Proveedor 3" }));
+        txtProvFind.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtProvFindKeyTyped(evt);
+            }
+        });
 
-        jLabel17.setText("Proveedor 3:");
+        btnProv1.setText("Proveedor 1");
+        btnProv1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProv1ActionPerformed(evt);
+            }
+        });
 
-        comboProv3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-Sin Especificar-", "Proveedor 1", "Proveedor 2", "Proveedor 3" }));
+        btnProv2.setText("Proveedor 2");
+        btnProv2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProv2ActionPerformed(evt);
+            }
+        });
 
-        comboProv4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-Sin Especificar-", "Proveedor 1", "Proveedor 2", "Proveedor 3" }));
+        btnProv3.setText("Proveedor 3");
+        btnProv3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProv3ActionPerformed(evt);
+            }
+        });
 
-        jLabel18.setText("Proveedor 4:");
+        btnProv4.setText("Proveedor 4");
+        btnProv4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProv4ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Buscar:");
+
+        lblProv1.setText(" ");
+
+        lblProv2.setText(" ");
+
+        lblProv3.setText(" ");
+
+        lblProv4.setText(" ");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtProvFind)
+                            .addComponent(btnProv1, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+                            .addComponent(btnProv2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnProv3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnProv4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(41, 41, 41)
-                                .addComponent(jLabel15))
+                                .addGap(6, 6, 6)
+                                .addComponent(lblProv4))
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(51, 51, 51)
-                                .addComponent(comboProv1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(7, 7, 7)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(75, 75, 75)
-                                .addComponent(comboProv2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel16)
-                                .addGap(91, 91, 91))))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel17)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(comboProv3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(71, 71, 71)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel18)
-                                    .addGroup(jPanel4Layout.createSequentialGroup()
-                                        .addGap(10, 10, 10)
-                                        .addComponent(comboProv4, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                    .addComponent(lblProv2)
+                                    .addComponent(lblProv3)
+                                    .addComponent(lblProv1)))))
+                    .addComponent(jLabel1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel16))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(comboProv1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comboProv2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtProvFind, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel17)
-                            .addComponent(jLabel18))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(comboProv3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(comboProv4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                            .addComponent(btnProv1)
+                            .addComponent(lblProv1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnProv2)
+                            .addComponent(lblProv2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnProv3)
+                            .addComponent(lblProv3))
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnProv4)
+                            .addComponent(lblProv4))))
+                .addGap(318, 318, 318))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Precio por Paquete de Unidades"));
@@ -356,76 +522,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        btnSaveModProd.setText("Guardar");
-        btnSaveModProd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveModProdActionPerformed(evt);
-            }
-        });
-
-        btnCancelModProd.setText("Cancelar");
-        btnCancelModProd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelModProdActionPerformed(evt);
-            }
-        });
-
-        tablaProvLista.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "ID", "Proveedor"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(tablaProvLista);
-
-        tablaProvSelect.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "ID", "Nombre de Proveedor"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane2.setViewportView(tablaProvSelect);
-
-        btnAddProv.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/send_up.png"))); // NOI18N
-        btnAddProv.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddProvActionPerformed(evt);
-            }
-        });
-
-        btnRemovProv.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/send_down.png"))); // NOI18N
-        btnRemovProv.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemovProvActionPerformed(evt);
-            }
-        });
-
-        btnRefrescar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/update.png"))); // NOI18N
-        btnRefrescar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefrescarActionPerformed(evt);
-            }
-        });
+        jLabel3.setText("Marca:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -433,60 +530,48 @@ public class AlterAddProd extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(lblCodigo))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtPreCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtPreVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(comboMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtProdNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(152, 152, 152)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(2, 2, 2)
+                                        .addComponent(lblCodigo))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel7)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtPreCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel8)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtPreVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(235, 235, 235)
                                 .addComponent(btnSaveModProd)
-                                .addGap(48, 48, 48)
+                                .addGap(18, 18, 18)
                                 .addComponent(btnCancelModProd))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(42, 42, 42)
-                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnRefrescar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnAddProv, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRemovProv, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(49, 83, Short.MAX_VALUE))
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtProdNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lblMarca)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnMarca)))))
+                        .addGap(0, 106, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -497,13 +582,12 @@ public class AlterAddProd extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(txtProdNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(comboMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton6)
-                    .addComponent(jButton7))
-                .addGap(11, 11, 11)
+                    .addComponent(jLabel3)
+                    .addComponent(lblMarca)
+                    .addComponent(btnMarca))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtPreCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -514,44 +598,37 @@ public class AlterAddProd extends javax.swing.JFrame {
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btnSaveModProd)
-                                    .addComponent(btnCancelModProd))
-                                .addContainerGap())
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnRefrescar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnAddProv, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnRemovProv, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(142, 142, 142))))))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, Short.MAX_VALUE)
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSaveModProd)
+                    .addComponent(btnCancelModProd))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        JOptionPane.showInputDialog("Nueva Marca:");
-    }//GEN-LAST:event_jButton6ActionPerformed
-
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        JOptionPane.showMessageDialog(this, "Hay productos registrados bajo esta marca... \nElimine primero estos productos antes de eliminar la Marca");
-    }//GEN-LAST:event_jButton7ActionPerformed
-
+    private void btnMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcaActionPerformed
+        try {
+            if(marka){
+                aProd.setMarcaDB(0);
+                lblMarca.setText(" ");
+                btnMarca.setText("Seleccionar");
+                marka = false; //falso porque se elimina,... ya no hay proveedor 
+            }else{
+                DefaultTableModel model = (DefaultTableModel) tablaMarcas.getModel();
+                tablaMarcas.setModel(aProd.llenarMarcas(model));
+                txtFindMarca.setText("");
+                this.FrameMarcas.setLocationRelativeTo(null);
+                this.FrameMarcas.setVisible(true);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AlterAddProd.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnMarcaActionPerformed
+//<editor-fold defaultstate="collapsed" desc="(TextFields)Validaciones para Ingresar solo Numeros">
     private void txtPreVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPreVentaKeyTyped
         validaNum(evt);
     }//GEN-LAST:event_txtPreVentaKeyTyped
@@ -563,7 +640,9 @@ public class AlterAddProd extends javax.swing.JFrame {
     private void txtPrePackKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrePackKeyTyped
         validaNum(evt);
     }//GEN-LAST:event_txtPrePackKeyTyped
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Boton de Guardado y Cancelar">
     private void spinGananciaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinGananciaStateChanged
         precioCompra = Float.parseFloat(txtPreCompra.getText());
         int f = Integer.parseInt(String.valueOf(spinGanancia.getValue()));
@@ -571,11 +650,12 @@ public class AlterAddProd extends javax.swing.JFrame {
         if(f<10){  gan += "0"; }
         gan += String.valueOf(f);
         ganancia = precioCompra* Float.parseFloat(gan);
+        float preVFinal =(precioCompra +ganancia);
 
-        precioVenta = precioCompra +ganancia;
+        precioVenta = Float.valueOf(df.format(preVFinal));
         txtPreVenta.setText(String.valueOf(precioVenta));
-        lblSugPrecio.setText("Precio Sugerido: $"+String.valueOf(precioVenta));
-        lblDiferencia.setText("Diferencia: $"+String.valueOf(ganancia));
+        lblSugPrecio.setText("Precio Sugerido: $"+df.format(precioVenta));
+        lblDiferencia.setText("Diferencia: $"+df.format(ganancia));
     }//GEN-LAST:event_spinGananciaStateChanged
 
     private void btnSaveModProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveModProdActionPerformed
@@ -590,7 +670,7 @@ public class AlterAddProd extends javax.swing.JFrame {
         }
 
         //Validacion para los precios de tipo Floats
-        if(!txtPreCompra.getText().equals("0") && !txtPreCompra.getText().equals("")){
+        if(!txtPreCompra.getText().equals("0") && !txtPreCompra.getText().equals("0.0") && !txtPreCompra.getText().equals("")){
             if(txtPreCompra.getText().contains(".")){
                 aProd.setPreCompra(Float.parseFloat(txtPreCompra.getText()));
             }else{
@@ -603,7 +683,7 @@ public class AlterAddProd extends javax.swing.JFrame {
         }
 
         //Setear venta
-        if(!txtPreVenta.getText().equals("0") && !txtPreVenta.getText().equals("")){
+        if(!txtPreVenta.getText().equals("0") && !txtPreVenta.getText().equals("0.0") && !txtPreVenta.getText().equals("")){
             if(txtPreVenta.getText().contains(".")){
                 aProd.setPreVenta(Float.parseFloat(txtPreVenta.getText()));
             }else{
@@ -640,13 +720,8 @@ public class AlterAddProd extends javax.swing.JFrame {
 
         //Settear los Que no necesitan de Validacion.
         aProd.setCantPack(Integer.parseInt(spinPack.getValue().toString()));
-        aProd.setMarca(comboMarca.getItemAt(comboMarca.getSelectedIndex()));
         aProd.setPorceGan(Integer.parseInt(spinGanancia.getValue().toString()));
         aProd.setBodegaCant(Integer.parseInt(spinBodega.getValue().toString()));
-        aProd.setProv1(comboProv1.getItemAt(comboProv1.getSelectedIndex()));
-        aProd.setProv2(comboProv2.getItemAt(comboProv2.getSelectedIndex()));
-        aProd.setProv3(comboProv3.getItemAt(comboProv3.getSelectedIndex()));
-        aProd.setProv4(comboProv4.getItemAt(comboProv4.getSelectedIndex()));
         boolean r=false;
         String res="";
 
@@ -679,60 +754,201 @@ public class AlterAddProd extends javax.swing.JFrame {
 
     private void btnCancelModProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelModProdActionPerformed
         try {
+            this.idProd=0;
             aProd.deselectProd();
             Admin.Administracion frame = new Admin.Administracion();
+            frame.idProd = 0;
             frame.setVisible(true);
             this.dispose();
         } catch (SQLException ex) {
             Logger.getLogger(AlterAddProd.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCancelModProdActionPerformed
-
-    private void btnAddProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProvActionPerformed
-        DefaultTableModel modProvSel= (DefaultTableModel) this.tablaProvSelect.getModel();
-        DefaultTableModel modProv = (DefaultTableModel) this.tablaProvLista.getModel();
-        int fila = this.tablaProvLista.getSelectedRow();
-        if(fila>=0){
-                 String id = modProv.getValueAt(fila,0).toString();
-                 String nombre = modProv.getValueAt(fila,1).toString();
-                 modProvSel.addRow(new Object[]{
-                     id,
-                     nombre,
-                 });
-                 //modelo.setColumnIdentifiers(new Object[]{"Codigo","Nombre","Precio unitario","Cantidad","Total"});
-                 this.tablaProvSelect.setModel(modProvSel);
-        }else{
-            JOptionPane.showMessageDialog(this, "Primero Selecione \n un Proveedor de la lista");
-        
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Evento KeyTyped para filtro de busqueda">
+    private void txtProvFindKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProvFindKeyTyped
+         // TODO add your handling code here:
+         txtProvFind.addKeyListener(new KeyAdapter() {
+        public void keyReleased(final KeyEvent e){
+            txtProvFind.setText(txtProvFind.getText());
+            repaint();
+            filtro.setRowFilter(RowFilter.regexFilter(txtProvFind.getText().trim(),1));
         }
-    }//GEN-LAST:event_btnAddProvActionPerformed
+        });
+        filtro = new TableRowSorter(this.tablaProvLista.getModel());
+        this.tablaProvLista.setRowSorter(filtro);
+    }//GEN-LAST:event_txtProvFindKeyTyped
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="(Botones)Metodos para Seleccionar Proveedores">
+    private void btnProv1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProv1ActionPerformed
+         // TODO add your handling code here:
+         int fila = tablaProvLista.getSelectedRow();
+         
+         
+         if(p1){//Si e sverdadero, es porque ya hay un proveedor. por lo tanto, vamo a borrarlo
+             aProd.setDbProv1(0);
+             lblProv1.setText("");
+             btnProv1.setText("Proveedor 1");
+             p1 = false; //falso porque se elimina,... ya no hay proveedor 
+                    
+         }else{ //En caso de que no exista un Proveeedor Actualmente
+             if(fila>=0){
+                 DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
+                 int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
+                 aProd.setDbProv1(id);  //setear el id del Proveedor
+                 p1=true; //true por que ahora se setea
+                 try {
+                    lblProv1.setText(">>> " + aProd.getProvNombre(id));
+                    btnProv1.setText("Quitar Proveedor");
+                 } catch (SQLException ex) {
+                     Logger.getLogger(AlterAddProd.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }else{
+                 JOptionPane.showMessageDialog(this, "Selecione un Proveedor de la lista");
+             }
+             
+         }
+         tablaProvLista.clearSelection();
+    }//GEN-LAST:event_btnProv1ActionPerformed
 
-    private void btnRemovProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemovProvActionPerformed
-        int fila = this.tablaProvSelect.getSelectedRow();
-        if(tablaProvSelect.isRowSelected(fila)){
-            DefaultTableModel modelProvSel = (DefaultTableModel) this.tablaProvSelect.getModel();
-            modelProvSel.removeRow(fila);
-        }else{
-            JOptionPane.showMessageDialog(this, "Seleccione uno de los Proveedores Seleccionados");
+    private void btnProv2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProv2ActionPerformed
+        int fila = tablaProvLista.getSelectedRow();
+         
+         
+         if(p2){//Si e sverdadero, es porque ya hay un proveedor. por lo tanto, vamo a borrarlo
+             aProd.setDbProv2(0);
+             lblProv2.setText("");
+             btnProv2.setText("Proveedor 2");
+             p2 = false; //falso porque se elimina,... ya no hay proveedor 
+                    
+         }else{ //En caso de que no exista un Proveeedor Actualmente
+             if(fila>=0){
+                 DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
+                 int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
+                 aProd.setDbProv2(id);  //setear el id del Proveedor
+                 p2=true; //true por que ahora se setea
+                 try {
+                    lblProv2.setText(">>> " + aProd.getProvNombre(id));
+                    btnProv2.setText("Quitar Proveedor");
+                 } catch (SQLException ex) {
+                     Logger.getLogger(AlterAddProd.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }else{
+                 JOptionPane.showMessageDialog(this, "Selecione un Proveedor de la lista");
+             }
+         }
+         tablaProvLista.clearSelection();
+    }//GEN-LAST:event_btnProv2ActionPerformed
+
+    private void btnProv3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProv3ActionPerformed
+        int fila = tablaProvLista.getSelectedRow();
+         
+         
+         if(p3){//Si e sverdadero, es porque ya hay un proveedor. por lo tanto, vamo a borrarlo
+             aProd.setDbProv3(0);
+             lblProv3.setText("");
+             btnProv3.setText("Proveedor 3");
+             p3 = false; //falso porque se elimina,... ya no hay proveedor 
+                    
+         }else{ //En caso de que no exista un Proveeedor Actualmente
+             if(fila>=0){
+                 DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
+                 int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
+                 aProd.setDbProv3(id);  //setear el id del Proveedor
+                 p3=true; //true por que ahora se setea
+                 try {
+                    lblProv3.setText(">>> " + aProd.getProvNombre(id));
+                    btnProv3.setText("Quitar Proveedor");
+                 } catch (SQLException ex) {
+                     Logger.getLogger(AlterAddProd.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }else{
+                 JOptionPane.showMessageDialog(this, "Selecione un Proveedor de la lista");
+             }
+         }
+         tablaProvLista.clearSelection();
+    }//GEN-LAST:event_btnProv3ActionPerformed
+
+    private void btnProv4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProv4ActionPerformed
+         int fila = tablaProvLista.getSelectedRow();
+         
+         
+         if(p4){//Si e sverdadero, es porque ya hay un proveedor. por lo tanto, vamo a borrarlo
+             aProd.setDbProv4(0);
+             lblProv4.setText("");
+             btnProv4.setText("Proveedor 4");
+             p4 = false; //falso porque se elimina,... ya no hay proveedor 
+                    
+         }else{ //En caso de que no exista un Proveeedor Actualmente
+             if(fila>=0){
+                 DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
+                 int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
+                 aProd.setDbProv4(id);  //setear el id del Proveedor
+                 p4=true; //true por que ahora se setea
+                 try {
+                    lblProv4.setText(">>> " + aProd.getProvNombre(id));
+                    btnProv4.setText("Quitar Proveedor");
+                 } catch (SQLException ex) {
+                     Logger.getLogger(AlterAddProd.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }else{
+                 JOptionPane.showMessageDialog(this, "Selecione un Proveedor de la lista");
+             }
+         }
+         tablaProvLista.clearSelection();
+    }//GEN-LAST:event_btnProv4ActionPerformed
+    //</editor-fold>
+    
+    
+    private void txtFindMarcaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFindMarcaKeyTyped
+        txtFindMarca.addKeyListener(new KeyAdapter() {
+        public void keyReleased(final KeyEvent e){
+            txtFindMarca.setText(txtFindMarca.getText());
+            repaint();
+            filtro.setRowFilter(RowFilter.regexFilter(txtFindMarca.getText().trim(),1));
         }
-    }//GEN-LAST:event_btnRemovProvActionPerformed
+        });
+        filtro = new TableRowSorter(this.tablaMarcas.getModel());
+        this.tablaMarcas.setRowSorter(filtro);
+    }//GEN-LAST:event_txtFindMarcaKeyTyped
 
-    private void btnRefrescarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefrescarActionPerformed
-        DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
-        try {
-            tablaProvLista.setModel(aProd.llenarProvs_(model));
-        } catch (SQLException ex) {
-            Logger.getLogger(AlterAddProd.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnRefrescarActionPerformed
+    private void btnMarcaOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcaOkActionPerformed
+         int fila = tablaMarcas.getSelectedRow();
+         
+             if(fila>=0){
+                 DefaultTableModel model = (DefaultTableModel) tablaMarcas.getModel();
+                 int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
+                 try {
+                    aProd.setMarcaDB(id);  //setear el id del Proveedor
+                    marka=true; //true por que ahora se setea
+                    btnMarca.setText("Quitar");
+                 
+                    lblMarca.setText(aProd.getMarcaNombre());
+                    tablaMarcas.clearSelection();
+                    FrameMarcas.setVisible(false);
+                 } catch (SQLException ex) {
+                     Logger.getLogger(AlterAddProd.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }else{
+                 JOptionPane.showMessageDialog(this.FrameMarcas, "Selecione una Marca de la lista");
+             }
+             
+         
+    }//GEN-LAST:event_btnMarcaOkActionPerformed
 
+    private void btnMarCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarCancelActionPerformed
+        tablaMarcas.clearSelection();
+        FrameMarcas.setVisible(false);
+    }//GEN-LAST:event_btnMarCancelActionPerformed
+    //</editor-fold>
     
     //-------------------------------Campos para -------------------------------------//
     //<editor-fold defaultstate="collapsed" desc="Metodos limpiar, rellenar y validar campos">
     public void limpiarCampos(){
         txtProdNombre.setText("");
         lblCodigo.setText("Codigo: ");
-        comboMarca.setSelectedIndex(0);
         txtPreCompra.setText("0");
         txtPreVenta.setText("0");
         spinGanancia.setValue(0);
@@ -741,10 +957,11 @@ public class AlterAddProd extends javax.swing.JFrame {
         spinPack.setValue(0);
         txtPrePack.setText("0");
         spinLocal.setValue(0); spinBodega.setValue(0); spinRepos.setValue(0);
-        comboProv1.setSelectedIndex(0); comboProv2.setSelectedIndex(0);
-        comboProv3.setSelectedIndex(0); comboProv4.setSelectedIndex(0);
                 
     }
+    
+    
+    
     public void llenarCampos() throws SQLException{     
         
         txtProdNombre.setText(aProd.getNombre());
@@ -758,7 +975,50 @@ public class AlterAddProd extends javax.swing.JFrame {
         spinBodega.setValue(aProd.getBodegaCant());
         spinRepos.setValue(aProd.getRepo());
         
-    }//</editor-fold>
+        //Para los Label de los Proveedores
+        
+        if(!aProd.getProv1().equals("-Sin Proveedor-")){
+             lblProv1.setText(">>> "+aProd.getProv1());
+             p1=true;
+         }else{
+             lblProv1.setText(" ");
+             p1=false;
+         }
+        
+        if(!aProd.getProv2().equals("-Sin Proveedor-")){
+             lblProv2.setText(">>> "+aProd.getProv2());
+             p2=true;
+         }else{
+             lblProv2.setText(" ");
+             p2=false;
+         }
+        
+        if(!aProd.getProv3().equals("-Sin Proveedor-")){
+             lblProv3.setText(">>> "+aProd.getProv3());
+             p3=true;
+             
+         }else{
+             lblProv3.setText(" ");
+             p3=false;
+         }
+        
+        if(!aProd.getProv4().equals("-Sin Proveedor-")){
+             lblProv4.setText(">>> "+aProd.getProv4());
+             p4=true;
+         }else{
+             lblProv4.setText(" ");
+             p4=false;
+         }
+        if(!aProd.getMarca().equals("")){
+            marka=true;
+            lblMarca.setText(aProd.getMarca());
+            btnMarca.setText("Quitar");
+        }else{
+            marka=false;
+            lblMarca.setText("Marca: ");
+            btnMarca.setText("Seleccionar");
+        }
+    }
     //Validacion para que no se puedan ingresar letras al jTextField
     
     private void validaNum(java.awt.event.KeyEvent evt){
@@ -768,7 +1028,7 @@ public class AlterAddProd extends javax.swing.JFrame {
             evt.consume();
         }
     }
-    
+    //</editor-fold>
     
     /**
      * @param args the command line arguments
@@ -808,31 +1068,27 @@ public class AlterAddProd extends javax.swing.JFrame {
             }
         });
     }
-
+    //<editor-fold defaultstate="collapsed" desc="Declaracion de Objetos JavaSwing">
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddProv;
+    private javax.swing.JFrame FrameMarcas;
     private javax.swing.JButton btnCancelModProd;
-    private javax.swing.JButton btnRefrescar;
-    private javax.swing.JButton btnRemovProv;
+    private javax.swing.JButton btnMarCancel;
+    private javax.swing.JButton btnMarca;
+    private javax.swing.JButton btnMarcaOk;
+    private javax.swing.JButton btnProv1;
+    private javax.swing.JButton btnProv2;
+    private javax.swing.JButton btnProv3;
+    private javax.swing.JButton btnProv4;
     private javax.swing.JButton btnSaveModProd;
-    public static final javax.swing.JComboBox<String> comboMarca = new javax.swing.JComboBox<>();
-    public static final javax.swing.JComboBox<String> comboProv1 = new javax.swing.JComboBox<>();
-    public static final javax.swing.JComboBox<String> comboProv2 = new javax.swing.JComboBox<>();
-    public static final javax.swing.JComboBox<String> comboProv3 = new javax.swing.JComboBox<>();
-    public static final javax.swing.JComboBox<String> comboProv4 = new javax.swing.JComboBox<>();
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -844,17 +1100,24 @@ public class AlterAddProd extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblCodigo;
     private javax.swing.JLabel lblDiferencia;
+    private javax.swing.JLabel lblMarca;
+    private javax.swing.JLabel lblProv1;
+    private javax.swing.JLabel lblProv2;
+    private javax.swing.JLabel lblProv3;
+    private javax.swing.JLabel lblProv4;
     private javax.swing.JLabel lblSugPrecio;
     private javax.swing.JSpinner spinBodega;
     private javax.swing.JSpinner spinGanancia;
     private javax.swing.JSpinner spinLocal;
     private javax.swing.JSpinner spinPack;
     private javax.swing.JSpinner spinRepos;
-    public static final javax.swing.JTable tablaProvLista = new javax.swing.JTable();
-    public static final javax.swing.JTable tablaProvSelect = new javax.swing.JTable();
+    private javax.swing.JTable tablaMarcas;
+    public javax.swing.JTable tablaProvLista;
+    private javax.swing.JTextField txtFindMarca;
     private javax.swing.JTextField txtPreCompra;
     private javax.swing.JTextField txtPrePack;
     private javax.swing.JTextField txtPreVenta;
     private javax.swing.JTextField txtProdNombre;
+    private javax.swing.JTextField txtProvFind;
     // End of variables declaration//GEN-END:variables
-}
+}//</editor-fold>

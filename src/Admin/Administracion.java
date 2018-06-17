@@ -5,15 +5,15 @@
  */
 package Admin;
 
-import java.awt.Event;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -24,21 +24,28 @@ public class Administracion extends javax.swing.JFrame {
     Funciones.Productos aProd = new Funciones.Productos();
     Funciones.Tablas tablas = new Funciones.Tablas();
     Login login = new Login();
-    public static boolean insertMode=false;
+    public static boolean insertMode;
     public static int idProd;
+    TableRowSorter filtro;
     
     //Variables para Realizar los procedimientos:
     float precioCompra, precioVenta, ganancia;
-
-    /**
-     * Creates new form Administracion
-     */
+    
     public Administracion() throws SQLException{
         initComponents();
         this.setLocationRelativeTo(null);
         tablas.TablaProductos();
         gRBSolicita.add(rbBo_Lo); gRBSolicita.add(rbPro_Bo);
         btnProdSolicita.setText("Solicitudes Pendientes("+aProd.getSoliCant()+")");
+        tablaProd.clearSelection();
+        
+        tablaProd.getColumnModel().getColumn(0).setMaxWidth(50);
+        tablaProd.getColumnModel().getColumn(8).setMaxWidth(80);
+        tablaProd.getColumnModel().getColumn(7).setMaxWidth(80);
+        tablaProd.getColumnModel().getColumn(6).setMaxWidth(80);
+        tablaProd.getColumnModel().getColumn(5).setMaxWidth(80);
+        tablaProd.getColumnModel().getColumn(4).setMaxWidth(80);
+        tablaProd.getColumnModel().getColumn(2).setMaxWidth(80);
     }
 
     /**
@@ -53,7 +60,7 @@ public class Administracion extends javax.swing.JFrame {
         gRBSolicita = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tfFindProd = new javax.swing.JTextField();
         btnProdSolicita = new javax.swing.JButton();
         btnAddProd = new javax.swing.JButton();
         btnModProd = new javax.swing.JButton();
@@ -67,29 +74,30 @@ public class Administracion extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jButton12 = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
-        jMenuBar2 = new javax.swing.JMenuBar();
-        jMenu3 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        optUsuarios = new javax.swing.JMenuItem();
+        optProveedores = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Panel de Administracion");
 
         tablaProd.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Codigo", "Nombre", "Marca", "Precio C/U", "Precio por Paquete", "Dispon. Local", "Dispon. Bodega"
+                "Codigo", "Nombre", "Marca", "Proveedor", "Precio Compra", "Precio C/U", "Precio por Paquete", "Local Stock", "Bodega Stock"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -100,9 +108,9 @@ public class Administracion extends javax.swing.JFrame {
 
         jLabel2.setText("Buscar");
 
-        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+        tfFindProd.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField1KeyTyped(evt);
+                tfFindProdKeyTyped(evt);
             }
         });
 
@@ -226,51 +234,72 @@ public class Administracion extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jMenu3.setText("Archivo");
+        jMenu1.setText("Archivo");
 
-        jMenuItem2.setText("Salir");
-        jMenu3.add(jMenuItem2);
+        jMenuItem5.setText("Cerrar Sesión");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem5);
 
-        jMenuBar2.add(jMenu3);
+        jMenuBar1.add(jMenu1);
 
-        jMenu4.setText("Administrar");
+        jMenu2.setText("Administrar");
 
-        jMenuItem1.setText("Ventas");
-        jMenu4.add(jMenuItem1);
+        jMenuItem4.setText("Compras y Ventas");
+        jMenu2.add(jMenuItem4);
 
-        jMenuItem3.setText("Usuarios");
-        jMenu4.add(jMenuItem3);
+        optUsuarios.setText("Usuarios");
+        optUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optUsuariosActionPerformed(evt);
+            }
+        });
+        jMenu2.add(optUsuarios);
 
-        jMenuBar2.add(jMenu4);
+        optProveedores.setText("Proveedores");
+        optProveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optProveedoresActionPerformed(evt);
+            }
+        });
+        jMenu2.add(optProveedores);
 
-        setJMenuBar(jMenuBar2);
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(86, 86, 86)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnDelProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnModProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnAddProd, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(99, 99, 99)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel2)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnProdSolicita))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 824, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(71, Short.MAX_VALUE))
+                        .addContainerGap(19, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 985, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(169, 169, 169)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnDelProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnModProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnAddProd, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tfFindProd, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnProdSolicita)))))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -278,7 +307,7 @@ public class Administracion extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfFindProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnProdSolicita))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -298,37 +327,65 @@ public class Administracion extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //<editor-fold defaultstate="collapsed" desc="Metodos para la solicitud de productos">
+    
     private void btnSolicitarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarProdActionPerformed
       
+        DefaultTableModel model = (DefaultTableModel) tablaProd.getModel();
+        int fila = tablaProd.getSelectedRow();
         //Obtener el ID de Producto.
-        if(tablaProd.isRowSelected(tablaProd.getSelectedRow())){
-            DefaultTableModel model = (DefaultTableModel) tablaProd.getModel();
-            int idProd = Integer.parseInt(model.getValueAt(tablaProd.getSelectedRow(), 0).toString());
-            aProd.setCodigo(idProd);
-            String destino="", origen="";
-            if(rbBo_Lo.isSelected()){
-                origen= "Bodega"; destino = "Local";
-            }else if(rbPro_Bo.isSelected()){
-                origen="Proveedor"; destino ="Bodega";
-            }
-            int cant = Integer.parseInt(spinCantSolicita.getValue().toString());
-            String marca = model.getValueAt(tablaProd.getSelectedRow(), 2).toString();
-                
-            try {
-                aProd.selectProd();
-                if(aProd.solicitarProd(origen, destino, cant, marca)){
-                    JOptionPane.showMessageDialog(this, "Añadido a Solicitudes Pendientes.");
-                }else{
-                    JOptionPane.showMessageDialog(this, "No se Pudo Añadir la Solicitud");
-                }
-                btnProdSolicita.setText("Solicitudes Pendientes("+aProd.getSoliCant()+")");
-            } catch (SQLException ex) {
-                Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        if(fila>=0){
             
+            aProd.setCodigo(Integer.valueOf(model.getValueAt(fila, 0).toString()));
+            
+            int bodeCant = Integer.parseInt(model.getValueAt(fila, 8).toString());
+            int cant = Integer.parseInt(spinCantSolicita.getValue().toString());
+            
+            String marca = model.getValueAt(fila, 2).toString();
+            String provs = model.getValueAt(fila, 3).toString();
+            
+            if(rbBo_Lo.isSelected()){
+                if(cant<=bodeCant){
+                    try {
+                        aProd.selectProd();
+                        if(aProd.solicitarProd("Bodega", "Local", cant, marca, provs)){
+                            JOptionPane.showMessageDialog(this, "Añadido a Solicitudes Pendientes.");
+                        }else{
+                            JOptionPane.showMessageDialog(this, "No se Pudo Añadir la Solicitud");
+                        }
+                    } catch (SQLException ex) {
+                        System.out.println(ex);
+                       Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(this, "La cantidad de Productos Solicitada,\n Supera a las existencias en Bodega");
+                }           
+            }else if(rbPro_Bo.isSelected()){
+                try {
+                    
+                    aProd.selectProd();
+                    if(aProd.solicitarProd("Proveedor", "Bodega", cant, marca, provs)){
+                        JOptionPane.showMessageDialog(this, "Añadido a Solicitudes Pendientes.");
+                    }else{
+                        JOptionPane.showMessageDialog(this, "No se Pudo Añadir la Solicitud");
+                    }
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }else{
             JOptionPane.showMessageDialog(this, "No ha Seleccionado ningun un Producto");
         }
+        try {
+            btnProdSolicita.setText("Solicitudes Pendientes("+aProd.getSoliCant()+")");
+        } catch (SQLException ex) {
+            Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        tablaProd.clearSelection();
+        spinCantSolicita.setValue(0);
+        
+        
     }//GEN-LAST:event_btnSolicitarProdActionPerformed
 
     private void btnProdSolicitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdSolicitaActionPerformed
@@ -340,7 +397,9 @@ public class Administracion extends javax.swing.JFrame {
             Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnProdSolicitaActionPerformed
-
+//</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Botones Add, Modific y Remove">
     private void btnDelProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelProdActionPerformed
         boolean r=false;
         if(tablaProd.isRowSelected(tablaProd.getSelectedRow())){
@@ -366,11 +425,11 @@ public class Administracion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDelProdActionPerformed
 
     private void btnAddProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProdActionPerformed
+        this.idProd = 0;
+        this.insertMode=true;
         try {
             Admin.AlterAddProd frame = new Admin.AlterAddProd();
             frame.setVisible(true);
-            insertMode = true;
-            idProd=0;
         } catch (SQLException ex) {
             Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -378,14 +437,14 @@ public class Administracion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddProdActionPerformed
 
     private void btnModProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModProdActionPerformed
-        
-        if(tablaProd.isRowSelected(tablaProd.getSelectedRow())){
+        int fila = tablaProd.getSelectedRow();
+        if(fila >=0){
             DefaultTableModel model = (DefaultTableModel) tablaProd.getModel();
-            idProd = Integer.parseInt(model.getValueAt(tablaProd.getSelectedRow(), 0).toString());
+            this.idProd = Integer.parseInt(model.getValueAt(fila, 0).toString());
+            this.insertMode =false;
             
             try {
             Admin.AlterAddProd frame = new Admin.AlterAddProd();
-            insertMode = false;
             frame.setVisible(true);
             this.dispose();
             
@@ -398,16 +457,11 @@ public class Administracion extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btnModProdActionPerformed
-
+//</editor-fold>
+    
+    
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        Usuarios f;
-        try {
-            f = new Usuarios();
-            f.setVisible(true);
-             this.dispose();
-        } catch (SQLException ex) {
-            Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
@@ -416,18 +470,45 @@ public class Administracion extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton13ActionPerformed
 
-    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1KeyTyped
-
-    //Validacion para que no se puedan ingresar letras al jTextField
-    private void validaNum(java.awt.event.KeyEvent evt){
-        char val=evt.getKeyChar();
-        if (Character.isLetter(val)){
-            getToolkit().beep();
-            evt.consume();
+    private void tfFindProdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFindProdKeyTyped
+        tfFindProd.addKeyListener(new KeyAdapter() {
+        public void keyReleased(final KeyEvent e){
+            tfFindProd.setText(tfFindProd.getText());
+            repaint();
+            filtro.setRowFilter(RowFilter.regexFilter(tfFindProd.getText().trim(), 1));
         }
-    }
+        });
+        filtro = new TableRowSorter(tablaProd.getModel());
+        tablaProd.setRowSorter(filtro);
+    }//GEN-LAST:event_tfFindProdKeyTyped
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        Admin.Login frame = new Admin.Login();
+        frame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void optUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optUsuariosActionPerformed
+        try {                                           
+            Usuarios f = new Usuarios();            
+            f.setVisible(true);
+            this.dispose();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_optUsuariosActionPerformed
+
+    private void optProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optProveedoresActionPerformed
+        try {
+            Proveedores f = new Proveedores();
+            f.setVisible(true);
+            this.dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_optProveedoresActionPerformed
+
     
     /**
      * @param args the command line arguments
@@ -479,20 +560,25 @@ public class Administracion extends javax.swing.JFrame {
     private javax.swing.JButton jButton13;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JMenuItem optProveedores;
+    private javax.swing.JMenuItem optUsuarios;
     private javax.swing.JRadioButton rbBo_Lo;
     private javax.swing.JRadioButton rbPro_Bo;
     private javax.swing.JSpinner spinCantSolicita;
     public static final javax.swing.JTable tablaProd = new javax.swing.JTable();
+    private javax.swing.JTextField tfFindProd;
     // End of variables declaration//GEN-END:variables
+
+    private void Solicitar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     //</editor-fold>
 }

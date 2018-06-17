@@ -5,12 +5,10 @@
  */
 package Funciones;
 
-import Admin.Administracion;
 import Admin.ProdSolicita;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
+import java.text.DecimalFormat;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Mauricio Cruz
  */
 public class Productos {
+    DecimalFormat df = new DecimalFormat("########.##");
     int rID;// rID es solo para retornar el id Numerico de los proveedores y de las  marcas
     int codigo, marcaDB, localCant, bodegaCant, repo, porceGan, cantPack, dbProv1, dbProv2, dbProv3, dbProv4; //Todos los parametros
     String nombre, marca, prov1, prov2, prov3, prov4; //Estos parametros se reciben como String para Conertirse con el valor correspondiente de la llave primaria en la tabla
@@ -29,6 +28,15 @@ public class Productos {
     public String getNombre() {
         return nombre;
     }
+
+    public int getMarcaDB() {
+        return marcaDB;
+    }
+
+    public void setMarcaDB(int marcaDB) {
+        this.marcaDB = marcaDB;
+    }
+    
     public String getMarca() {
         return marca;
     }
@@ -71,6 +79,23 @@ public class Productos {
     public int getCodigo() {
         return codigo;
     }
+    public int getDbProv1() {
+        return dbProv1;
+    }
+
+    public int getDbProv2() {
+        return dbProv2;
+    }
+
+    public int getDbProv3() {
+        return dbProv3;
+    }
+
+    public int getDbProv4() {
+        return dbProv4;
+    }
+    
+    
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -116,26 +141,33 @@ public class Productos {
     }
     public void setCodigo(int codigo) {
         this.codigo = codigo;
-    }//</editor-fold>
+    }
+    public void setDbProv1(int dbProv1) {
+        this.dbProv1 = dbProv1;
+    }
+
+    public void setDbProv2(int dbProv2) {
+        this.dbProv2 = dbProv2;
+    }
+
+    public void setDbProv3(int dbProv3) {
+        this.dbProv3 = dbProv3;
+    }
+
+    public void setDbProv4(int dbProv4) {
+        this.dbProv4 = dbProv4;
+    }
+    
+
+//</editor-fold>
     
     String sql="";
     ResultSet rs;
     //-------------- Metodos para hacer esto Mas Sukhulemtho---------------//
     
     //Metodo para retornar el ID de un proveedor de la base de datos
-    //<editor-fold desc="Metodos para Obtener IDs y Nombre de Proveedor y marcas">
-    private int getProvID(String prov) throws SQLException{ 
-        String sql = "SELECT id FROM proveedores WHERE prov_nombre='"+prov+"'";
-        
-        ResultSet rs = funcion.select(sql);
-        if(rs.next()){
-            rID = rs.getInt(1);
-        }else{
-            rID=0;
-        }
-        return rID;
-    }
-    private String getProvNombre(int id) throws SQLException{ 
+    //<editor-fold defaultstate="collapsed" desc="Metodos para Obtener IDs y Nombre de Proveedor y marcas">
+    public String getProvNombre(int id) throws SQLException{ 
         String prov="",sql = "SELECT prov_nombre FROM proveedores WHERE id="+id;
         ResultSet rs = funcion.select(sql);
         if(rs.next()){
@@ -146,7 +178,7 @@ public class Productos {
         return prov;
     }
     
-    private int getMarcaID(String marca) throws SQLException{ 
+    public int getMarcaID(String marca) throws SQLException{ 
         String sql = "SELECT id FROM marcas WHERE marca='"+marca+"'";
         
         ResultSet rs = funcion.select(sql);
@@ -157,14 +189,12 @@ public class Productos {
         }
         return rID;
     }
-    private String getMarcaNombre(int marca) throws SQLException{ 
-        String res ="", sql = "SELECT id FROM marcas WHERE marca='"+marca+"'";
+    public String getMarcaNombre() throws SQLException{ 
+        String res =""; sql = "SELECT marca FROM marcas WHERE id="+marcaDB;
         
-        ResultSet rs = funcion.select(sql);
+        rs = funcion.select(sql);
         if(rs.next()){
-            res = rs.getString("nombre");
-        }else{
-            res="";
+            res = rs.getString(1);
         }
         return res;
     }//</editor-fold>
@@ -172,44 +202,11 @@ public class Productos {
     
     //Setear el id a todos los proveedores que se hayan enviado como parametros.
     //  Busca y setea los proveedores y las marcas
-    private void setMarca_Prov() throws SQLException{ //Tambien incluye la marca ademas de los proveedores
-        if(!prov1.equals("")){
-            dbProv1 = getProvID(prov1);
-        }else{
-            dbProv1 = 0;
-        }
-        
-        if(!prov2.equals("")){
-            dbProv2 = getProvID(prov2);
-        }else{
-            dbProv2 = 0;
-        }
-        
-        if(!prov3.equals("")){
-            dbProv3 = getProvID(prov3);
-        }else{
-            dbProv3 = 0;
-        }
-        
-        if(!prov4.equals("")){
-            dbProv4 = getProvID(prov4);
-        }else{
-            dbProv4 = 0;
-        }
-        
-        if (!marca.equals("")){
-            marcaDB=getMarcaID(marca);
-        }else{
-            marcaDB = 0;
-        }
-    }
-    
-    
     
     //Preparacion de Consultas SQL
-    
+    //<editor-fold defaultstate="collapsed" desc="CRUD para los productos">
     public boolean addProd() throws SQLException{
-        setMarca_Prov();
+        //setMarca_Prov();
         String campo = "codigo";
         String value = "null";
             campo += ", nombre"; value += ", '"+nombre+"'";
@@ -235,7 +232,7 @@ public class Productos {
     }
     
     public boolean modProd() throws SQLException{
-        setMarca_Prov();
+        
         String campo = "";
         campo += "nombre='"+nombre+"'";
         //Floats y Enteros no van entre comilla simple
@@ -264,6 +261,7 @@ public class Productos {
         return funcion.ExecSQL(sql);
     }
     
+    
     public void selectProd() throws SQLException{
         sql ="SELECT * FROM productos WHERE codigo="+codigo;
         rs =funcion.select(sql);
@@ -289,30 +287,30 @@ public class Productos {
         if(dbProv1 > 0){
             prov1 = getProvNombre(dbProv1);
         }else{
-            prov1= "-Sin Especificar-";
+            prov1= "-Sin Proveedor-";
         }
         
         if(dbProv2 > 0){
             prov2 = getProvNombre(dbProv2);
         }else{
-            prov2= "-Sin Especificar-";
+            prov2= "-Sin Proveedor-";
         }
         
         if(dbProv3 > 0){
             prov3 = getProvNombre(dbProv3);
         }else{
-            prov3= "-Sin Especificar-";
+            prov3= "-Sin Proveedor-";
         }
         
         if(dbProv4 > 0){
             prov4 = getProvNombre(dbProv4);
         }else{
-            prov4= "-Sin Especificar-";
+            prov4= "-Sin Proveedor-";
         }
         if(marcaDB > 0){
-            marca= getMarcaNombre(marcaDB);
+            marca= getMarcaNombre();
         }else{
-            marca="-Sin Especificar-";
+            marca="";
         }
         
     }
@@ -324,26 +322,21 @@ public class Productos {
         marcaDB=0;
         dbProv1 =0; dbProv2=0; dbProv3=0; dbProv4=0;
     }
+    //</editor-fold>
     
-    public DefaultComboBoxModel llenarComboMarcas(DefaultComboBoxModel marcas) throws SQLException{
-        marcas.removeAllElements();
-        if(marcaDB!=0){
-           sql="SELECT marca FROM marcas WHERE id="+marcaDB;
-           ResultSet res = funcion.select(sql);
-           while(res.next()){
-               marcas.addElement(res.getString(1));
-           }
-           
-        }
+    //<editor-fold defaultstate="collapsed" desc="Retorno de Modelos para marcars y para tablas">
+    public DefaultTableModel llenarMarcas(DefaultTableModel model) throws SQLException{
+        model.setRowCount(0);
+        String datos[] = new String [2];
         
-        marcas.addElement("--No Especificado--");
-        
-        sql="SELECT marca FROM marcas";
+        sql="SELECT id, marca FROM marcas";
         rs = funcion.select(sql);
         while(rs.next()){
-            marcas.addElement(rs.getString(1));
+            datos[0] = rs.getString(1);
+            datos[1] = rs.getString(2);
+            model.addRow(datos);
         }
-        return marcas;
+        return model;
     }
     
     
@@ -359,64 +352,22 @@ public class Productos {
         }
         
         return model;
-    }
-    public DefaultTableModel provSelList(DefaultTableModel model) throws SQLException{
-        model.setRowCount(0);
-        String prov="";
-        sql="SELECT proveedor1 FROM productos WHERE codigo="+codigo;
-        rs=funcion.select(sql);
-        while(rs.next()){
-            prov = rs.getString(1);
-            String datos[]= prov.split(",");
-            for (int i=0; i<datos.length;i++){
-                sql="SELECT id, prov_nombre FROM proveedores WHERE id="+datos[i];
-                rs=funcion.select(sql);
-                String datosProv[] = new String[2];
-                while(rs.next()){
-                    datosProv[0] = rs.getString(1);
-                    datosProv[1] = rs.getString(2);
-                    model.addRow(datos);
-                }
-                
-            }
-        }
-        
-        return model;
-    }
-    
-    
-    
+    }  //</editor-fold>
+       
     
     //--------------------------------//---------------------------//
-    public DefaultComboBoxModel llenarProvs(DefaultComboBoxModel comboProv) throws SQLException{
-        
-        comboProv.removeAllElements();
-        
-        if(dbProv1!=0){
-           sql="SELECT prov_nombre FROM proveedores WHERE id="+dbProv1;
-           ResultSet res = funcion.select(sql);
-           while(res.next()){
-               comboProv.addElement(res.getString(1));
-           }
-        }
-        
-        comboProv.addElement("--No Especificado--");
-        
-        sql="SELECT prov_nombre FROM proveedores";
-        rs = funcion.select(sql);
-        while(rs.next()){
-            comboProv.addElement(rs.getString(1));
-        }
-        return comboProv;
-    }
     
-    public boolean solicitarProd(String origen, String destino, int cant, String marcaSend) throws SQLException{
-        sql ="SELECT cantidad FROM prod_solicita WHERE cod_prod="+codigo+" AND destino='"+destino+"'";
+    //<editor-fold defaultstate="collapsed" desc="Metodos para gestionar solicitud de Productos">
+    public boolean solicitarProd(String origen, String destino, int cant, String marcaSend, String provs) throws SQLException{
+        sql ="SELECT cantidad, precio FROM prod_solicita WHERE cod_prod="+codigo+" AND destino='"+destino+"';";
+        
+        float total = preCompra*cant;
         rs = funcion.select(sql);
-        if (rs.next()){            
-            sql = "UPDATE prod_solicita SET cantidad="+(rs.getInt(1)+cant)+" WHERE cod_prod="+codigo + " AND destino='"+destino+"'";
+        if (rs.next()){
+            total= rs.getFloat(2)*(rs.getInt(1)+cant);
+            sql = "UPDATE prod_solicita SET cantidad="+(rs.getInt(1)+cant)+", precio="+Float.valueOf(df.format(total))+" WHERE cod_prod="+codigo + " AND destino='"+destino+"'";
         }else{
-            sql="INSERT INTO prod_solicita VALUES("+codigo+", '"+nombre+"', '"+marcaSend+"', '"+origen+"', '"+destino+"', "+cant+", "+(preCompra*cant)+")";
+            sql="INSERT INTO prod_solicita VALUES("+codigo+", '"+nombre+"', '"+marcaSend+"', '"+provs+"', '"+origen+"', '"+destino+"', "+cant+", "+Float.valueOf(df.format(total))+")";
         }
         return funcion.ExecSQL(sql);
     }
@@ -441,7 +392,7 @@ public class Productos {
         //Extraer la cantidad actual para luego sumarle
         boolean r=false;
         String sqlUpd = "";
-        int exisBodega =0, exisLocal=0, cantidad=0;
+        int cantidad=0;
         sql="SELECT cantidad FROM prod_solicita WHERE cod_prod="+codigo + " AND destino='"+destino+"'";
         rs = funcion.select(sql);
         while(rs.next()){
@@ -469,6 +420,6 @@ public class Productos {
         
         
         return r;
-    }
+    }//</editor-fold>
     
 }

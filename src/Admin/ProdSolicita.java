@@ -23,13 +23,19 @@ public class ProdSolicita extends javax.swing.JFrame {
     
     Funciones.Tablas tablas = new Funciones.Tablas();
     Funciones.Productos aProd = new Funciones.Productos();
+    int fila;
     
     
     public ProdSolicita() throws SQLException {
         initComponents();
         this.setLocationRelativeTo(null);
         tablas.tablaProdSolicita();
-        
+        tablaProdSolicita.getColumnModel().getColumn(0).setMaxWidth(50);
+        tablaProdSolicita.getColumnModel().getColumn(7).setMaxWidth(100); tablaProdSolicita.getColumnModel().getColumn(7).setMinWidth(60);
+        tablaProdSolicita.getColumnModel().getColumn(6).setMaxWidth(60); 
+        tablaProdSolicita.getColumnModel().getColumn(5).setMaxWidth(70); 
+        tablaProdSolicita.getColumnModel().getColumn(4).setMaxWidth(80);
+        tablaProdSolicita.getColumnModel().getColumn(2).setMaxWidth(100);
     }
 
     /**
@@ -45,9 +51,6 @@ public class ProdSolicita extends javax.swing.JFrame {
         btnProdRecibido = new javax.swing.JButton();
         btnCancelSoli = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,11 +59,11 @@ public class ProdSolicita extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Codigo", "Nombre", "Marca", "Origen", "Destino", "Cantidad", "Total $"
+                "Codigo", "Nombre", "Marca", "Proveedor", "Origen", "Destino", "Cantidad", "Total $"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -90,14 +93,6 @@ public class ProdSolicita extends javax.swing.JFrame {
             }
         });
 
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -125,20 +120,21 @@ public class ProdSolicita extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelSoli)
                     .addComponent(jButton3))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelSoliActionPerformed
-        if(tablaProdSolicita.isRowSelected(tablaProdSolicita.getSelectedRow())){
-            int conf = JOptionPane.showConfirmDialog(this, "*Cancelar esta Solicitud de Productos?\n¿Confirmar?");
+         fila = tablaProdSolicita.getSelectedRow();
+        if(fila>=0){
+            int conf = JOptionPane.showConfirmDialog(this, "¿Esta Seguro de Cancelar esta Solicitud?");
             if (conf == 0){
                 DefaultTableModel model = (DefaultTableModel) tablaProdSolicita.getModel();
-                int idReg = Integer.parseInt(model.getValueAt(tablaProdSolicita.getSelectedRow(), 0).toString());
+                int idReg = Integer.parseInt(model.getValueAt(fila, 0).toString());
                 aProd.setCodigo(idReg);
-                String destino = model.getValueAt(tablaProdSolicita.getSelectedRow(), 4).toString();
+                String destino = model.getValueAt(tablaProdSolicita.getSelectedRow(), 5).toString();
                try {
                     aProd.rmovSoliProc(destino);
                     tablas.tablaProdSolicita();
@@ -148,23 +144,23 @@ public class ProdSolicita extends javax.swing.JFrame {
             }
             
         }else{
-            JOptionPane.showConfirmDialog(this, "¡No ha seleccionado Ningun Elemento");
+            JOptionPane.showConfirmDialog(this, "¡No ha seleccionado Ningun Elemento!");
         }
         
         
     }//GEN-LAST:event_btnCancelSoliActionPerformed
     public static  String mensaje="";
     private void btnProdRecibidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdRecibidoActionPerformed
-        
-        if(tablaProdSolicita.isRowSelected(tablaProdSolicita.getSelectedRow())){
-            int conf = JOptionPane.showConfirmDialog(this, "*Las nuevos productos se registraran en la base de datos\n¿Confirmar?");
+        fila = tablaProdSolicita.getSelectedRow();
+        if(fila>=0){
+            int conf = JOptionPane.showConfirmDialog(this, "Al Confirmar esta Acción, \nse sumará la solicitud a las existencias del producto.\n¿Confirmar?");
             mensaje="";
             if (conf == 0){
                 DefaultTableModel model = (DefaultTableModel) tablaProdSolicita.getModel();
-                int idReg = Integer.parseInt(model.getValueAt(tablaProdSolicita.getSelectedRow(), 0).toString());
+                int idReg = Integer.parseInt(model.getValueAt(fila, 0).toString());
                 aProd.setCodigo(idReg);
                 
-                String destino = model.getValueAt(tablaProdSolicita.getSelectedRow(), 4).toString();
+                String destino = model.getValueAt(tablaProdSolicita.getSelectedRow(), 5).toString();
                 
                try {
                     aProd.selectProd();
@@ -237,9 +233,6 @@ public class ProdSolicita extends javax.swing.JFrame {
     private javax.swing.JButton btnCancelSoli;
     private javax.swing.JButton btnProdRecibido;
     private javax.swing.JButton jButton3;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     public static final javax.swing.JTable tablaProdSolicita = new javax.swing.JTable();
     // End of variables declaration//GEN-END:variables
