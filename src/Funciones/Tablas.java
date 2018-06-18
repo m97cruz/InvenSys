@@ -149,7 +149,6 @@ public class Tablas {
             datos[2] = rs.getString(3);
             datos[3] = rs.getString(4);
             datos[4] = rs.getString(5);
-            datos[5] = rs.getString(6);
             model.addRow(datos);
         }
         return model;
