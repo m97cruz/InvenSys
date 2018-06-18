@@ -7,10 +7,11 @@ package Admin;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.math.RoundingMode;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
@@ -26,31 +27,46 @@ public class AlterAddProd extends javax.swing.JFrame {
     Funciones.Productos aProd = new Funciones.Productos();
     Funciones.Tablas tablas = new Funciones.Tablas();
     Login login = new Login();
-    public static boolean insertMode;
-    public static int idProd=0;
+    public boolean insertMode;
+    public int idProd;
     float precioCompra, precioVenta, ganancia;
+    DecimalFormat df= new DecimalFormat("####.##");
     private TableRowSorter filtro;
     private boolean p1=false, p2=false, p3=false, p4=false, marka=false;
+
+    public void setIdProd(int idProd) {
+        this.idProd = idProd;
+    }
+    public void setInsertMode(boolean insertMode) {
+        this.insertMode = insertMode;
+    }
+    
     
     
     //<editor-fold defaultstate="collapsed" desc="METODO CONSTRUCTOR">
     public AlterAddProd() throws SQLException {
         initComponents();
-        FrameMarcas.setVisible(false);
+        df.setRoundingMode(RoundingMode.UP);
         Admin.Administracion frame = new Admin.Administracion();
-        this.insertMode = frame.insertMode;
         this.idProd = frame.idProd;
+        this.insertMode = frame.insertMode;
+        
+        FrameMarcas.setVisible(false);
         this.setLocationRelativeTo(null);
+        
         DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
         tablaProvLista.getColumnModel().getColumn(0).setMaxWidth(0); //Ocultar la Columna de ID
         
-        if(idProd>0){
-            aProd.setCodigo(idProd);
-            aProd.selectProd();
-            llenarCampos();
+        if(insertMode){
+            lblCodigo.setText("Codigo: --Nuevo Registro--");
+            DefaultTableModel tblMarcaModel = (DefaultTableModel) tablaMarcas.getModel();
+            tablaMarcas.setModel(aProd.llenarMarcas(tblMarcaModel));
             this.tablaProvLista.setModel(aProd.llenarProvs_(model));
             
         }else{
+            aProd.setCodigo(idProd);
+            aProd.selectProd();
+            llenarCampos();
             tablaProvLista.setModel(aProd.llenarProvs_(model));
             DefaultTableModel tblMarcaModel = (DefaultTableModel) tablaMarcas.getModel();
             tablaMarcas.setModel(aProd.llenarMarcas(tblMarcaModel));
@@ -114,8 +130,8 @@ public class AlterAddProd extends javax.swing.JFrame {
         spinGanancia = new javax.swing.JSpinner();
         lblSugPrecio = new javax.swing.JLabel();
         lblDiferencia = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
-        FrameMarcas.setMaximumSize(new java.awt.Dimension(429, 300));
         FrameMarcas.setMinimumSize(new java.awt.Dimension(429, 300));
 
         tablaMarcas.setModel(new javax.swing.table.DefaultTableModel(
@@ -207,7 +223,8 @@ public class AlterAddProd extends javax.swing.JFrame {
 
         jLabel4.setText("*Nombre:");
 
-        lblMarca.setText("Marca:");
+        lblMarca.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblMarca.setText(" ");
 
         btnMarca.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         btnMarca.setText("Seleccionar");
@@ -351,13 +368,13 @@ public class AlterAddProd extends javax.swing.JFrame {
 
         jLabel1.setText("Buscar:");
 
-        lblProv1.setText(">>>");
+        lblProv1.setText(" ");
 
-        lblProv2.setText(">>>");
+        lblProv2.setText(" ");
 
-        lblProv3.setText(">>>");
+        lblProv3.setText(" ");
 
-        lblProv4.setText(">>>");
+        lblProv4.setText(" ");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -505,12 +522,15 @@ public class AlterAddProd extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jLabel3.setText("Marca:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -532,25 +552,26 @@ public class AlterAddProd extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(jLabel8)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtPreVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(txtPreVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(235, 235, 235)
+                                .addComponent(btnSaveModProd)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnCancelModProd))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtProdNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(lblMarca)
                                         .addGap(18, 18, 18)
-                                        .addComponent(btnMarca))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtProdNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 106, Short.MAX_VALUE))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addComponent(btnMarca)))))
+                        .addGap(0, 106, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(235, 235, 235)
-                .addComponent(btnSaveModProd)
-                .addGap(18, 18, 18)
-                .addComponent(btnCancelModProd)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -561,11 +582,12 @@ public class AlterAddProd extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(txtProdNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
                     .addComponent(lblMarca)
                     .addComponent(btnMarca))
-                .addGap(15, 15, 15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtPreCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -578,7 +600,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                     .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSaveModProd)
                     .addComponent(btnCancelModProd))
@@ -592,7 +614,7 @@ public class AlterAddProd extends javax.swing.JFrame {
         try {
             if(marka){
                 aProd.setMarcaDB(0);
-                lblMarca.setText("Marca: ");
+                lblMarca.setText(" ");
                 btnMarca.setText("Seleccionar");
                 marka = false; //falso porque se elimina,... ya no hay proveedor 
             }else{
@@ -628,11 +650,12 @@ public class AlterAddProd extends javax.swing.JFrame {
         if(f<10){  gan += "0"; }
         gan += String.valueOf(f);
         ganancia = precioCompra* Float.parseFloat(gan);
+        float preVFinal =(precioCompra +ganancia);
 
-        precioVenta = precioCompra +ganancia;
+        precioVenta = Float.valueOf(df.format(preVFinal));
         txtPreVenta.setText(String.valueOf(precioVenta));
-        lblSugPrecio.setText("Precio Sugerido: $"+String.valueOf(precioVenta));
-        lblDiferencia.setText("Diferencia: $"+String.valueOf(ganancia));
+        lblSugPrecio.setText("Precio Sugerido: $"+df.format(precioVenta));
+        lblDiferencia.setText("Diferencia: $"+df.format(ganancia));
     }//GEN-LAST:event_spinGananciaStateChanged
 
     private void btnSaveModProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveModProdActionPerformed
@@ -647,7 +670,7 @@ public class AlterAddProd extends javax.swing.JFrame {
         }
 
         //Validacion para los precios de tipo Floats
-        if(!txtPreCompra.getText().equals("0") && !txtPreCompra.getText().equals("")){
+        if(!txtPreCompra.getText().equals("0") && !txtPreCompra.getText().equals("0.0") && !txtPreCompra.getText().equals("")){
             if(txtPreCompra.getText().contains(".")){
                 aProd.setPreCompra(Float.parseFloat(txtPreCompra.getText()));
             }else{
@@ -660,7 +683,7 @@ public class AlterAddProd extends javax.swing.JFrame {
         }
 
         //Setear venta
-        if(!txtPreVenta.getText().equals("0") && !txtPreVenta.getText().equals("")){
+        if(!txtPreVenta.getText().equals("0") && !txtPreVenta.getText().equals("0.0") && !txtPreVenta.getText().equals("")){
             if(txtPreVenta.getText().contains(".")){
                 aProd.setPreVenta(Float.parseFloat(txtPreVenta.getText()));
             }else{
@@ -765,18 +788,20 @@ public class AlterAddProd extends javax.swing.JFrame {
          
          
          if(p1){//Si e sverdadero, es porque ya hay un proveedor. por lo tanto, vamo a borrarlo
-             aProd.setProv1("0");
+             aProd.setDbProv1(0);
              lblProv1.setText("");
+             btnProv1.setText("Proveedor 1");
              p1 = false; //falso porque se elimina,... ya no hay proveedor 
                     
          }else{ //En caso de que no exista un Proveeedor Actualmente
              if(fila>=0){
                  DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
-                 String id= model.getValueAt(fila, 0).toString();
-                 aProd.setProv1(id);  //setear el id del Proveedor
+                 int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
+                 aProd.setDbProv1(id);  //setear el id del Proveedor
                  p1=true; //true por que ahora se setea
                  try {
-                    lblProv1.setText(">>>: " + aProd.getProvNombre(Integer.parseInt(id)));
+                    lblProv1.setText(">>> " + aProd.getProvNombre(id));
+                    btnProv1.setText("Quitar Proveedor");
                  } catch (SQLException ex) {
                      Logger.getLogger(AlterAddProd.class.getName()).log(Level.SEVERE, null, ex);
                  }
@@ -785,7 +810,7 @@ public class AlterAddProd extends javax.swing.JFrame {
              }
              
          }
-         
+         tablaProvLista.clearSelection();
     }//GEN-LAST:event_btnProv1ActionPerformed
 
     private void btnProv2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProv2ActionPerformed
@@ -793,18 +818,20 @@ public class AlterAddProd extends javax.swing.JFrame {
          
          
          if(p2){//Si e sverdadero, es porque ya hay un proveedor. por lo tanto, vamo a borrarlo
-             aProd.setProv2("0");
+             aProd.setDbProv2(0);
              lblProv2.setText("");
+             btnProv2.setText("Proveedor 2");
              p2 = false; //falso porque se elimina,... ya no hay proveedor 
                     
          }else{ //En caso de que no exista un Proveeedor Actualmente
              if(fila>=0){
                  DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
-                 String id= model.getValueAt(fila, 0).toString();
-                 aProd.setProv2(id);  //setear el id del Proveedor
+                 int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
+                 aProd.setDbProv2(id);  //setear el id del Proveedor
                  p2=true; //true por que ahora se setea
                  try {
-                    lblProv2.setText(">>> " + aProd.getProvNombre(Integer.parseInt(id)));
+                    lblProv2.setText(">>> " + aProd.getProvNombre(id));
+                    btnProv2.setText("Quitar Proveedor");
                  } catch (SQLException ex) {
                      Logger.getLogger(AlterAddProd.class.getName()).log(Level.SEVERE, null, ex);
                  }
@@ -812,6 +839,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                  JOptionPane.showMessageDialog(this, "Selecione un Proveedor de la lista");
              }
          }
+         tablaProvLista.clearSelection();
     }//GEN-LAST:event_btnProv2ActionPerformed
 
     private void btnProv3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProv3ActionPerformed
@@ -819,18 +847,20 @@ public class AlterAddProd extends javax.swing.JFrame {
          
          
          if(p3){//Si e sverdadero, es porque ya hay un proveedor. por lo tanto, vamo a borrarlo
-             aProd.setProv3("0");
+             aProd.setDbProv3(0);
              lblProv3.setText("");
+             btnProv3.setText("Proveedor 3");
              p3 = false; //falso porque se elimina,... ya no hay proveedor 
                     
          }else{ //En caso de que no exista un Proveeedor Actualmente
              if(fila>=0){
                  DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
-                 String id= model.getValueAt(fila, 0).toString();
-                 aProd.setProv3(id);  //setear el id del Proveedor
+                 int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
+                 aProd.setDbProv3(id);  //setear el id del Proveedor
                  p3=true; //true por que ahora se setea
                  try {
-                    lblProv3.setText(">>> " + aProd.getProvNombre(Integer.parseInt(id)));
+                    lblProv3.setText(">>> " + aProd.getProvNombre(id));
+                    btnProv3.setText("Quitar Proveedor");
                  } catch (SQLException ex) {
                      Logger.getLogger(AlterAddProd.class.getName()).log(Level.SEVERE, null, ex);
                  }
@@ -838,6 +868,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                  JOptionPane.showMessageDialog(this, "Selecione un Proveedor de la lista");
              }
          }
+         tablaProvLista.clearSelection();
     }//GEN-LAST:event_btnProv3ActionPerformed
 
     private void btnProv4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProv4ActionPerformed
@@ -845,18 +876,20 @@ public class AlterAddProd extends javax.swing.JFrame {
          
          
          if(p4){//Si e sverdadero, es porque ya hay un proveedor. por lo tanto, vamo a borrarlo
-             aProd.setProv1("0");
+             aProd.setDbProv4(0);
              lblProv4.setText("");
+             btnProv4.setText("Proveedor 4");
              p4 = false; //falso porque se elimina,... ya no hay proveedor 
                     
          }else{ //En caso de que no exista un Proveeedor Actualmente
              if(fila>=0){
                  DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
-                 String id= model.getValueAt(fila, 0).toString();
-                 aProd.setProv4(id);  //setear el id del Proveedor
+                 int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
+                 aProd.setDbProv4(id);  //setear el id del Proveedor
                  p4=true; //true por que ahora se setea
                  try {
-                    lblProv4.setText(">>> " + aProd.getProvNombre(Integer.parseInt(id)));
+                    lblProv4.setText(">>> " + aProd.getProvNombre(id));
+                    btnProv4.setText("Quitar Proveedor");
                  } catch (SQLException ex) {
                      Logger.getLogger(AlterAddProd.class.getName()).log(Level.SEVERE, null, ex);
                  }
@@ -864,6 +897,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                  JOptionPane.showMessageDialog(this, "Selecione un Proveedor de la lista");
              }
          }
+         tablaProvLista.clearSelection();
     }//GEN-LAST:event_btnProv4ActionPerformed
     //</editor-fold>
     
@@ -891,7 +925,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                     marka=true; //true por que ahora se setea
                     btnMarca.setText("Quitar");
                  
-                    lblMarca.setText("Marca: " + aProd.getMarcaNombre());
+                    lblMarca.setText(aProd.getMarcaNombre());
                     tablaMarcas.clearSelection();
                     FrameMarcas.setVisible(false);
                  } catch (SQLException ex) {
@@ -944,40 +978,40 @@ public class AlterAddProd extends javax.swing.JFrame {
         //Para los Label de los Proveedores
         
         if(!aProd.getProv1().equals("-Sin Proveedor-")){
-             lblProv1.setText("Proveedor 1: "+aProd.getProv1());
+             lblProv1.setText(">>> "+aProd.getProv1());
              p1=true;
          }else{
-             lblProv1.setText("Proveedor 1: ");
+             lblProv1.setText(" ");
              p1=false;
          }
         
         if(!aProd.getProv2().equals("-Sin Proveedor-")){
-             lblProv2.setText("Proveedor 2: "+aProd.getProv2());
+             lblProv2.setText(">>> "+aProd.getProv2());
              p2=true;
          }else{
-             lblProv2.setText("Proveedor 2: ");
+             lblProv2.setText(" ");
              p2=false;
          }
         
         if(!aProd.getProv3().equals("-Sin Proveedor-")){
-             lblProv3.setText("Proveedor 3: "+aProd.getProv3());
+             lblProv3.setText(">>> "+aProd.getProv3());
              p3=true;
              
          }else{
-             lblProv3.setText("Proveedor 3: ");
+             lblProv3.setText(" ");
              p3=false;
          }
         
         if(!aProd.getProv4().equals("-Sin Proveedor-")){
-             lblProv4.setText("Proveedor 4: "+aProd.getProv4());
+             lblProv4.setText(">>> "+aProd.getProv4());
              p4=true;
          }else{
-             lblProv4.setText("Proovedor 4:");
+             lblProv4.setText(" ");
              p4=false;
          }
         if(!aProd.getMarca().equals("")){
             marka=true;
-            lblMarca.setText("Marca: "+aProd.getMarca());
+            lblMarca.setText(aProd.getMarca());
             btnMarca.setText("Quitar");
         }else{
             marka=false;
@@ -1053,6 +1087,7 @@ public class AlterAddProd extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
