@@ -516,14 +516,14 @@ public class Vendedor extends javax.swing.JFrame {
     }//GEN-LAST:event_jt_efectivoKeyPressed
 
     private void btn_nVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nVentaActionPerformed
-        try {
-            Nuevaventa f = new Nuevaventa();
-            f.setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            Nuevaventa f = new Nuevaventa();
+//            f.setVisible(true);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (ParseException ex) {
+//            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }//GEN-LAST:event_btn_nVentaActionPerformed
 
     private void txf_buscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txf_buscarKeyPressed

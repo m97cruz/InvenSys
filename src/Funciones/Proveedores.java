@@ -72,6 +72,7 @@ public class Proveedores {
     //</editor-fold>
     
     //////////-----------------------------------------------------------------------------------------////////////
+    //<editor-fold defaultstate="collapsed" desc="CRUD para los Proveedores">
     public boolean addProv(){
         sql ="INSERT INTO proveedores VALUES(null, '"+nombre+"', '"+encargado+"', '"+tel+"', '"+direc+"', '"+correo+"')";
         return funcion.ExecSQL(sql);
@@ -93,7 +94,7 @@ public class Proveedores {
         }
         
         if(ok){
-            sql ="UPDATE proveedores SET estado=0 WHERE id="+id;
+            sql ="DELETE FROM proveedores WHERE id="+id;
             ok= funcion.ExecSQL(sql);
         }
         
@@ -118,4 +119,34 @@ public class Proveedores {
             
         }
     }
+    //</editor-fold>
+    
+    public boolean desvincular(int cod) throws SQLException{
+        boolean r = false;
+        sql="SELECT proveedor1, proveedor2, proveedor3, proveedor4 FROM productos WHERE codigo="+cod;
+        rs = funcion.select(sql);
+        while(rs.next()){
+            
+            if(rs.getInt(1) == id){
+                sql = "UPDATE productos SET proveedor1=0 WHERE codigo="+cod;
+                r = funcion.ExecSQL(sql);
+            }
+            if(rs.getInt(2) == id){
+                sql = "UPDATE productos SET proveedor2=0 WHERE codigo="+cod;
+                r = funcion.ExecSQL(sql);
+            }
+            if(rs.getInt(3) == id){
+                sql = "UPDATE productos SET proveedor3=0 WHERE codigo="+cod;
+                r = funcion.ExecSQL(sql);
+            }
+            if(rs.getInt(4) == id){
+                sql = "UPDATE productos SET proveedor4=0 WHERE codigo="+cod;
+                r = funcion.ExecSQL(sql);
+            }
+            
+        }
+        
+        return r;
+    }
+    
 }

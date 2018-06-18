@@ -20,6 +20,7 @@ public class Proveedores extends javax.swing.JFrame {
     Funciones.Tablas tablas = new Funciones.Tablas();
     Funciones.Proveedores aProvs = new Funciones.Proveedores();
     DefaultTableModel model;
+    int fila, idProv;
     /**
      * Creates new form Proveedores
      */
@@ -53,6 +54,11 @@ public class Proveedores extends javax.swing.JFrame {
         btnCancel = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         tfEncargado = new javax.swing.JTextField();
+        prodVinculados = new javax.swing.JFrame();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tablaProdVinculado = new javax.swing.JTable();
+        btnDesvincular = new javax.swing.JButton();
+        btnVincuRegresar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jButton1 = new javax.swing.JButton();
         btnModProv = new javax.swing.JButton();
@@ -60,6 +66,7 @@ public class Proveedores extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
+        btnViewProds = new javax.swing.JButton();
 
         interModInsert.setMinimumSize(new java.awt.Dimension(300, 220));
         interModInsert.setPreferredSize(new java.awt.Dimension(300, 240));
@@ -159,6 +166,70 @@ public class Proveedores extends javax.swing.JFrame {
                     .addComponent(btnCancel)))
         );
 
+        prodVinculados.setUndecorated(true);
+
+        tablaProdVinculado.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Codigo", "Nombre", "Marca", "Proveedor", "Precio de Compra", "Precio C/U", "Precio(Paquete)", "# Local", "# Bodega"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tablaProdVinculado);
+
+        btnDesvincular.setText("Desvincular Proveedor");
+        btnDesvincular.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDesvincularActionPerformed(evt);
+            }
+        });
+
+        btnVincuRegresar.setText("Regresar");
+        btnVincuRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVincuRegresarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout prodVinculadosLayout = new javax.swing.GroupLayout(prodVinculados.getContentPane());
+        prodVinculados.getContentPane().setLayout(prodVinculadosLayout);
+        prodVinculadosLayout.setHorizontalGroup(
+            prodVinculadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(prodVinculadosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, prodVinculadosLayout.createSequentialGroup()
+                .addContainerGap(371, Short.MAX_VALUE)
+                .addComponent(btnDesvincular)
+                .addGap(42, 42, 42)
+                .addComponent(btnVincuRegresar)
+                .addGap(305, 305, 305))
+        );
+        prodVinculadosLayout.setVerticalGroup(
+            prodVinculadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, prodVinculadosLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(prodVinculadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDesvincular)
+                    .addComponent(btnVincuRegresar))
+                .addGap(27, 27, 27))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         tablaProvs.setModel(new javax.swing.table.DefaultTableModel(
@@ -212,6 +283,13 @@ public class Proveedores extends javax.swing.JFrame {
             }
         });
 
+        btnViewProds.setText("Ver Productos");
+        btnViewProds.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewProdsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -225,13 +303,15 @@ public class Proveedores extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 831, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 833, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnModProv)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnModProv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnViewProds, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton3)
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -252,7 +332,9 @@ public class Proveedores extends javax.swing.JFrame {
                     .addComponent(jButton6)
                     .addComponent(btnModProv))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(btnViewProds))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
 
@@ -260,8 +342,8 @@ public class Proveedores extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        int fila = tablaProvs.getSelectedRow();
-        DefaultTableModel model = (DefaultTableModel) tablaProvs.getModel();
+        fila = tablaProvs.getSelectedRow();
+        model = (DefaultTableModel) tablaProvs.getModel();
         aProvs.setId(Integer.valueOf(model.getValueAt(fila, 0).toString()));
         if (fila >= 0){
             int confirmar = JOptionPane.showConfirmDialog(this, "¿Eliminar al Proveedor \""+model.getValueAt(fila, 1)+"\"?");
@@ -298,8 +380,8 @@ public class Proveedores extends javax.swing.JFrame {
 
     private void btnModProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModProvActionPerformed
         //Llenar Campos 
-        DefaultTableModel model = (DefaultTableModel) tablaProvs.getModel();
-        int fila = tablaProvs.getSelectedRow();
+        model = (DefaultTableModel) tablaProvs.getModel();
+        fila = tablaProvs.getSelectedRow();
         if(fila >= 0){
             int id = Integer.valueOf(model.getValueAt(fila, 0).toString());
             aProvs.setId(id);
@@ -351,6 +433,58 @@ public class Proveedores extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void btnViewProdsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewProdsActionPerformed
+        model = (DefaultTableModel) tablaProvs.getModel();
+        fila = tablaProvs.getSelectedRow();
+        idProv = Integer.valueOf(model.getValueAt(fila, 0).toString());
+        aProvs.setId(idProv);
+        if(fila >= 0){
+            try {
+                model = (DefaultTableModel) tablaProdVinculado.getModel();
+                model = tablas.prodVinculados(model, idProv); //Mandamos como parametros el modelo y el id del proveedor
+                tablaProdVinculado.setModel(model);
+                prodVinculados.setSize(855, 390);
+                prodVinculados.setLocationRelativeTo(null);
+                prodVinculados.setVisible(true);
+                this.setVisible(false);
+            } catch (SQLException ex) {
+                Logger.getLogger(Proveedores.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        
+    }//GEN-LAST:event_btnViewProdsActionPerformed
+
+    private void btnDesvincularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesvincularActionPerformed
+        fila = tablaProdVinculado.getSelectedRow();
+        model = (DefaultTableModel) tablaProdVinculado.getModel();
+        if(fila >= 0){
+            int id = Integer.valueOf(model.getValueAt(fila, 0).toString());
+            try {
+                int confir = JOptionPane.showConfirmDialog(prodVinculados, "¿Esta Seguro de Realizar esta Acción?");
+                if(confir >= 0){
+                    if(aProvs.desvincular(id)){
+                    JOptionPane.showMessageDialog(this.prodVinculados, "¡Producto Desvinculado de Este Proveedor!");
+                    tablaProdVinculado.setModel(tablas.prodVinculados(model, idProv));
+                    tablaProdVinculado.clearSelection();
+                }else{
+                        JOptionPane.showMessageDialog(prodVinculados, "¡No se ha Podido Desvincular este Producto!");
+                    }
+                }
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Proveedores.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+            
+        
+    }//GEN-LAST:event_btnDesvincularActionPerformed
+
+    private void btnVincuRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVincuRegresarActionPerformed
+        this.prodVinculados.setVisible(false);
+        this.setVisible(true);
+    }//GEN-LAST:event_btnVincuRegresarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -392,8 +526,11 @@ public class Proveedores extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnDesvincular;
     private javax.swing.JButton btnModProv;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnViewProds;
+    private javax.swing.JButton btnVincuRegresar;
     private javax.swing.JFrame interModInsert;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
@@ -405,7 +542,10 @@ public class Proveedores extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JFrame prodVinculados;
+    private javax.swing.JTable tablaProdVinculado;
     public static final javax.swing.JTable tablaProvs = new javax.swing.JTable();
     private javax.swing.JTextField tfCorreo;
     private javax.swing.JTextField tfDireccion;

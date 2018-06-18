@@ -23,13 +23,15 @@ public class ProdSolicita extends javax.swing.JFrame {
     
     Funciones.Tablas tablas = new Funciones.Tablas();
     Funciones.Productos aProd = new Funciones.Productos();
+    DefaultTableModel model;
     int fila;
     
     
     public ProdSolicita() throws SQLException {
         initComponents();
         this.setLocationRelativeTo(null);
-        tablas.tablaProdSolicita();
+        model = (DefaultTableModel) tablaProdSolicita.getModel();
+        tablas.tablaProdSolicita(model);
         tablaProdSolicita.getColumnModel().getColumn(0).setMaxWidth(50);
         tablaProdSolicita.getColumnModel().getColumn(7).setMaxWidth(100); tablaProdSolicita.getColumnModel().getColumn(7).setMinWidth(60);
         tablaProdSolicita.getColumnModel().getColumn(6).setMaxWidth(60); 
@@ -137,7 +139,8 @@ public class ProdSolicita extends javax.swing.JFrame {
                 String destino = model.getValueAt(tablaProdSolicita.getSelectedRow(), 5).toString();
                try {
                     aProd.rmovSoliProc(destino);
-                    tablas.tablaProdSolicita();
+                    model = (DefaultTableModel) tablaProdSolicita.getModel();
+                    tablas.tablaProdSolicita(model);
                 } catch (SQLException ex) {
                     Logger.getLogger(ProdSolicita.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -156,7 +159,7 @@ public class ProdSolicita extends javax.swing.JFrame {
             int conf = JOptionPane.showConfirmDialog(this, "Al Confirmar esta Acción, \nse sumará la solicitud a las existencias del producto.\n¿Confirmar?");
             mensaje="";
             if (conf == 0){
-                DefaultTableModel model = (DefaultTableModel) tablaProdSolicita.getModel();
+                model = (DefaultTableModel) tablaProdSolicita.getModel();
                 int idReg = Integer.parseInt(model.getValueAt(fila, 0).toString());
                 aProd.setCodigo(idReg);
                 
@@ -165,7 +168,8 @@ public class ProdSolicita extends javax.swing.JFrame {
                try {
                     aProd.selectProd();
                     aProd.confirmPedido(destino);
-                    tablas.tablaProdSolicita();
+                    model = (DefaultTableModel) tablaProdSolicita.getModel();
+                    tablas.tablaProdSolicita(model);
                     if(!mensaje.equals("")){
                         JOptionPane.showMessageDialog(this, mensaje);
                     }

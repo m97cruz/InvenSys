@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 //Aqi se van a ingresar las funciones para poder ejecutar las funciones de SQL
 public class SQL_fun {
     Conexion conex = new Conexion();
-    boolean r;
     public boolean ExecSQL(String sql){
         
         try {
