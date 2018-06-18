@@ -212,7 +212,7 @@ public class Tablas {
     }
 
     public void tablaProdVendAdd() throws  SQLException{
-        DefaultTableModel model = (DefaultTableModel) Vendedor.VendedorAdd.tablaProd.getModel(); //Obtiene el Modelo
+        DefaultTableModel model = (DefaultTableModel) Vendedor.Nuevaventa.tablaProds.getModel(); //Obtiene el Modelo
         model.setRowCount(0); //Reinicia el Contador de Filas
         sql ="SELECT * FROM productos"; String query;
         

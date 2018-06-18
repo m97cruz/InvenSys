@@ -5,6 +5,7 @@
  */
 package Admin;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -118,7 +119,7 @@ Funciones.Usuarios fUser = new Funciones.Usuarios();
                     this.dispose();
                     break;
                 case "NORMAL":
-                    Vendedor.Vendedor vend = new Vendedor.Vendedor();
+                     Vendedor.Vendedor vend = new Vendedor.Vendedor();
                     vend.setVisible(true);
                     this.dispose();
                     break;
@@ -130,6 +131,8 @@ Funciones.Usuarios fUser = new Funciones.Usuarios();
             JOptionPane.showMessageDialog(this, "El Usuario No Existe en el Sistema");
         }
     } catch (SQLException ex) {
+        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (ParseException ex) {
         Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
     }
             
