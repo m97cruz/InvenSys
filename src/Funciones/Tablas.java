@@ -29,10 +29,8 @@ public class Tablas {
         DefaultTableModel model = (DefaultTableModel) Administracion.tablaProd.getModel(); //Obtiene el Modelo
         model.setRowCount(0); //Reinicia el Contador de Filas
         sql ="SELECT * FROM productos"; 
-        String query;
         
         String[] datos = new String[9];
-        ResultSet rs2;
 
         rs = funcion.select(sql);
         if(!rs.isBeforeFirst()){
@@ -79,9 +77,8 @@ public class Tablas {
     }
     
     
-    public void tablaProdSolicita() throws SQLException{
+    public DefaultTableModel tablaProdSolicita(DefaultTableModel model) throws SQLException{
         sql = "SELECT * FROM prod_solicita";
-        DefaultTableModel model = (DefaultTableModel) ProdSolicita.tablaProdSolicita.getModel();
         model.setRowCount(0);
         rs=funcion.select(sql);
         String datos[] = new String[8];
@@ -96,9 +93,112 @@ public class Tablas {
             datos[7] = rs.getString(8);
             model.addRow(datos);
         }
-        ProdSolicita.tablaProdSolicita.setModel(model);
+        return model;
     }
 
+    public void tablaProdVendedor() throws  SQLException{
+        DefaultTableModel model = (DefaultTableModel) Vendedor.Vendedor.tablaProds.getModel(); //Obtiene el Modelo
+        model.setRowCount(0); //Reinicia el Contador de Filas
+        sql ="SELECT * FROM productos"; String query;
+        
+        String[] datos = new String[7];
+        ResultSet rsMarca;
+
+        rs = funcion.select(sql);
+        if(!rs.isBeforeFirst()){
+            JOptionPane.showMessageDialog(null, "La tabla no contiene algun valor!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+        }
+        while(rs.next()){
+            datos[0] = rs.getString(1); //codigo
+            datos[1] = rs.getString(2); //nombre
+            datos[2] = "---";
+            if(rs.getInt(11) > 0){
+                query = "SELECT marca FROM marcas WHERE id="+rs.getInt(11);
+                rsMarca = funcion.select(query);
+                if(rsMarca.next()){
+                    datos[2] = rsMarca.getString(1);
+                }
+            }
+            
+            datos[3] = rs.getString(4); //Precio Unitario
+            
+            if(rs.getInt(6) > 0){
+                datos[4] = "$"+rs.getString(5) + " ("+rs.getString(6)+" U)"; //Precio por Paquete ( $Precio(nUnidades) )
+            }else{
+                datos[4] = "";
+            }
+            datos[5] = rs.getString(7); //nombre
+            datos[6] = rs.getString(8); //nombre
+            model.addRow(datos);
+        }
+    }
+    
+    //<editor-fold defaultstate="collapsed" desc="Esta madre es para va vaina de proveedores">
+    public DefaultTableModel tablaProveedor(DefaultTableModel model) throws SQLException{
+        model.setRowCount(0);
+        String datos[] = new String [6];
+        sql ="SELECT * FROM proveedores";
+        rs=funcion.select(sql);
+        while(rs.next()){
+            datos[0] = rs.getString(1);
+            datos[1] = rs.getString(2);
+            datos[2] = rs.getString(3);
+            datos[3] = rs.getString(4);
+            datos[4] = rs.getString(5);
+            datos[5] = rs.getString(6);
+            model.addRow(datos);
+        }
+        return model;
+    }
+    
+    public DefaultTableModel prodVinculados(DefaultTableModel model, int cod) throws SQLException{
+        model.setRowCount(0); //Reinicia el Contador de Filas
+        sql ="SELECT * FROM productos WHERE proveedor1="+cod+" OR proveedor2="+cod+" OR proveedor3="+cod+" OR proveedor4="+cod+";";
+        rs = funcion.select(sql);
+        String[] datos = new String[9];
+        
+        while(rs.next()){
+            datos[0] = rs.getString(1); //codigo
+            datos[1] = rs.getString(2); //nombre
+            datos[2] = "---";
+            if(rs.getInt(11) > 0){
+                aProd.setMarcaDB(rs.getInt(11));
+                datos[2] = aProd.getMarcaNombre();
+            }
+            
+            //------Setear la lista de Proveedores------//
+            datos[3] = "";
+            if(rs.getInt(12)>0){
+                datos[3] += aProd.getProvNombre(rs.getInt(12));
+            }
+            if(rs.getInt(13)>0){
+                datos[3] += aProd.getProvNombre(rs.getInt(13));
+            }
+            if(rs.getInt(14)>0){
+                datos[3] += aProd.getProvNombre(rs.getInt(14));
+            }
+            if(rs.getInt(15)>0){
+                datos[3] += aProd.getProvNombre(rs.getInt(15));
+            }
+            datos[4] = "$"+rs.getString(3);//precio de COmpra
+            datos[5] = "$"+rs.getString(4); //Precio Unitario
+            
+            if(rs.getInt(6) > 0){
+                datos[6] = "$"+rs.getString(5) + " ("+rs.getString(6)+" U)"; //Precio por Paquete ( $Precio(nUnidades) )
+            }else{
+                datos[6] = "";
+            }
+            
+            
+            datos[7] = rs.getString(7); //Stock de Local
+            datos[8] = rs.getString(8); //Stock de Bodega
+            model.addRow(datos);
+        }
+        return model;
+        
+    }
+    //</editor-fold>
+    
     
     public float getTotal(String codigo,int cantidad,boolean check) throws SQLException{
         float total=0.0f;//total a pagar por este producto
@@ -160,23 +260,6 @@ public class Tablas {
        }
        return total;
     }
-    public DefaultTableModel tablaProveedor(DefaultTableModel model) throws SQLException{
-        model.setRowCount(0);
-        String datos[] = new String [6];
-        sql ="SELECT * FROM proveedores";
-        rs=funcion.select(sql);
-        while(rs.next()){
-            datos[0] = rs.getString(1);
-            datos[1] = rs.getString(2);
-            datos[2] = rs.getString(3);
-            datos[3] = rs.getString(4);
-            datos[4] = rs.getString(5);
-            datos[5] = rs.getString(6);
-            model.addRow(datos);
-        }
-        return model;
-    }
-
     
     public void tablaProdVend(DefaultTableModel model) throws  SQLException{
         model.setRowCount(0); //Reinicia el Contador de Filas
