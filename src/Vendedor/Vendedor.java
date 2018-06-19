@@ -55,6 +55,7 @@ public class Vendedor extends javax.swing.JFrame {
         modelo= (DefaultTableModel) Vendedor.tbl_list.getModel(); //Obtiene el Modelo
         this.txf_buscar.requestFocus();
         model=(DefaultTableModel) Vendedor.tablaProds.getModel();
+        
         tablas.tablaProdVend(model);
     }
 
@@ -86,6 +87,7 @@ public class Vendedor extends javax.swing.JFrame {
         lbl_cambio = new javax.swing.JLabel();
         chbx_mayoreo = new javax.swing.JCheckBox();
         chbx_lugar = new javax.swing.JCheckBox();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -165,9 +167,16 @@ public class Vendedor extends javax.swing.JFrame {
                 "Codigo", "Nombre", "Precio Unitario", "Cantidad", "Depachar desde", "Total"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Float.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, true, true, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -275,6 +284,8 @@ public class Vendedor extends javax.swing.JFrame {
         chbx_lugar.setFont(getFont());
         chbx_lugar.setText("Despachar de bodega");
 
+        jButton1.setText("jButton1");
+
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/icon_list.png"))); // NOI18N
         jMenu1.setText("Opciones");
 
@@ -338,6 +349,8 @@ public class Vendedor extends javax.swing.JFrame {
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(lbl_lista)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton1)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(btn_limpiar))
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -388,14 +401,15 @@ public class Vendedor extends javax.swing.JFrame {
                         .addComponent(chbx_mayoreo)
                         .addGap(18, 18, 18)
                         .addComponent(chbx_lugar)))
-                .addGap(18, 32, Short.MAX_VALUE)
+                .addGap(18, 31, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_add)
                     .addComponent(btn_remove))
                 .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_lista)
-                    .addComponent(btn_limpiar))
+                    .addComponent(btn_limpiar)
+                    .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -474,6 +488,9 @@ public class Vendedor extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(evt.getKeyCode()==KeyEvent.VK_DELETE){
             this.removerProd();
+        } else if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            this.actuColumna();
+            this.setTotal();
         }
     }//GEN-LAST:event_tbl_listKeyPressed
 
@@ -570,7 +587,7 @@ public class Vendedor extends javax.swing.JFrame {
             //verificar que la cantidad solicitada no exceda la cantidad disponible
             if(cantidad>cantDisponible){
                 //si se excede la cantidad disponible
-                JOptionPane.showMessageDialog(this, "Se excede la cantidad disponible en el local","Aviso",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Se excede la cantidad disponible","Aviso",JOptionPane.INFORMATION_MESSAGE);
             } else{
                 //Si la cantidad solicitada es valida
                 //verificar si la cantidad solicitada es mayor a cero 
@@ -589,7 +606,7 @@ public class Vendedor extends javax.swing.JFrame {
                     modelo.addRow(new Object[]{
                        codigo,
                        nombre,
-                       precioUni,
+                       Float.valueOf(precioUni),
                        String.valueOf(cantidad),
                        lugar,
                        total
@@ -626,6 +643,7 @@ public class Vendedor extends javax.swing.JFrame {
             this.txf_buscar.setText("");
             this.lbl_cambio.setText("");
             this.txf_buscar.requestFocus();
+            this.chbx_lugar.setSelected(false);
             setTotal();
         } else{
             JOptionPane.showMessageDialog(this, "Lista de venta vacia","Aviso",JOptionPane.INFORMATION_MESSAGE);       
@@ -643,6 +661,20 @@ public class Vendedor extends javax.swing.JFrame {
         }
         this.lbl_total.setText(String.valueOf(total));
     }
+    private void actuColumna(){
+        int filas=modelo.getRowCount();
+        float total=0.00f;
+        float precio=0.00f;
+        int cantidad=0;
+        if(filas>0){
+            for(int i=0;i<=filas-1;i++){
+                precio=Float.valueOf(Vendedor.this.modelo.getValueAt(i, 2).toString());
+                cantidad=Integer.valueOf(Vendedor.this.modelo.getValueAt(i, 3).toString());
+                total=precio*cantidad;
+                tbl_list.setValueAt(String.valueOf(total), i,5);
+            }
+        }
+    }
     private void procesarVenta() throws SQLException{
         if(modelo.getRowCount()>0){
             if(this.jt_efectivo.getText().isEmpty()){
@@ -654,7 +686,9 @@ public class Vendedor extends javax.swing.JFrame {
                     this.jt_efectivo.requestFocus();
                     JOptionPane.showMessageDialog(this,"Efectivo insuficiente","Aviso",JOptionPane.INFORMATION_MESSAGE);
                 } else{
-                    if(JOptionPane.showConfirmDialog(this,"CONFIRMAR VENTA","CONFIRMACION" ,JOptionPane.OK_CANCEL_OPTION)==0){
+                    float cambio=efectivo-Float.valueOf(this.lbl_total.getText());
+                    this.lbl_cambio.setText(String.valueOf(cambio));
+                    if(JOptionPane.showConfirmDialog(this,"CONFIRMAR VENTA\n Cambio $"+cambio,"CONFIRMACION" ,JOptionPane.OK_CANCEL_OPTION)==0){
                         String lugar="local_cant";
                         for(int i=0;i<modelo.getRowCount();i++){
                             funVendedor.setFecha(LocalDate.now().toString());
@@ -668,9 +702,7 @@ public class Vendedor extends javax.swing.JFrame {
                             funVendedor.setLugar(lugar);
                             funVendedor.procesarVenta();
                         }
-                        float cambio=efectivo-Float.valueOf(this.lbl_total.getText());
-                        this.lbl_cambio.setText(String.valueOf(cambio));
-                        JOptionPane.showMessageDialog(this, "Venta procesada\n Cambio $ "+String.valueOf(cambio),"Aviso",JOptionPane.INFORMATION_MESSAGE);  
+                        JOptionPane.showMessageDialog(this, "Venta procesada","Aviso",JOptionPane.INFORMATION_MESSAGE);  
                         limpiarLista();
                         tablas.tablaProdVend(model);
                     } else{
@@ -732,6 +764,7 @@ public class Vendedor extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cb_filtro;
     private javax.swing.JCheckBox chbx_lugar;
     private javax.swing.JCheckBox chbx_mayoreo;
+    private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;

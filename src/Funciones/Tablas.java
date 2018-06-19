@@ -301,7 +301,7 @@ public class Tablas {
                 }
             }
             
-            datos[3] = "$"+rs.getString(4); //Precio Unitario
+            datos[3] = rs.getString(4); //Precio Unitario
             
             if(rs.getInt(6) > 0){
                 datos[4] = "$"+rs.getString(5) + " ("+rs.getString(6)+" U)"; //Precio por Paquete ( $Precio(nUnidades) )
