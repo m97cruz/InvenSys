@@ -76,11 +76,12 @@ public class Administracion extends javax.swing.JFrame {
         jButton13 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        optLogOut = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         optUsuarios = new javax.swing.JMenuItem();
         optProveedores = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Panel de Administracion");
@@ -236,13 +237,13 @@ public class Administracion extends javax.swing.JFrame {
 
         jMenu1.setText("Archivo");
 
-        jMenuItem5.setText("Cerrar Sesión");
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+        optLogOut.setText("Cerrar Sesión");
+        optLogOut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem5ActionPerformed(evt);
+                optLogOutActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem5);
+        jMenu1.add(optLogOut);
 
         jMenuBar1.add(jMenu1);
 
@@ -271,6 +272,14 @@ public class Administracion extends javax.swing.JFrame {
             }
         });
         jMenu2.add(optProveedores);
+
+        jMenuItem1.setText("Marcas");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem1);
 
         jMenuBar1.add(jMenu2);
 
@@ -410,7 +419,7 @@ public class Administracion extends javax.swing.JFrame {
         if(tablaProd.isRowSelected(tablaProd.getSelectedRow())){
             
             DefaultTableModel model = (DefaultTableModel) tablaProd.getModel();
-            int idProd = Integer.parseInt(model.getValueAt(tablaProd.getSelectedRow(), 0).toString());
+            idProd = Integer.parseInt(model.getValueAt(tablaProd.getSelectedRow(), 0).toString());
             int conf = JOptionPane.showConfirmDialog(this, "¿Está seguro de Eliminar este producto?");
             if(conf == 0){
                 aProd.setCodigo(idProd);
@@ -493,11 +502,11 @@ public class Administracion extends javax.swing.JFrame {
         tablaProd.setRowSorter(filtro);
     }//GEN-LAST:event_tfFindProdKeyTyped
 
-    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+    private void optLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optLogOutActionPerformed
         Admin.Login frame = new Admin.Login();
         frame.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jMenuItem5ActionPerformed
+    }//GEN-LAST:event_optLogOutActionPerformed
 
     private void optUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optUsuariosActionPerformed
         try {                                           
@@ -521,8 +530,25 @@ public class Administracion extends javax.swing.JFrame {
     }//GEN-LAST:event_optProveedoresActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-         // TODO add your handling code here:
+        try {
+            Admin.Estadisticas f = new Admin.Estadisticas();
+            f.setVisible(true);
+            this.dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        try {
+            Admin.Marcas f = new Admin.Marcas();
+            f.setVisible(true);
+            this.dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     
     /**
@@ -578,11 +604,12 @@ public class Administracion extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenuItem optLogOut;
     private javax.swing.JMenuItem optProveedores;
     private javax.swing.JMenuItem optUsuarios;
     private javax.swing.JRadioButton rbBo_Lo;

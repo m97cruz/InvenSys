@@ -6,7 +6,6 @@
 package Funciones;
 
 import Admin.Administracion;
-import Admin.ProdSolicita;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
@@ -24,7 +23,7 @@ public class Tablas {
     Funciones.Productos aProd = new Funciones.Productos();
     String sql="";
     ResultSet rs;
-    
+    //<editor-fold defaultstate="collapsed" desc="Tablas para Listar Productos">
     public void TablaProductos() throws SQLException{
         DefaultTableModel model = (DefaultTableModel) Administracion.tablaProd.getModel(); //Obtiene el Modelo
         model.setRowCount(0); //Reinicia el Contador de Filas
@@ -95,6 +94,8 @@ public class Tablas {
         }
         return model;
     }
+    
+    
 
     public void tablaProdVendedor() throws  SQLException{
         DefaultTableModel model = (DefaultTableModel) Vendedor.Vendedor.tablaProds.getModel(); //Obtiene el Modelo
@@ -132,6 +133,8 @@ public class Tablas {
             model.addRow(datos);
         }
     }
+    //</editor-fold>
+    
     
     //<editor-fold defaultstate="collapsed" desc="Esta madre es para va vaina de proveedores">
     public DefaultTableModel tablaProveedor(DefaultTableModel model) throws SQLException{
@@ -261,6 +264,20 @@ public class Tablas {
        return total;
     }
     
+    public DefaultTableModel Marcas(DefaultTableModel model) throws SQLException{
+        model.setRowCount(0);
+        sql = "SELECT * FROM marcas";
+        rs = funcion.select(sql);
+        String datos[] = new String[2];
+        while(rs.next()){
+            datos[0]= rs.getString(1);
+            datos[1] = rs.getString(2);
+            model.addRow(datos);
+        }
+        
+        return model;
+    }
+    
     public void tablaProdVend(DefaultTableModel model) throws  SQLException{
         model.setRowCount(0); //Reinicia el Contador de Filas
         sql ="SELECT * FROM productos"; String query;
@@ -299,7 +316,9 @@ public class Tablas {
         }
         //return model;
     }
-     public void EstadVentas(DefaultTableModel model,String fecha1,String fecha2) throws SQLException{
+    
+    //<editor-fold defaultstate="collapsed" desc="Esto es para el Control de Ventas y Compras de Productos">
+     public DefaultTableModel EstadVentas(DefaultTableModel model,String fecha1,String fecha2) throws SQLException{
         model.setRowCount(0);
         if(fecha1.equals("") && fecha2.equals("")){
             sql="SELECT * FROM ventas";
@@ -308,13 +327,35 @@ public class Tablas {
         }
         rs=funcion.select(sql);
         String datos[]= new String[4];
-            while(rs.next()){
-                datos[0]=rs.getString("producto");
-                datos[1]=rs.getString("cantidad");
-                datos[2]=rs.getString("total");
-                datos[3]=rs.getString("fecha");
-                model.addRow(datos);
-            }
+        while(rs.next()){
+            datos[0]=rs.getString("producto");
+            datos[1]=rs.getString("cantidad");
+            datos[2]=rs.getString("total");
+            datos[3]=rs.getString("fecha");
+            model.addRow(datos);
+        }
+        return model;
+    }
+     
+     public DefaultTableModel EstadCompras(DefaultTableModel model,String fecha1,String fecha2) throws SQLException{
+        model.setRowCount(0);
+        if(fecha1.equals("") && fecha2.equals("")){
+            sql="SELECT * FROM compras";
+        } else{
+            sql="SELECT * FROM compras WHERE fecha BETWEEN '"+fecha1+"' and '"+fecha2+"'";
+        }
+        rs=funcion.select(sql);
+        String datos[]= new String[6];
+        while(rs.next()){
+            datos[0]=rs.getString("producto");
+            datos[1]=rs.getString("proveedor");
+            datos[2]=rs.getString("pre_compra");
+            datos[3]=rs.getString("cantidad");
+            datos[4]=rs.getString("precio");
+            datos[5]=rs.getString("fecha");
+            model.addRow(datos);
+        }
+        return model;
     }
    
 }

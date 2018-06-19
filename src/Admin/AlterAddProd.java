@@ -26,11 +26,12 @@ public class AlterAddProd extends javax.swing.JFrame {
     Funciones.Usuarios usuarios = new Funciones.Usuarios();
     Funciones.Productos aProd = new Funciones.Productos();
     Funciones.Tablas tablas = new Funciones.Tablas();
+    DefaultTableModel model;
     Login login = new Login();
     public boolean insertMode;
     public int idProd;
     float precioCompra, precioVenta, ganancia;
-    DecimalFormat df= new DecimalFormat("####.##");
+    DecimalFormat df= new DecimalFormat("#####.##");
     private TableRowSorter filtro;
     private boolean p1=false, p2=false, p3=false, p4=false, marka=false;
 
@@ -54,22 +55,24 @@ public class AlterAddProd extends javax.swing.JFrame {
         FrameMarcas.setVisible(false);
         this.setLocationRelativeTo(null);
         
-        DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
+        model = (DefaultTableModel) tablaProvLista.getModel();
         tablaProvLista.getColumnModel().getColumn(0).setMaxWidth(0); //Ocultar la Columna de ID
         
         if(insertMode){
             lblCodigo.setText("Codigo: --Nuevo Registro--");
-            DefaultTableModel tblMarcaModel = (DefaultTableModel) tablaMarcas.getModel();
-            tablaMarcas.setModel(aProd.llenarMarcas(tblMarcaModel));
+            model = (DefaultTableModel) tablaMarcas.getModel();
+            tablaMarcas.setModel(aProd.llenarMarcas(model));
             this.tablaProvLista.setModel(aProd.llenarProvs_(model));
             
         }else{
             aProd.setCodigo(idProd);
             aProd.selectProd();
             llenarCampos();
+            model = (DefaultTableModel) tablaProvLista.getModel();
             tablaProvLista.setModel(aProd.llenarProvs_(model));
-            DefaultTableModel tblMarcaModel = (DefaultTableModel) tablaMarcas.getModel();
-            tablaMarcas.setModel(aProd.llenarMarcas(tblMarcaModel));
+            model = (DefaultTableModel) tablaMarcas.getModel();
+            
+            tablaMarcas.setModel(aProd.llenarMarcas(model));
         }      
     }//</editor-fold>
 
@@ -89,6 +92,7 @@ public class AlterAddProd extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         btnMarcaOk = new javax.swing.JButton();
         btnMarCancel = new javax.swing.JButton();
+        btnAddMarca = new javax.swing.JButton();
         lblCodigo = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txtProdNombre = new javax.swing.JTextField();
@@ -181,6 +185,13 @@ public class AlterAddProd extends javax.swing.JFrame {
             }
         });
 
+        btnAddMarca.setText("Agregar");
+        btnAddMarca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddMarcaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout FrameMarcasLayout = new javax.swing.GroupLayout(FrameMarcas.getContentPane());
         FrameMarcas.getContentPane().setLayout(FrameMarcasLayout);
         FrameMarcasLayout.setHorizontalGroup(
@@ -196,7 +207,8 @@ public class AlterAddProd extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(FrameMarcasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnMarcaOk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnMarCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnMarCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAddMarca, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
         FrameMarcasLayout.setVerticalGroup(
@@ -208,11 +220,13 @@ public class AlterAddProd extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(FrameMarcasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(FrameMarcasLayout.createSequentialGroup()
                         .addComponent(btnMarcaOk)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnMarCancel))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnAddMarca)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnMarCancel)))
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
@@ -599,8 +613,8 @@ public class AlterAddProd extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, Short.MAX_VALUE)
-                .addGap(29, 29, 29)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 237, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSaveModProd)
                     .addComponent(btnCancelModProd))
@@ -618,7 +632,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                 btnMarca.setText("Seleccionar");
                 marka = false; //falso porque se elimina,... ya no hay proveedor 
             }else{
-                DefaultTableModel model = (DefaultTableModel) tablaMarcas.getModel();
+                model = (DefaultTableModel) tablaMarcas.getModel();
                 tablaMarcas.setModel(aProd.llenarMarcas(model));
                 txtFindMarca.setText("");
                 this.FrameMarcas.setLocationRelativeTo(null);
@@ -795,7 +809,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                     
          }else{ //En caso de que no exista un Proveeedor Actualmente
              if(fila>=0){
-                 DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
+                 model = (DefaultTableModel) tablaProvLista.getModel();
                  int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
                  aProd.setDbProv1(id);  //setear el id del Proveedor
                  p1=true; //true por que ahora se setea
@@ -825,7 +839,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                     
          }else{ //En caso de que no exista un Proveeedor Actualmente
              if(fila>=0){
-                 DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
+                 model = (DefaultTableModel) tablaProvLista.getModel();
                  int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
                  aProd.setDbProv2(id);  //setear el id del Proveedor
                  p2=true; //true por que ahora se setea
@@ -854,7 +868,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                     
          }else{ //En caso de que no exista un Proveeedor Actualmente
              if(fila>=0){
-                 DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
+                 model = (DefaultTableModel) tablaProvLista.getModel();
                  int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
                  aProd.setDbProv3(id);  //setear el id del Proveedor
                  p3=true; //true por que ahora se setea
@@ -883,7 +897,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                     
          }else{ //En caso de que no exista un Proveeedor Actualmente
              if(fila>=0){
-                 DefaultTableModel model = (DefaultTableModel) tablaProvLista.getModel();
+                 model = (DefaultTableModel) tablaProvLista.getModel();
                  int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
                  aProd.setDbProv4(id);  //setear el id del Proveedor
                  p4=true; //true por que ahora se setea
@@ -918,7 +932,7 @@ public class AlterAddProd extends javax.swing.JFrame {
          int fila = tablaMarcas.getSelectedRow();
          
              if(fila>=0){
-                 DefaultTableModel model = (DefaultTableModel) tablaMarcas.getModel();
+                 model = (DefaultTableModel) tablaMarcas.getModel();
                  int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
                  try {
                     aProd.setMarcaDB(id);  //setear el id del Proveedor
@@ -942,6 +956,18 @@ public class AlterAddProd extends javax.swing.JFrame {
         tablaMarcas.clearSelection();
         FrameMarcas.setVisible(false);
     }//GEN-LAST:event_btnMarCancelActionPerformed
+
+    private void btnAddMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddMarcaActionPerformed
+        String marca = JOptionPane.showInputDialog("Ingrese la Nueva Marca");
+        if(!marca.equals("")){
+            if(aProd.addMarca(marca)){
+                JOptionPane.showMessageDialog(this.FrameMarcas, "¡Marca Agregada!");
+                model = (DefaultTableModel) tablaMarcas.getModel();
+            }else{
+                JOptionPane.showMessageDialog(this.FrameMarcas, "No se Pudo Agregar la Marca");
+            }
+        }
+    }//GEN-LAST:event_btnAddMarcaActionPerformed
     //</editor-fold>
     
     //-------------------------------Campos para -------------------------------------//
@@ -977,7 +1003,7 @@ public class AlterAddProd extends javax.swing.JFrame {
         
         //Para los Label de los Proveedores
         
-        if(!aProd.getProv1().equals("-Sin Proveedor-")){
+        if(!aProd.getProv1().equals("")){
              lblProv1.setText(">>> "+aProd.getProv1());
              p1=true;
          }else{
@@ -985,7 +1011,7 @@ public class AlterAddProd extends javax.swing.JFrame {
              p1=false;
          }
         
-        if(!aProd.getProv2().equals("-Sin Proveedor-")){
+        if(!aProd.getProv2().equals("")){
              lblProv2.setText(">>> "+aProd.getProv2());
              p2=true;
          }else{
@@ -993,7 +1019,7 @@ public class AlterAddProd extends javax.swing.JFrame {
              p2=false;
          }
         
-        if(!aProd.getProv3().equals("-Sin Proveedor-")){
+        if(!aProd.getProv3().equals("")){
              lblProv3.setText(">>> "+aProd.getProv3());
              p3=true;
              
@@ -1002,7 +1028,7 @@ public class AlterAddProd extends javax.swing.JFrame {
              p3=false;
          }
         
-        if(!aProd.getProv4().equals("-Sin Proveedor-")){
+        if(!aProd.getProv4().equals("")){
              lblProv4.setText(">>> "+aProd.getProv4());
              p4=true;
          }else{
@@ -1071,6 +1097,7 @@ public class AlterAddProd extends javax.swing.JFrame {
     //<editor-fold defaultstate="collapsed" desc="Declaracion de Objetos JavaSwing">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFrame FrameMarcas;
+    private javax.swing.JButton btnAddMarca;
     private javax.swing.JButton btnCancelModProd;
     private javax.swing.JButton btnMarCancel;
     private javax.swing.JButton btnMarca;

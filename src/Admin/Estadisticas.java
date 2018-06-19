@@ -5,15 +5,15 @@
  */
 package Admin;
 
-import java.sql.Date;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+
 
 /**
  *
@@ -27,14 +27,23 @@ public class Estadisticas extends javax.swing.JFrame {
     DefaultTableModel model;
     Funciones.Tablas tablas = new Funciones.Tablas();
     private TableRowSorter filtro;
+    DecimalFormat df = new DecimalFormat("############.##");
     Calendar calendar;
+    float totalVenta = 0.00f, totalInvers=0.00f, ganancia=0.00f;
+    
+    
     public Estadisticas() throws SQLException {
         initComponents();
         this.setLocationRelativeTo(null);
+        
         model=(DefaultTableModel) Admin.Estadisticas.tb_ventas.getModel();
-        tablas.EstadVentas(model, "","");
+        this.tb_ventas.setModel(tablas.EstadVentas(model, "",""));
+        
+        model = (DefaultTableModel) Admin.Estadisticas.tb_compras.getModel();
+        this.tb_compras.setModel(tablas.EstadCompras(model, "", ""));
         calendar=Calendar.getInstance();
         setTotalVentas();
+        setTotalCompra();
     }
 
     
@@ -52,37 +61,46 @@ public class Estadisticas extends javax.swing.JFrame {
         lbl_ventas = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        lblInversion = new javax.swing.JLabel();
         lbl_totalventas = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lblGanancia = new javax.swing.JLabel();
         lbl_filtrar = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jProgressBar1 = new javax.swing.JProgressBar();
-        jButton1 = new javax.swing.JButton();
+        btnCerrar = new javax.swing.JButton();
         cbx_mes1 = new javax.swing.JComboBox<>();
         cbx_mes2 = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnFiltrarFecha = new javax.swing.JButton();
         cbx_dia1 = new javax.swing.JComboBox<>();
         cbx_dia2 = new javax.swing.JComboBox<>();
         cbx_anio1 = new javax.swing.JComboBox<>();
         cbx_anio2 = new javax.swing.JComboBox<>();
+        btnRefreshTablas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         tb_compras.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Producto", "Proveedor", "Precio de Compra", "Cantidad", "Total", "Fecha"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, true, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tb_compras);
 
         jScrollPane2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -114,14 +132,14 @@ public class Estadisticas extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Resumen", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
 
-        jLabel3.setFont(getFont());
-        jLabel3.setText("Inversión total: $200");
+        lblInversion.setFont(getFont());
+        lblInversion.setText("Inversión total: $200");
 
         lbl_totalventas.setFont(getFont());
         lbl_totalventas.setText("Ventas Totales: $310");
 
-        jLabel5.setFont(getFont());
-        jLabel5.setText("Ganancias: $110");
+        lblGanancia.setFont(getFont());
+        lblGanancia.setText("Ganancias: $110");
 
         lbl_filtrar.setFont(getFont());
         lbl_filtrar.setText("Filtrar Por Fechas:");
@@ -135,11 +153,11 @@ public class Estadisticas extends javax.swing.JFrame {
         jProgressBar1.setFont(getFont());
         jProgressBar1.setValue(20);
 
-        jButton1.setFont(getFont());
-        jButton1.setText("Cerrar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnCerrar.setFont(getFont());
+        btnCerrar.setText("Cerrar");
+        btnCerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnCerrarActionPerformed(evt);
             }
         });
 
@@ -151,11 +169,11 @@ public class Estadisticas extends javax.swing.JFrame {
 
         jLabel1.setText("dd/mm/aaaa");
 
-        jButton2.setFont(getFont());
-        jButton2.setText("Aplicar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnFiltrarFecha.setFont(getFont());
+        btnFiltrarFecha.setText("Aplicar");
+        btnFiltrarFecha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnFiltrarFechaActionPerformed(evt);
             }
         });
 
@@ -171,6 +189,13 @@ public class Estadisticas extends javax.swing.JFrame {
         cbx_anio2.setFont(getFont());
         cbx_anio2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033", "2034", " ", " ", " " }));
 
+        btnRefreshTablas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/update.png"))); // NOI18N
+        btnRefreshTablas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshTablasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -185,16 +210,20 @@ public class Estadisticas extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbx_mes2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(lbl_totalventas)
-                    .addComponent(jLabel3)
-                    .addComponent(jButton2)
+                    .addComponent(lblGanancia)
+                    .addComponent(lblInversion)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cbx_dia1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbx_mes1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cbx_mes1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(btnFiltrarFecha)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(btnRefreshTablas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(lbl_totalventas, javax.swing.GroupLayout.Alignment.LEADING)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cbx_anio2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -206,7 +235,7 @@ public class Estadisticas extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel1)
-                            .addComponent(jButton1))
+                            .addComponent(btnCerrar))
                         .addGap(108, 108, 108))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(lbl_filtrar)
@@ -232,17 +261,19 @@ public class Estadisticas extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnFiltrarFecha)
+                    .addComponent(btnRefreshTablas, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addComponent(lbl_totalventas)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel3)
+                .addComponent(lblInversion)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel5)
+                .addComponent(lblGanancia)
                 .addGap(27, 27, 27)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(48, 48, 48)
-                .addComponent(jButton1)
+                .addComponent(btnCerrar)
                 .addContainerGap())
         );
 
@@ -251,14 +282,17 @@ public class Estadisticas extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(194, 194, 194)
-                        .addComponent(lbl_ventas))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                        .addGap(174, 174, 174)
+                        .addComponent(lbl_ventas)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 729, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
@@ -271,18 +305,19 @@ public class Estadisticas extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
                         .addComponent(lbl_ventas)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(25, 25, 25)))
-                .addGap(20, 20, 20))
+                        .addGap(45, 45, 45))))
         );
 
         pack();
@@ -291,20 +326,29 @@ public class Estadisticas extends javax.swing.JFrame {
     
     public void filtrar() throws SQLException{
             String dia1,dia2,mes1,mes2,anio1,anio2,fecha1,fecha2;
+            
             dia1=String.valueOf(cbx_dia1.getSelectedIndex()+1);
             dia2=String.valueOf(cbx_dia1.getSelectedIndex()+1);
+            
             mes1=String.valueOf((this.cbx_mes1.getSelectedIndex()+1));
             mes2=String.valueOf((this.cbx_mes2.getSelectedIndex()+1));
+            
             anio1=this.cbx_anio1.getSelectedItem().toString();
             anio2=this.cbx_anio1.getSelectedItem().toString();
+            
             fecha1=anio1+"-"+mes1+"-"+dia1;
             fecha2=anio2+"-"+mes2+"-"+dia2;
+            
             System.out.println(fecha1);
-            tablas.EstadVentas(model, fecha1,fecha2);
+            model = (DefaultTableModel) tb_ventas.getModel();
+            tb_ventas.setModel(tablas.EstadVentas(model, fecha1,fecha2));
+            
+            model = (DefaultTableModel) tb_compras.getModel();
+            tb_compras.setModel(tablas.EstadCompras(model, fecha1, fecha2));
             setTotalVentas();
             //JOptionPane.showMessageDialog(this,"Ingrese una fecha valida","Aviso",JOptionPane.INFORMATION_MESSAGE);
     }
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         try {
             Administracion f = new Administracion();
             f.setVisible(true);
@@ -312,16 +356,31 @@ public class Estadisticas extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Estadisticas.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnCerrarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnFiltrarFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarFechaActionPerformed
         try {
             // TODO add your handling code here:
             filtrar();
+            setGanancia();
         } catch (SQLException ex) {
             Logger.getLogger(Estadisticas.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnFiltrarFechaActionPerformed
+
+    private void btnRefreshTablasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshTablasActionPerformed
+        try {
+            model=(DefaultTableModel) Admin.Estadisticas.tb_ventas.getModel();
+            this.tb_ventas.setModel(tablas.EstadVentas(model, "",""));
+            
+            model = (DefaultTableModel) Admin.Estadisticas.tb_compras.getModel();
+            this.tb_compras.setModel(tablas.EstadCompras(model, "", ""));
+            this.setTotalVentas();
+        } catch (SQLException ex) {
+            Logger.getLogger(Estadisticas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_btnRefreshTablasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -362,31 +421,44 @@ public class Estadisticas extends javax.swing.JFrame {
         });
     }
     public void setTotalVentas(){
-        float total=0.00f;
+         totalVenta=0.00f;
         for(int i=0;i<this.tb_ventas.getRowCount();i++){
-            total+=Float.valueOf(this.tb_ventas.getValueAt(i,2).toString());
+            totalVenta+=Float.valueOf(this.tb_ventas.getValueAt(i,2).toString());
         }
-        this.lbl_totalventas.setText("Ventas totales: $"+total);
+        this.lbl_totalventas.setText("Ventas totales: $"+df.format(totalVenta));
     }
+    public void setTotalCompra(){
+         totalInvers=0.00f;
+        for(int i=0;i<this.tb_compras.getRowCount();i++){
+            totalInvers+=Float.valueOf(this.tb_compras.getValueAt(i,4).toString());
+        }
+        this.lblInversion.setText("Inversión total: $"+df.format(totalInvers));
+    }
+    private void setGanancia(){
+        ganancia = totalVenta-totalInvers;
+        lblGanancia.setText("Ganancias: $"+df.format(ganancia));
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCerrar;
+    private javax.swing.JButton btnFiltrarFecha;
+    private javax.swing.JButton btnRefreshTablas;
     private javax.swing.JComboBox<String> cbx_anio1;
     private javax.swing.JComboBox<String> cbx_anio2;
     private javax.swing.JComboBox<String> cbx_dia1;
     private javax.swing.JComboBox<String> cbx_dia2;
     private javax.swing.JComboBox<String> cbx_mes1;
     private javax.swing.JComboBox<String> cbx_mes2;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblGanancia;
+    private javax.swing.JLabel lblInversion;
     private javax.swing.JLabel lbl_filtrar;
     private javax.swing.JLabel lbl_totalventas;
     private javax.swing.JLabel lbl_ventas;

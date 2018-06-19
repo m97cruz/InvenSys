@@ -168,12 +168,11 @@ public class Productos {
     //Metodo para retornar el ID de un proveedor de la base de datos
     //<editor-fold defaultstate="collapsed" desc="Metodos para Obtener IDs y Nombre de Proveedor y marcas">
     public String getProvNombre(int id) throws SQLException{ 
-        String prov="",sql = "SELECT prov_nombre FROM proveedores WHERE id="+id;
-        ResultSet rs = funcion.select(sql);
+        String prov="";
+        sql = "SELECT prov_nombre FROM proveedores WHERE id="+id;
+        rs = funcion.select(sql);
         if(rs.next()){
-            prov = rs.getString(1);
-        }else{
-            prov = "-Sin Proveedor-";
+            prov = rs.getString(1) + " || ";
         }
         return prov;
     }
@@ -287,25 +286,25 @@ public class Productos {
         if(dbProv1 > 0){
             prov1 = getProvNombre(dbProv1);
         }else{
-            prov1= "-Sin Proveedor-";
+            prov1= "";
         }
         
         if(dbProv2 > 0){
             prov2 = getProvNombre(dbProv2);
         }else{
-            prov2= "-Sin Proveedor-";
+            prov2= "";
         }
         
         if(dbProv3 > 0){
             prov3 = getProvNombre(dbProv3);
         }else{
-            prov3= "-Sin Proveedor-";
+            prov3= "";
         }
         
         if(dbProv4 > 0){
             prov4 = getProvNombre(dbProv4);
         }else{
-            prov4= "-Sin Proveedor-";
+            prov4= "";
         }
         if(marcaDB > 0){
             marca= getMarcaNombre();
@@ -421,5 +420,26 @@ public class Productos {
         
         return r;
     }//</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="CRUD para las MARCAS">
+    
+    public boolean addMarca(String marca){
+        sql ="INSERT INTO marcas VALUES(null, '"+marca+"')";
+        return funcion.ExecSQL(sql);
+    }
+    
+    public boolean rmMarca(int id) throws SQLException{
+        boolean r=false;
+        sql="SELECT codigo FROM productos WHERE marca="+id;
+        rs = funcion.select(sql);
+        if(!rs.next()){
+            sql="DELETE FROM marcas WHERE id="+id;
+            r = funcion.ExecSQL(sql);
+        }
+        
+        return r;
+    }
+    
+    //</editor-fold>
     
 }

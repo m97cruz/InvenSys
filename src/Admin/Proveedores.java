@@ -5,11 +5,16 @@
  */
 package Admin;
 
+import static Admin.Administracion.tablaProd;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -20,7 +25,9 @@ public class Proveedores extends javax.swing.JFrame {
     Funciones.Tablas tablas = new Funciones.Tablas();
     Funciones.Proveedores aProvs = new Funciones.Proveedores();
     DefaultTableModel model;
+    TableRowSorter filtro;
     int fila, idProv;
+    boolean insertMode;
     /**
      * Creates new form Proveedores
      */
@@ -60,10 +67,9 @@ public class Proveedores extends javax.swing.JFrame {
         btnDesvincular = new javax.swing.JButton();
         btnVincuRegresar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jButton1 = new javax.swing.JButton();
+        btnAddProv = new javax.swing.JButton();
         btnModProv = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        btnRmProv = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
         btnViewProds = new javax.swing.JButton();
@@ -244,7 +250,7 @@ public class Proveedores extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, true, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -253,10 +259,10 @@ public class Proveedores extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tablaProvs);
 
-        jButton1.setText("Añadir Proveedor");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnAddProv.setText("Añadir Proveedor");
+        btnAddProv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnAddProvActionPerformed(evt);
             }
         });
 
@@ -267,14 +273,15 @@ public class Proveedores extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Remover Proveedor");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnRmProv.setText("Remover Proveedor");
+        btnRmProv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnRmProvActionPerformed(evt);
             }
         });
 
-        jLabel2.setText("Buscar");
+        jLabel2.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
+        jLabel2.setText("Lista de Proveedores");
 
         jButton6.setText("Cerrar");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -297,8 +304,6 @@ public class Proveedores extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(140, 140, 140)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -313,52 +318,62 @@ public class Proveedores extends javax.swing.JFrame {
                             .addComponent(btnViewProds, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton3)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnRmProv)
+                            .addComponent(btnAddProv, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(btnAddProv)
                     .addComponent(jButton6)
                     .addComponent(btnModProv))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
+                    .addComponent(btnRmProv)
                     .addComponent(btnViewProds))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnRmProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRmProvActionPerformed
         fila = tablaProvs.getSelectedRow();
         model = (DefaultTableModel) tablaProvs.getModel();
-        aProvs.setId(Integer.valueOf(model.getValueAt(fila, 0).toString()));
+        int idProvee =Integer.parseInt(model.getValueAt(fila, 0).toString());
+        aProvs.setId(idProvee);
         if (fila >= 0){
             int confirmar = JOptionPane.showConfirmDialog(this, "¿Eliminar al Proveedor \""+model.getValueAt(fila, 1)+"\"?");
             if (confirmar == 0){
-                if(aProvs.rmProv()){
-                    JOptionPane.showMessageDialog(this, "¡Proveedor Eliminado!");
-                }else{
-                    JOptionPane.showMessageDialog(this, "Este proveedor esta vinculado a uno o más productos\n Desvincule este Proveedor de estos Productos para remover al Proveedor");
+                try {
+                    if(aProvs.rmProv()){
+                        JOptionPane.showMessageDialog(this, "¡Proveedor Eliminado!");
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Este proveedor esta vinculado a uno o más productos\n Desvincule este Proveedor de estos Productos para remover al Proveedor");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Proveedores.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                model = (DefaultTableModel) tablaProvs.getModel();
+                try {
+                    tablaProvs.setModel(tablas.tablaProveedor(model));
+                } catch (SQLException ex) {
+                    Logger.getLogger(Proveedores.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }else{
             JOptionPane.showMessageDialog(this, "Aún No ha seleccionado un Proveedor");
         }
         
-    }//GEN-LAST:event_jButton3ActionPerformed
+        
+    }//GEN-LAST:event_btnRmProvActionPerformed
 
     private void tfCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfCorreoActionPerformed
         // TODO add your handling code here:
@@ -373,10 +388,12 @@ public class Proveedores extends javax.swing.JFrame {
         interModInsert.setVisible(false);
     }//GEN-LAST:event_btnCancelActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        interModInsert.setVisible(true);
+    private void btnAddProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProvActionPerformed
+        interModInsert.setSize(320, 360);
         interModInsert.setLocationRelativeTo(null);
-    }//GEN-LAST:event_jButton1ActionPerformed
+        interModInsert.setVisible(true);
+        insertMode = true;
+    }//GEN-LAST:event_btnAddProvActionPerformed
 
     private void btnModProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModProvActionPerformed
         //Llenar Campos 
@@ -395,6 +412,7 @@ public class Proveedores extends javax.swing.JFrame {
             interModInsert.setVisible(true);
             interModInsert.setSize(320, 360);
             interModInsert.setLocationRelativeTo(null);
+            insertMode = false;
             
         }else{
             JOptionPane.showMessageDialog(interModInsert, "¡Seleccione un Proveedor!");
@@ -420,12 +438,30 @@ public class Proveedores extends javax.swing.JFrame {
         aProvs.setDirec(tfDireccion.getText());
         aProvs.setCorreo(tfCorreo.getText());
         try {
-        if(aProvs.modProv()){
-                JOptionPane.showMessageDialog(interModInsert, "¡Cambios Guardados!");
-                interModInsert.setVisible(false);
-        }else{
-                JOptionPane.showMessageDialog(interModInsert, "¡No Pudieron Aplicar los Cambios!");
-        }
+            if(insertMode){ //Evaluar si esta vaina va a modificar o intsertar proveedor
+                if(aProvs.addProv()){
+                    JOptionPane.showMessageDialog(interModInsert, "¡Proveedor Registrado!");
+                    interModInsert.setVisible(false);
+                    this.setVisible(true);
+                }else{
+                    JOptionPane.showMessageDialog(interModInsert, "¡No se Pudo resgistrar el nuevo Proveedor!");
+                }
+                        
+            }else{
+                if(aProvs.modProv()){
+                    JOptionPane.showMessageDialog(interModInsert, "¡Cambios Guardados!");
+                    interModInsert.setVisible(false);
+                    this.setVisible(true);
+                    tablaProvs.clearSelection();
+                }else{
+                    JOptionPane.showMessageDialog(interModInsert, "¡No Pudieron Aplicar los Cambios!");
+                }
+            }
+            tfCorreo.setText("");
+            tfNombre.setText("");
+            tfEncargado.setText("");
+            tfTelefono.setText("");
+            tfDireccion.setText("");
             model = (DefaultTableModel) tablaProvs.getModel();
             tablas.tablaProveedor(model);
         } catch (SQLException ex) {
@@ -525,15 +561,15 @@ public class Proveedores extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddProv;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDesvincular;
     private javax.swing.JButton btnModProv;
+    private javax.swing.JButton btnRmProv;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnViewProds;
     private javax.swing.JButton btnVincuRegresar;
     private javax.swing.JFrame interModInsert;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -543,7 +579,6 @@ public class Proveedores extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JFrame prodVinculados;
     private javax.swing.JTable tablaProdVinculado;
     public static final javax.swing.JTable tablaProvs = new javax.swing.JTable();

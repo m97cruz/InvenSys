@@ -83,13 +83,12 @@ public class Proveedores {
         return funcion.ExecSQL(sql);
     }
     
-    public boolean rmProv(){
-        boolean ok; // OK para proceder a eliminar
+    public boolean rmProv() throws SQLException{
+        boolean ok=false; // OK para proceder a eliminar
         
         sql = "SELECT codigo FROM productos WHERE proveedor1="+id+" OR proveedor2="+id+" OR proveedor3="+id+" OR proveedor4="+id+";";
-        if (funcion.select(sql) != null){
-            ok = false;
-        }else{
+        rs = funcion.select(sql);
+        if(!rs.next()){
             ok = true;
         }
         
@@ -97,7 +96,7 @@ public class Proveedores {
             sql ="DELETE FROM proveedores WHERE id="+id;
             ok= funcion.ExecSQL(sql);
         }
-        
+
         return ok;
     }
     
