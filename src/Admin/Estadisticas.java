@@ -330,18 +330,19 @@ public class Estadisticas extends javax.swing.JFrame {
             String dia1,dia2,mes1,mes2,anio1,anio2,fecha1,fecha2;
             
             dia1=String.valueOf(cbx_dia1.getSelectedIndex()+1);
-            dia2=String.valueOf(cbx_dia1.getSelectedIndex()+1);
+            dia2=String.valueOf(cbx_dia2.getSelectedIndex()+1);
             
             mes1=String.valueOf((this.cbx_mes1.getSelectedIndex()+1));
             mes2=String.valueOf((this.cbx_mes2.getSelectedIndex()+1));
             
             anio1=this.cbx_anio1.getSelectedItem().toString();
-            anio2=this.cbx_anio1.getSelectedItem().toString();
+            anio2=this.cbx_anio2.getSelectedItem().toString();
             
             fecha1=anio1+"-"+mes1+"-"+dia1;
             fecha2=anio2+"-"+mes2+"-"+dia2;
             
-            System.out.println(fecha1);
+            System.out.println("fecha1 "+fecha1);
+            System.out.println("fecha2 "+fecha2);
             model = (DefaultTableModel) tb_ventas.getModel();
             tb_ventas.setModel(tablas.EstadVentas(model, fecha1,fecha2));
             
