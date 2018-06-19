@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
@@ -35,6 +36,7 @@ public class Marcas extends javax.swing.JFrame {
         model=(DefaultTableModel) tablaMarcas.getModel();
         tablaMarcas.setModel(tablas.Marcas(model));
         this.setLocationRelativeTo(null);
+        this.setIconImage(new ImageIcon(getClass().getResource("../Imagenes/iconos/logo.png")).getImage());
     }
 
     /**

@@ -16,8 +16,18 @@ public class Vendedor_ {
     int id;
     String fecha;
     String producto;
+    String lugar;
+
+    public String getLugar() {
+        return lugar;
+    }
+
+    public void setLugar(String lugar) {
+        this.lugar = lugar;
+    }
     int cantidad;
     float total=0.00f;
+    
     DBControl.SQL_fun SQL_fun = new DBControl.SQL_fun();
     
     public int getId() {
@@ -86,13 +96,13 @@ public class Vendedor_ {
         //Se procede ha hacer la debida actualizacion del inventario de productos;
         
         
-        sql="SELECT local_cant from productos WHERE codigo="+id;
+        sql="SELECT "+lugar+" from productos WHERE codigo="+id;
         rs=SQL_fun.select(sql);
         while(rs.next()){//iniciar el ResultSet
-            canActu=rs.getInt("local_cant");//obtener la cantidad actual
+            canActu=rs.getInt(lugar);//obtener la cantidad actual
         }
         canActu-=cantidad;//hacer la deduccion del inventario
-        sql="UPDATE productos SET local_cant="+canActu+" WHERE codigo="+id;
+        sql="UPDATE productos SET "+lugar+"="+canActu+" WHERE codigo="+id;
         SQL_fun.ExecSQL(sql);
     }
 }

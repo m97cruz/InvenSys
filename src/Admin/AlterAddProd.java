@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
@@ -50,6 +51,7 @@ public class AlterAddProd extends javax.swing.JFrame {
         df.setRoundingMode(RoundingMode.UP);
         Admin.Administracion frame = new Admin.Administracion();
         this.idProd = frame.idProd;
+        this.setIconImage(new ImageIcon(getClass().getResource("../Imagenes/iconos/logo.png")).getImage());
         this.insertMode = frame.insertMode;
         
         FrameMarcas.setVisible(false);
