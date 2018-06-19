@@ -87,7 +87,6 @@ public class Vendedor extends javax.swing.JFrame {
         lbl_cambio = new javax.swing.JLabel();
         chbx_mayoreo = new javax.swing.JCheckBox();
         chbx_lugar = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -284,8 +283,6 @@ public class Vendedor extends javax.swing.JFrame {
         chbx_lugar.setFont(getFont());
         chbx_lugar.setText("Despachar de bodega");
 
-        jButton1.setText("jButton1");
-
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/icon_list.png"))); // NOI18N
         jMenu1.setText("Opciones");
 
@@ -349,8 +346,6 @@ public class Vendedor extends javax.swing.JFrame {
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(lbl_lista)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(btn_limpiar))
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -401,15 +396,14 @@ public class Vendedor extends javax.swing.JFrame {
                         .addComponent(chbx_mayoreo)
                         .addGap(18, 18, 18)
                         .addComponent(chbx_lugar)))
-                .addGap(18, 31, Short.MAX_VALUE)
+                .addGap(18, 32, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_add)
                     .addComponent(btn_remove))
                 .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_lista)
-                    .addComponent(btn_limpiar)
-                    .addComponent(jButton1))
+                    .addComponent(btn_limpiar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -764,7 +758,6 @@ public class Vendedor extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cb_filtro;
     private javax.swing.JCheckBox chbx_lugar;
     private javax.swing.JCheckBox chbx_mayoreo;
-    private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
