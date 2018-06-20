@@ -8,6 +8,7 @@ package Admin;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -30,6 +31,7 @@ public class ProdSolicita extends javax.swing.JFrame {
     public ProdSolicita() throws SQLException {
         initComponents();
         this.setLocationRelativeTo(null);
+        this.setIconImage(new ImageIcon(getClass().getResource("../Imagenes/iconos/logo.png")).getImage());
         model = (DefaultTableModel) tablaProdSolicita.getModel();
         tablas.tablaProdSolicita(model);
         tablaProdSolicita.getColumnModel().getColumn(0).setMaxWidth(50);

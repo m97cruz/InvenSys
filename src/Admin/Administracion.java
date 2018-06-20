@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
@@ -46,6 +47,7 @@ public class Administracion extends javax.swing.JFrame {
         tablaProd.getColumnModel().getColumn(5).setMaxWidth(80);
         tablaProd.getColumnModel().getColumn(4).setMaxWidth(80);
         tablaProd.getColumnModel().getColumn(2).setMaxWidth(80);
+        this.setIconImage(new ImageIcon(getClass().getResource("../Imagenes/iconos/logo.png")).getImage());
     }
 
     /**

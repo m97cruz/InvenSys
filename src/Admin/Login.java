@@ -9,7 +9,7 @@ import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
-
+import javax.swing.ImageIcon;
 
 
 
@@ -22,7 +22,8 @@ public class Login extends javax.swing.JFrame {
 Funciones.Usuarios fUser = new Funciones.Usuarios();
     public Login() {
         initComponents();
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);  
+        this.setIconImage(new ImageIcon(getClass().getResource("../Imagenes/iconos/logo.png")).getImage());
     }
 
     /**

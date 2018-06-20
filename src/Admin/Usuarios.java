@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -26,6 +27,7 @@ public class Usuarios extends javax.swing.JFrame {
     public Usuarios() throws SQLException {
         initComponents();
         this.setLocationRelativeTo(null);
+        this.setIconImage(new ImageIcon(getClass().getResource("../Imagenes/iconos/logo.png")).getImage());
         MostrarDatos();
         this.InterAddModUsr.setLocationRelativeTo(null);
         this.InterAddModUsr.setSize(400,550);

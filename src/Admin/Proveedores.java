@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
@@ -34,6 +35,7 @@ public class Proveedores extends javax.swing.JFrame {
     public Proveedores() throws SQLException {
         initComponents();
         this.setLocationRelativeTo(null);
+        this.setIconImage(new ImageIcon(getClass().getResource("../Imagenes/iconos/logo.png")).getImage());
         tablaProvs.getColumnModel().getColumn(0).setMaxWidth(60);
         model = (DefaultTableModel) tablaProvs.getModel();
         tablas.tablaProveedor(model);

@@ -10,6 +10,7 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -44,6 +45,7 @@ public class Estadisticas extends javax.swing.JFrame {
         calendar=Calendar.getInstance();
         setTotalVentas();
         setTotalCompra();
+        this.setIconImage(new ImageIcon(getClass().getResource("../Imagenes/iconos/logo.png")).getImage());
     }
 
     
