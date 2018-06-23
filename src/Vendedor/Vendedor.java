@@ -14,6 +14,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -55,7 +57,6 @@ public class Vendedor extends javax.swing.JFrame {
         modelo= (DefaultTableModel) Vendedor.tbl_list.getModel(); //Obtiene el Modelo
         this.txf_buscar.requestFocus();
         model=(DefaultTableModel) Vendedor.tablaProds.getModel();
-        
         tablas.tablaProdVend(model);
     }
 
@@ -119,9 +120,9 @@ public class Vendedor extends javax.swing.JFrame {
             }
         });
 
-        jScrollPane1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jScrollPane1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        tablaProds.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        tablaProds.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tablaProds.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
@@ -155,9 +156,9 @@ public class Vendedor extends javax.swing.JFrame {
             tablaProds.getColumnModel().getColumn(1).setMaxWidth(350);
         }
 
-        jScrollPane2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jScrollPane2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        tbl_list.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        tbl_list.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tbl_list.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -603,7 +604,7 @@ public class Vendedor extends javax.swing.JFrame {
                        Float.valueOf(precioUni),
                        String.valueOf(cantidad),
                        lugar,
-                       total
+                       setDecimal(total)
                    });
                     //Setear el total a pagar debido al ingreso de otro producto a la lista
                     setTotal();
@@ -653,7 +654,7 @@ public class Vendedor extends javax.swing.JFrame {
                 total+=precio;
             }
         }
-        this.lbl_total.setText(String.valueOf(total));
+        this.lbl_total.setText(setDecimal(total));
     }
     private void actuColumna(){
         int filas=modelo.getRowCount();
@@ -665,7 +666,7 @@ public class Vendedor extends javax.swing.JFrame {
                 precio=Float.valueOf(Vendedor.this.modelo.getValueAt(i, 2).toString());
                 cantidad=Integer.valueOf(Vendedor.this.modelo.getValueAt(i, 3).toString());
                 total=precio*cantidad;
-                tbl_list.setValueAt(String.valueOf(total), i,5);
+                tbl_list.setValueAt(setDecimal(total), i,5);
             }
         }
     }
@@ -681,8 +682,8 @@ public class Vendedor extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this,"Efectivo insuficiente","Aviso",JOptionPane.INFORMATION_MESSAGE);
                 } else{
                     float cambio=efectivo-Float.valueOf(this.lbl_total.getText());
-                    this.lbl_cambio.setText(String.valueOf(cambio));
-                    if(JOptionPane.showConfirmDialog(this,"CONFIRMAR VENTA\n Cambio $"+cambio,"CONFIRMACION" ,JOptionPane.OK_CANCEL_OPTION)==0){
+                    this.lbl_cambio.setText(setDecimal(cambio));
+                    if(JOptionPane.showConfirmDialog(this,"CONFIRMAR VENTA\n Cambio $"+setDecimal(cambio),"CONFIRMACION" ,JOptionPane.OK_CANCEL_OPTION)==0){
                         String lugar="local_cant";
                         for(int i=0;i<modelo.getRowCount();i++){
                             funVendedor.setFecha(LocalDate.now().toString());
@@ -707,6 +708,14 @@ public class Vendedor extends javax.swing.JFrame {
         } else{
             JOptionPane.showMessageDialog(this, "Lista de venta vacia","Aviso",JOptionPane.INFORMATION_MESSAGE);       
         }
+    }
+    public String setDecimal(float decimal){
+        String valor;
+        DecimalFormatSymbols separadores= new DecimalFormatSymbols();
+        separadores.setDecimalSeparator('.');
+        DecimalFormat formato=new DecimalFormat("#.00",separadores);
+        valor = formato.format(decimal);
+        return valor;
     }
     /**
      * @param args the command line arguments
