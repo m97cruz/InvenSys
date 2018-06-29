@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
+-- version 4.7.9
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 29-06-2018 a las 02:35:23
--- Versión del servidor: 10.1.21-MariaDB
--- Versión de PHP: 5.6.30
+-- Servidor: localhost
+-- Tiempo de generación: 29-06-2018 a las 07:10:57
+-- Versión del servidor: 10.1.31-MariaDB
+-- Versión de PHP: 5.6.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -62,7 +64,9 @@ CREATE TABLE `marcas` (
 INSERT INTO `marcas` (`id`, `marca`) VALUES
 (1, 'IMACASA'),
 (2, 'PRETUL'),
-(3, 'Marca 01');
+(3, 'Marca 01'),
+(5, 'Marca'),
+(6, 'Marca 12');
 
 -- --------------------------------------------------------
 
@@ -165,7 +169,8 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `usuario`, `nombre`, `passwd`, `rol`, `apellido`, `direccion`, `telefono`, `correo`) VALUES
 (1, 'admin', 'Administrador - ROOT', 'admin', 'ADMIN', '', '', '', ''),
-(2, 'Vendedor 1', 'Vendedor - Prueba', '1234', 'NORMAL', '', '', '', '');
+(2, 'Vendedor 1', 'Vendedor - Prueba', '1234', 'NORMAL', '', '', '', ''),
+(3, 'mau', 'Maui', 'mau', 'NORMAL', 'Cruz', 'Mikasa', '75560099', 'mcruz@mail.com');
 
 -- --------------------------------------------------------
 
@@ -218,6 +223,7 @@ ALTER TABLE `compras`
 --
 ALTER TABLE `marcas`
   ADD PRIMARY KEY (`id`);
+ALTER TABLE `marcas` ADD FULLTEXT KEY `FulText_Marca` (`marca`);
 
 --
 -- Indices de la tabla `productos`
@@ -225,6 +231,7 @@ ALTER TABLE `marcas`
 ALTER TABLE `productos`
   ADD PRIMARY KEY (`codigo`),
   ADD KEY `FK_MARCA` (`marca`);
+ALTER TABLE `productos` ADD FULLTEXT KEY `NombreFullText` (`nombre`);
 
 --
 -- Indices de la tabla `proveedores`
@@ -253,31 +260,38 @@ ALTER TABLE `ventas`
 --
 ALTER TABLE `compras`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT de la tabla `marcas`
 --
 ALTER TABLE `marcas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
   MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
 --
 -- AUTO_INCREMENT de la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
