@@ -101,9 +101,6 @@ public class Marcas extends javax.swing.JFrame {
         });
 
         txtFindMarca.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtFindMarcaKeyTyped(evt);
-            }
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtFindMarcaKeyPressed(evt);
             }
@@ -211,16 +208,15 @@ public class Marcas extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnDeleteMarcaActionPerformed
 
-    private void txtFindMarcaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFindMarcaKeyTyped
-        try {
-            tablas.Marcas(model, txtFindMarca.getText());
-        } catch (SQLException ex) {
-            Logger.getLogger(Marcas.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_txtFindMarcaKeyTyped
-
     private void txtFindMarcaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFindMarcaKeyPressed
         
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            try {
+                this.tablaMarcas.setModel(tablas.Marcas(model, txtFindMarca.getText()));
+            } catch (SQLException ex) {
+                Logger.getLogger(Marcas.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_txtFindMarcaKeyPressed
 
     /**

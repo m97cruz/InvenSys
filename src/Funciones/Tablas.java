@@ -243,7 +243,6 @@ public class Tablas {
             sql = "SELECT * FROM marcas WHERE MATCH(marca) AGAINST('"+cadena+"');";
         }
         
-        sql = "SELECT * FROM marcas";
         rs = funcion.select(sql);
         String datos[] = new String[2];
         while(rs.next()){
