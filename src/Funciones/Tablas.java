@@ -24,16 +24,20 @@ public class Tablas {
     String sql="";
     ResultSet rs;
     //<editor-fold defaultstate="collapsed" desc="Tablas para Listar Productos">
-    public void TablaProductos() throws SQLException{
-        DefaultTableModel model = (DefaultTableModel) Administracion.tablaProd.getModel(); //Obtiene el Modelo
+    public DefaultTableModel adminTablaProductos(DefaultTableModel model, String cadena) throws SQLException{
         model.setRowCount(0); //Reinicia el Contador de Filas
-        sql ="SELECT * FROM productos"; 
+        
+        if(cadena.equals("")){
+            sql ="SELECT * FROM productos"; 
+        }else{
+            sql = "SELECT * FROM productos WHERE MATCH(nombre) AGAINST('"+cadena+"');";
+        }
         
         String[] datos = new String[9];
 
         rs = funcion.select(sql);
         if(!rs.isBeforeFirst()){
-            JOptionPane.showMessageDialog(null, "La tabla no contiene ningun valor!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "¡No se han encontrado Resultados!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
         while(rs.next()){
             datos[0] = rs.getString(1); //codigo
@@ -72,11 +76,15 @@ public class Tablas {
             datos[8] = rs.getString(8); //Stock de Bodega
             model.addRow(datos);
         }
+        return model;
         
     }
     
     
     public DefaultTableModel tablaProdSolicita(DefaultTableModel model) throws SQLException{
+        //Primero lo Primero, Evaular si va a buscar o no...
+        
+        
         sql = "SELECT * FROM prod_solicita";
         model.setRowCount(0);
         rs=funcion.select(sql);
@@ -95,44 +103,6 @@ public class Tablas {
         return model;
     }
     
-    
-
-    public void tablaProdVendedor() throws  SQLException{
-        DefaultTableModel model = (DefaultTableModel) Vendedor.Vendedor.tablaProds.getModel(); //Obtiene el Modelo
-        model.setRowCount(0); //Reinicia el Contador de Filas
-        sql ="SELECT * FROM productos"; String query;
-        
-        String[] datos = new String[7];
-        ResultSet rsMarca;
-
-        rs = funcion.select(sql);
-        if(!rs.isBeforeFirst()){
-            JOptionPane.showMessageDialog(null, "La tabla no contiene algun valor!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-        }
-        while(rs.next()){
-            datos[0] = rs.getString(1); //codigo
-            datos[1] = rs.getString(2); //nombre
-            datos[2] = "---";
-            if(rs.getInt(11) > 0){
-                query = "SELECT marca FROM marcas WHERE id="+rs.getInt(11);
-                rsMarca = funcion.select(query);
-                if(rsMarca.next()){
-                    datos[2] = rsMarca.getString(1);
-                }
-            }
-            
-            datos[3] = rs.getString(4); //Precio Unitario
-            
-            if(rs.getInt(6) > 0){
-                datos[4] = "$"+rs.getString(5) + " ("+rs.getString(6)+" U)"; //Precio por Paquete ( $Precio(nUnidades) )
-            }else{
-                datos[4] = "";
-            }
-            datos[5] = rs.getString(7); //nombre
-            datos[6] = rs.getString(8); //nombre
-            model.addRow(datos);
-        }
-    }
     //</editor-fold>
     
 
@@ -264,8 +234,15 @@ public class Tablas {
        return total;
     }
     
-    public DefaultTableModel Marcas(DefaultTableModel model) throws SQLException{
+    public DefaultTableModel Marcas(DefaultTableModel model, String cadena) throws SQLException{
         model.setRowCount(0);
+        
+        if(cadena.equals("")){
+            sql ="SELECT * FROM marcas"; 
+        }else{
+            sql = "SELECT * FROM marcas WHERE MATCH(marca) AGAINST('"+cadena+"');";
+        }
+        
         sql = "SELECT * FROM marcas";
         rs = funcion.select(sql);
         String datos[] = new String[2];
@@ -277,10 +254,15 @@ public class Tablas {
         
         return model;
     }
-    
-    public void tablaProdVend(DefaultTableModel model) throws  SQLException{
+   
+    public DefaultTableModel tablaProdVend(DefaultTableModel model, String cadena) throws  SQLException{
         model.setRowCount(0); //Reinicia el Contador de Filas
-        sql ="SELECT * FROM productos"; String query;
+        if(cadena.equals("")){
+            sql ="SELECT * FROM productos"; 
+        }else{
+            sql = "SELECT * FROM productos WHERE MATCH(nombre) AGAINST('"+cadena+"');";
+        } 
+        String query;
         
         String[] datos = new String[7];
         ResultSet rsMarca;
@@ -314,7 +296,7 @@ public class Tablas {
             datos[6] = rs.getString(8); //nombre
             model.addRow(datos);
         }
-        //return model;
+        return model;
     }
     
     //<editor-fold defaultstate="collapsed" desc="Esto es para el Control de Ventas y Compras de Productos">
@@ -356,6 +338,6 @@ public class Tablas {
             model.addRow(datos);
         }
         return model;
-    }
+    }//</editor-fold>
    
 }

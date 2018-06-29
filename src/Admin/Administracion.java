@@ -5,14 +5,12 @@
  */
 package Admin;
 
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -24,8 +22,9 @@ public class Administracion extends javax.swing.JFrame {
     Funciones.Usuarios usuarios = new Funciones.Usuarios();
     Funciones.Productos aProd = new Funciones.Productos();
     Funciones.Tablas tablas = new Funciones.Tablas();
+    DefaultTableModel model;
     Login login = new Login();
-    public static boolean insertMode;
+    public static boolean insertMode, filtrado=false;
     public static int idProd;
     TableRowSorter filtro;
     
@@ -35,7 +34,10 @@ public class Administracion extends javax.swing.JFrame {
     public Administracion() throws SQLException{
         initComponents();
         this.setLocationRelativeTo(null);
-        tablas.TablaProductos();
+        model = (DefaultTableModel) this.tablaProd.getModel();
+        tablaProd.setModel(tablas.adminTablaProductos(model, ""));
+        
+        
         gRBSolicita.add(rbBo_Lo); gRBSolicita.add(rbPro_Bo);
         btnProdSolicita.setText("Solicitudes Pendientes("+aProd.getSoliCant()+")");
         tablaProd.clearSelection();
@@ -76,6 +78,8 @@ public class Administracion extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jButton12 = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
+        btnFindProd = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         optLogOut = new javax.swing.JMenuItem();
@@ -111,9 +115,17 @@ public class Administracion extends javax.swing.JFrame {
 
         jLabel2.setText("Buscar");
 
+        tfFindProd.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                tfFindProdCaretUpdate(evt);
+            }
+        });
         tfFindProd.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 tfFindProdKeyTyped(evt);
+            }
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfFindProdKeyPressed(evt);
             }
         });
 
@@ -237,6 +249,20 @@ public class Administracion extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        btnFindProd.setText("Buscar");
+        btnFindProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFindProdActionPerformed(evt);
+            }
+        });
+
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/update.png"))); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         jMenu1.setText("Archivo");
 
         optLogOut.setText("Cerrar Sesión");
@@ -306,13 +332,17 @@ public class Administracion extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(btnDelProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(btnModProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnAddProd, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btnAddProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(tfFindProd, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnFindProd)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnProdSolicita)))))
                 .addContainerGap(25, Short.MAX_VALUE))
@@ -324,7 +354,9 @@ public class Administracion extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(tfFindProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnProdSolicita))
+                    .addComponent(btnProdSolicita)
+                    .addComponent(btnFindProd)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -337,7 +369,7 @@ public class Administracion extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnDelProd))
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addGap(28, 28, 28))
         );
 
         pack();
@@ -454,11 +486,13 @@ public class Administracion extends javax.swing.JFrame {
 
     private void btnModProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModProdActionPerformed
         int fila = tablaProd.getSelectedRow();
+        
+        
+        JOptionPane.showMessageDialog(this, "Fila: "+fila);
         if(fila >=0){
-            DefaultTableModel model = (DefaultTableModel) tablaProd.getModel();
-            this.idProd = Integer.parseInt(model.getValueAt(fila, 0).toString());
+            this.setIDProdTabla(fila);
             this.insertMode =false;
-            
+            JOptionPane.showMessageDialog(this, "ID Prod: "+ idProd);
             try {
             Admin.AlterAddProd frame = new Admin.AlterAddProd();
             frame.setVisible(true);
@@ -491,18 +525,6 @@ public class Administracion extends javax.swing.JFrame {
         
         this.dispose();
     }//GEN-LAST:event_jButton13ActionPerformed
-
-    private void tfFindProdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFindProdKeyTyped
-        tfFindProd.addKeyListener(new KeyAdapter() {
-        public void keyReleased(final KeyEvent e){
-            tfFindProd.setText(tfFindProd.getText());
-            repaint();
-            filtro.setRowFilter(RowFilter.regexFilter(tfFindProd.getText().trim(), 1));
-        }
-        });
-        filtro = new TableRowSorter(tablaProd.getModel());
-        tablaProd.setRowSorter(filtro);
-    }//GEN-LAST:event_tfFindProdKeyTyped
 
     private void optLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optLogOutActionPerformed
         Admin.Login frame = new Admin.Login();
@@ -552,6 +574,57 @@ public class Administracion extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void tfFindProdCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tfFindProdCaretUpdate
+        
+        
+    }//GEN-LAST:event_tfFindProdCaretUpdate
+
+    private void tfFindProdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFindProdKeyTyped
+
+    }//GEN-LAST:event_tfFindProdKeyTyped
+
+    private void tfFindProdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFindProdKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            try {   //Setear nuevamente el model al precionar el enter, capturando la busqueda;
+                tablaProd.setModel(tablas.adminTablaProductos(model, tfFindProd.getText()));
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_tfFindProdKeyPressed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            tablaProd.setModel(tablas.adminTablaProductos(model,""));
+        } catch (SQLException ex) {
+            Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btnFindProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindProdActionPerformed
+        try {
+            tablaProd.setModel(tablas.adminTablaProductos(model, tfFindProd.getText()));
+        } catch (SQLException ex) {
+            Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnFindProdActionPerformed
+
+    
+    
+    
+    
+    
+    
+    ////-----//----------------------------------------------------------------------//-----////
+    private void setIDProdTabla(int fila){
+        if (filtrado){
+            //DefaultRowSorter rsModel = (DefaultRowSorter) tablaProd.getRowSorter().getModel();
+            this.idProd = Integer.parseInt(tablaProd.getModel().getValueAt(fila,0).toString());
+        }else{
+            this.idProd = Integer.parseInt(tablaProd.getModel().getValueAt(fila, 0).toString());
+        }
+    }
     
     /**
      * @param args the command line arguments
@@ -595,12 +668,14 @@ public class Administracion extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddProd;
     private javax.swing.JButton btnDelProd;
+    private javax.swing.JButton btnFindProd;
     private javax.swing.JButton btnModProd;
     private javax.swing.JButton btnProdSolicita;
     private javax.swing.JButton btnSolicitarProd;
     private javax.swing.ButtonGroup gRBSolicita;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;

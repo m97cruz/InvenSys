@@ -34,7 +34,7 @@ public class Marcas extends javax.swing.JFrame {
     public Marcas() throws SQLException {
         initComponents();
         model=(DefaultTableModel) tablaMarcas.getModel();
-        tablaMarcas.setModel(tablas.Marcas(model));
+        tablaMarcas.setModel(tablas.Marcas(model, ""));
         this.setLocationRelativeTo(null);
         this.setIconImage(new ImageIcon(getClass().getResource("../Imagenes/iconos/logo.png")).getImage());
     }
@@ -104,6 +104,9 @@ public class Marcas extends javax.swing.JFrame {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtFindMarcaKeyTyped(evt);
             }
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtFindMarcaKeyPressed(evt);
+            }
         });
 
         jLabel2.setText("Buscar:");
@@ -168,8 +171,7 @@ public class Marcas extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "¡Marca Agregada!");
                 
                 try {
-                    model = (DefaultTableModel) tablaMarcas.getModel();
-                    tablaMarcas.setModel(tablas.Marcas(model));
+                    tablaMarcas.setModel(tablas.Marcas(model, ""));
                 } catch (SQLException ex) {
                     Logger.getLogger(Marcas.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -185,16 +187,14 @@ public class Marcas extends javax.swing.JFrame {
         int fila = tablaMarcas.getSelectedRow();
 
         if(fila>=0){
-            model = (DefaultTableModel) tablaMarcas.getModel();
             int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
             int ok = JOptionPane.showConfirmDialog(this, "¿Esta seguro de eliminar esta marca?");
             if(ok == 0){
                 try {
                     if(aProd.rmMarca(id)){
                         JOptionPane.showMessageDialog(this, "La Marca ha Sido Eliminada");
-                        model = (DefaultTableModel) tablaMarcas.getModel();
                         try {
-                            tablaMarcas.setModel(tablas.Marcas(model));
+                            tablaMarcas.setModel(tablas.Marcas(model, ""));
                         } catch (SQLException ex) {
                             Logger.getLogger(Marcas.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -212,16 +212,16 @@ public class Marcas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteMarcaActionPerformed
 
     private void txtFindMarcaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFindMarcaKeyTyped
-        txtFindMarca.addKeyListener(new KeyAdapter() {
-            public void keyReleased(final KeyEvent e){
-                txtFindMarca.setText(txtFindMarca.getText());
-                repaint();
-                filtro.setRowFilter(RowFilter.regexFilter(txtFindMarca.getText().trim(),1));
-            }
-        });
-        filtro = new TableRowSorter(this.tablaMarcas.getModel());
-        this.tablaMarcas.setRowSorter(filtro);
+        try {
+            tablas.Marcas(model, txtFindMarca.getText());
+        } catch (SQLException ex) {
+            Logger.getLogger(Marcas.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_txtFindMarcaKeyTyped
+
+    private void txtFindMarcaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFindMarcaKeyPressed
+        
+    }//GEN-LAST:event_txtFindMarcaKeyPressed
 
     /**
      * @param args the command line arguments

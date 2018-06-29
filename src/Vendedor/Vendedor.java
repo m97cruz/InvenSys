@@ -7,34 +7,17 @@ package Vendedor;
  */
 
 
-import Admin.Administracion;
-import java.awt.MenuComponent;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.input.KeyCode;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
-import javax.swing.RowFilter;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
-import javax.swing.text.MaskFormatter;
-import javax.swing.text.NumberFormatter;
-
 /**
  *
  * @author Alumno
@@ -43,7 +26,6 @@ public class Vendedor extends javax.swing.JFrame {
     Funciones.Usuarios usuarios = new Funciones.Usuarios();
     Admin.Login login = new Admin.Login();
     Funciones.Tablas tablas = new Funciones.Tablas();
-    private TableRowSorter filtro;
     DefaultTableModel  modelo,model;
     
     Funciones.Vendedor_ funVendedor =new Funciones.Vendedor_();
@@ -57,7 +39,7 @@ public class Vendedor extends javax.swing.JFrame {
         modelo= (DefaultTableModel) Vendedor.tbl_list.getModel(); //Obtiene el Modelo
         this.txf_buscar.requestFocus();
         model=(DefaultTableModel) Vendedor.tablaProds.getModel();
-        tablas.tablaProdVend(model);
+        this.tablaProds.setModel(tablas.tablaProdVend(model, ""));
     }
 
     /**
@@ -88,6 +70,8 @@ public class Vendedor extends javax.swing.JFrame {
         lbl_cambio = new javax.swing.JLabel();
         chbx_mayoreo = new javax.swing.JCheckBox();
         chbx_lugar = new javax.swing.JCheckBox();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -106,17 +90,9 @@ public class Vendedor extends javax.swing.JFrame {
 
         txf_buscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txf_buscar.setNextFocusableComponent(tablaProds);
-        txf_buscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txf_buscarActionPerformed(evt);
-            }
-        });
         txf_buscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txf_buscarKeyPressed(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txf_buscarKeyTyped(evt);
             }
         });
 
@@ -284,6 +260,15 @@ public class Vendedor extends javax.swing.JFrame {
         chbx_lugar.setFont(getFont());
         chbx_lugar.setText("Despachar de bodega");
 
+        jButton1.setText("Buscar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/update.png"))); // NOI18N
+
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/icon_list.png"))); // NOI18N
         jMenu1.setText("Opciones");
 
@@ -352,15 +337,7 @@ public class Vendedor extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btn_success))
                         .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addGap(2, 2, 2)
-                                    .addComponent(lbl_search)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txf_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 652, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 652, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(layout.createSequentialGroup()
@@ -377,7 +354,18 @@ public class Vendedor extends javax.swing.JFrame {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addComponent(jt_efectivo))
                                 .addComponent(chbx_mayoreo)
-                                .addComponent(chbx_lugar)))))
+                                .addComponent(chbx_lugar)))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(2, 2, 2)
+                            .addComponent(lbl_search)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(txf_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(jButton1)
+                            .addGap(10, 10, 10)
+                            .addComponent(jButton2))))
                 .addContainerGap(46, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -387,7 +375,9 @@ public class Vendedor extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_search)
                     .addComponent(txf_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cb_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -461,19 +451,6 @@ public class Vendedor extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tablaProdsKeyPressed
 
-    private void txf_buscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txf_buscarKeyTyped
-        // TODO add your handling code here:
-         txf_buscar.addKeyListener(new KeyAdapter() {
-        public void keyReleased(final KeyEvent e){
-            txf_buscar.setText(txf_buscar.getText());
-            repaint();
-            filtro.setRowFilter(RowFilter.regexFilter(txf_buscar.getText().trim(), cb_filtro.getSelectedIndex()));
-        }
-        });
-        filtro = new TableRowSorter(this.tablaProds.getModel());
-        this.tablaProds.setRowSorter(filtro);
-    }//GEN-LAST:event_txf_buscarKeyTyped
-
     private void btn_removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_removeActionPerformed
         // TODO add your handling code here:
         this.removerProd();
@@ -492,7 +469,7 @@ public class Vendedor extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         try {
             // TODO add your handling code here:
-            tablas.tablaProdVend(model);
+            this.tablaProds.setModel(tablas.tablaProdVend(model, ""));
         } catch (SQLException ex) {
             Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -551,7 +528,11 @@ public class Vendedor extends javax.swing.JFrame {
     private void txf_buscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txf_buscarKeyPressed
          // TODO add your handling code here:
          if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            this.tablaProds.requestFocus();
+             try {
+                 this.tablaProds.setModel(tablas.tablaProdVend(model, txf_buscar.getText()));
+             } catch (SQLException ex) {
+                 Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+             }
         }
     }//GEN-LAST:event_txf_buscarKeyPressed
 
@@ -559,9 +540,14 @@ public class Vendedor extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_chbx_mayoreoActionPerformed
 
-    private void txf_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txf_buscarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txf_buscarActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+                 this.tablaProds.setModel(tablas.tablaProdVend(model, txf_buscar.getText()));
+             } catch (SQLException ex) {
+                 Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+             }
+    }//GEN-LAST:event_jButton1ActionPerformed
+    
     public void llenarTbl_List() throws SQLException{
         int fila=tablaProds.getSelectedRow();
         if(fila<0){
@@ -699,7 +685,7 @@ public class Vendedor extends javax.swing.JFrame {
                         }
                         JOptionPane.showMessageDialog(this, "Venta procesada","Aviso",JOptionPane.INFORMATION_MESSAGE);  
                         limpiarLista();
-                        tablas.tablaProdVend(model);
+                        this.tablaProds.setModel(tablas.tablaProdVend(model, ""));
                     } else{
                         JOptionPane.showMessageDialog(this, "Venta cancelada","Aviso",JOptionPane.INFORMATION_MESSAGE);       
                     }
@@ -767,6 +753,8 @@ public class Vendedor extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cb_filtro;
     private javax.swing.JCheckBox chbx_lugar;
     private javax.swing.JCheckBox chbx_mayoreo;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;

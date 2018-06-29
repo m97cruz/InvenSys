@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-06-2018 a las 23:17:47
+-- Tiempo de generación: 29-06-2018 a las 02:35:23
 -- Versión del servidor: 10.1.21-MariaDB
 -- Versión de PHP: 5.6.30
 
@@ -23,6 +23,30 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `compras`
+--
+
+CREATE TABLE `compras` (
+  `id` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `producto` varchar(255) NOT NULL,
+  `proveedor` varchar(255) NOT NULL,
+  `pre_compra` decimal(10,2) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `precio` decimal(11,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `compras`
+--
+
+INSERT INTO `compras` (`id`, `fecha`, `producto`, `proveedor`, `pre_compra`, `cantidad`, `precio`) VALUES
+(1, '2018-06-18', 'Martillo', 'Distribuidora Lopez', '6.50', 3, '19.50'),
+(2, '2018-06-17', 'Alicates', 'Proveedor Dominic', '5.00', 5, '25.00');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `marcas`
 --
 
@@ -37,7 +61,8 @@ CREATE TABLE `marcas` (
 
 INSERT INTO `marcas` (`id`, `marca`) VALUES
 (1, 'IMACASA'),
-(2, 'PRETUL');
+(2, 'PRETUL'),
+(3, 'Marca 01');
 
 -- --------------------------------------------------------
 
@@ -68,10 +93,13 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`codigo`, `nombre`, `pre_compra`, `pre_venta`, `pre_pack`, `cant_pack`, `local_cant`, `bodega_cant`, `repo`, `porce_gan`, `marca`, `proveedor1`, `proveedor2`, `proveedor3`, `proveedor4`) VALUES
-(1, 'Martillo', '6.00', '7.50', '0.00', 0, 5, 0, 3, 0, 2, 1, 0, 0, 0),
-(2, 'Destornillador', '3.00', '3.30', '0.00', 0, 7, 4, 3, 10, 1, 1, 0, 0, 0),
-(5, 'lb Clavos de 2\"', '1.50', '2.00', '0.00', 0, 25, 25, 12, 0, 0, 1, 0, 0, 0),
-(6, 'Alicates', '4.00', '4.80', '4.00', 5, 7, 5, 3, 20, 2, 1, 0, 0, 0);
+(1, 'Martillo', '6.00', '7.50', '0.00', 0, 10, 10, 3, 0, 1, 0, 0, 0, 0),
+(2, 'Destornillador', '3.00', '3.30', '0.00', 0, 3, 5, 1, 10, 3, 0, 4, 0, 0),
+(6, 'Alicates', '4.00', '4.80', '4.00', 5, 2, 10, 3, 20, 2, 2, 0, 0, 0),
+(7, 'Destornillador', '3.00', '3.30', '0.00', 0, 7, 10, 1, 10, 2, 2, 0, 0, 0),
+(8, 'Cuchara De Construccion', '6.00', '7.14', '0.00', 0, 0, 24, 4, 19, 1, 1, 0, 0, 0),
+(9, 'Alambre de Amarre', '0.50', '0.75', '0.00', 0, 6, 10, 4, 50, 0, 2, 4, 0, 0),
+(10, 'Libra de clavos 2\"', '0.50', '0.75', '0.00', 0, 5, 14, 8, 48, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -83,21 +111,12 @@ CREATE TABLE `prod_solicita` (
   `cod_prod` int(11) NOT NULL,
   `prod_nombre` varchar(255) NOT NULL,
   `marca` varchar(60) NOT NULL,
+  `provs` varchar(255) NOT NULL,
   `origen` varchar(10) NOT NULL,
   `destino` varchar(10) NOT NULL,
   `cantidad` int(11) NOT NULL,
   `precio` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `prod_solicita`
---
-
-INSERT INTO `prod_solicita` (`cod_prod`, `prod_nombre`, `marca`, `origen`, `destino`, `cantidad`, `precio`) VALUES
-(1, 'Martillo', '', 'Proveedor', 'Bodega', 7, '6.00'),
-(2, 'Destornillador', '', 'Bodega', 'Local', 3, '3.00'),
-(5, 'lb Clavos de 2\"', '---', 'Proveedor', 'Bodega', 5, '1.50'),
-(1, 'Martillo', 'PRETUL', 'Bodega', 'Local', 4, '6.00');
 
 -- --------------------------------------------------------
 
@@ -108,6 +127,7 @@ INSERT INTO `prod_solicita` (`cod_prod`, `prod_nombre`, `marca`, `origen`, `dest
 CREATE TABLE `proveedores` (
   `id` int(11) NOT NULL,
   `prov_nombre` varchar(200) NOT NULL,
+  `encargado` varchar(75) NOT NULL,
   `telefono` varchar(15) NOT NULL,
   `direccion` varchar(200) NOT NULL,
   `correo` varchar(110) NOT NULL
@@ -117,8 +137,9 @@ CREATE TABLE `proveedores` (
 -- Volcado de datos para la tabla `proveedores`
 --
 
-INSERT INTO `proveedores` (`id`, `prov_nombre`, `telefono`, `direccion`, `correo`) VALUES
-(1, 'Distribuidora Lopez', '75689400', 'San Miguel', 'dLopes@mail.com');
+INSERT INTO `proveedores` (`id`, `prov_nombre`, `encargado`, `telefono`, `direccion`, `correo`) VALUES
+(2, 'Distribuidora Marquez', 'Milena Guzman', '76543344', 'San Salvador', 'distmarq@mail.com'),
+(4, 'Industrias Ferreira', 'Samuel Bercian', '7890-9988', 'San Salvador', 'induferreira@mail.com');
 
 -- --------------------------------------------------------
 
@@ -146,9 +167,51 @@ INSERT INTO `usuarios` (`id`, `usuario`, `nombre`, `passwd`, `rol`, `apellido`, 
 (1, 'admin', 'Administrador - ROOT', 'admin', 'ADMIN', '', '', '', ''),
 (2, 'Vendedor 1', 'Vendedor - Prueba', '1234', 'NORMAL', '', '', '', '');
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ventas`
+--
+
+CREATE TABLE `ventas` (
+  `id` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `producto` varchar(255) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `total` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `ventas`
+--
+
+INSERT INTO `ventas` (`id`, `fecha`, `producto`, `cantidad`, `total`) VALUES
+(1, '2018-06-16', 'Martillo', 3, 22.5),
+(2, '2018-06-16', 'Destornillador', 5, 16.5),
+(3, '2018-06-16', 'lb Clavos de 2\"', 145, 145),
+(4, '2018-06-17', 'Martillo', 2, 14.5),
+(5, '2018-06-17', 'Destornillador', 22, 71.8),
+(6, '2018-06-18', 'lb Clavos de 2\"', 3, 6),
+(7, '2018-06-18', 'Alicates', 2, 9.6),
+(8, '2018-06-17', 'lb Clavos de 2\"', 35, 53),
+(9, '2018-06-17', 'clavo de acero libra', 9, 10.5),
+(10, '2018-06-17', 'Alicates', 4, 16.8),
+(11, '2018-06-18', 'Cuchara De Construccion', 11, 78.14),
+(12, '2018-06-18', 'Destornillador', 3, 9.9),
+(13, '2018-06-18', 'Libra de clavos 2\"', 2, 1.5),
+(14, '2018-06-18', 'Martillo', 1, 7.5),
+(15, '2018-06-19', 'Destornillador', 2, 6.6),
+(16, '2018-06-19', 'Cuchara De Construccion', 1, 7.14);
+
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `compras`
+--
+ALTER TABLE `compras`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `marcas`
@@ -176,29 +239,45 @@ ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `ventas`
+--
+ALTER TABLE `ventas`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
+-- AUTO_INCREMENT de la tabla `compras`
+--
+ALTER TABLE `compras`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
 -- AUTO_INCREMENT de la tabla `marcas`
 --
 ALTER TABLE `marcas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT de la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT de la tabla `ventas`
+--
+ALTER TABLE `ventas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

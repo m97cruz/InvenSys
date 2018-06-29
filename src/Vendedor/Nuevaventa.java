@@ -20,18 +20,11 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.input.KeyCode;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import javax.swing.text.MaskFormatter;
-import javax.swing.text.NumberFormatter;
 
 /**
  *
@@ -56,7 +49,7 @@ public class Nuevaventa extends javax.swing.JFrame {
         this.txf_buscar.requestFocus();
         model=(DefaultTableModel) Nuevaventa.tablaProds.getModel();
         
-        tablas.tablaProdVend(model);
+        this.tablaProds.setModel(tablas.tablaProdVend(model, ""));
     }
 
     /**
@@ -490,7 +483,7 @@ public class Nuevaventa extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         try {
             // TODO add your handling code here:
-            tablas.tablaProdVend(model);
+            this.tablaProds.setModel(tablas.tablaProdVend(model, ""));
         } catch (SQLException ex) {
             Logger.getLogger(Nuevaventa.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -540,9 +533,12 @@ public class Nuevaventa extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_nVentaActionPerformed
 
     private void txf_buscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txf_buscarKeyPressed
-         // TODO add your handling code here:
          if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            this.tablaProds.requestFocus();
+             try {
+                 this.tablaProds.setModel(tablas.tablaProdVend(model, txf_buscar.getText()));
+             } catch (SQLException ex) {
+                 Logger.getLogger(Nuevaventa.class.getName()).log(Level.SEVERE, null, ex);
+             }
         }
     }//GEN-LAST:event_txf_buscarKeyPressed
 
@@ -690,7 +686,7 @@ public class Nuevaventa extends javax.swing.JFrame {
                         }
                         JOptionPane.showMessageDialog(this, "Venta procesada","Aviso",JOptionPane.INFORMATION_MESSAGE);  
                         limpiarLista();
-                        tablas.tablaProdVend(model);
+                        this.tablaProds.setModel(tablas.tablaProdVend(model, ""));
                     } else{
                         JOptionPane.showMessageDialog(this, "Venta cancelada","Aviso",JOptionPane.INFORMATION_MESSAGE);       
                     }

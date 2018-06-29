@@ -103,7 +103,7 @@
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="btnDelProd" max="32767" attributes="0"/>
                                   <Component id="btnModProd" max="32767" attributes="0"/>
-                                  <Component id="btnAddProd" alignment="0" min="-2" pref="125" max="-2" attributes="0"/>
+                                  <Component id="btnAddProd" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
@@ -112,6 +112,10 @@
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="tfFindProd" min="-2" pref="182" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="btnFindProd" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="btnProdSolicita" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -130,6 +134,8 @@
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="tfFindProd" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnProdSolicita" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnFindProd" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButton2" alignment="0" min="-2" pref="25" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="294" max="-2" attributes="0"/>
@@ -145,7 +151,7 @@
                   </Group>
                   <Component id="jPanel3" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace pref="28" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -234,7 +240,9 @@
     </Component>
     <Component class="javax.swing.JTextField" name="tfFindProd">
       <Events>
+        <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="tfFindProdCaretUpdate"/>
         <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfFindProdKeyTyped"/>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfFindProdKeyPressed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnProdSolicita">
@@ -412,5 +420,23 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="btnFindProd">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Buscar"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFindProdActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButton2">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/Imagenes/iconos/update.png"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>
