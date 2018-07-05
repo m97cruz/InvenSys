@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  * @author mcruz
@@ -20,9 +21,6 @@ public class SQL_fun {
             com.mysql.jdbc.Connection cn = (com.mysql.jdbc.Connection) conex.conn();
             com.mysql.jdbc.PreparedStatement pst = (com.mysql.jdbc.PreparedStatement) cn.prepareStatement(sql);
             pst.executeUpdate();
-            
-            System.out.println("SQL: "+sql);
-            System.out.println("Retorna: True");
             return true;
         } catch (Exception e) {
             System.out.println("Error: "+e);

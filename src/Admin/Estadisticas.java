@@ -69,7 +69,6 @@ public class Estadisticas extends javax.swing.JFrame {
         lbl_filtrar = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jProgressBar1 = new javax.swing.JProgressBar();
         btnCerrar = new javax.swing.JButton();
         cbx_mes1 = new javax.swing.JComboBox<>();
         cbx_mes2 = new javax.swing.JComboBox<>();
@@ -82,6 +81,7 @@ public class Estadisticas extends javax.swing.JFrame {
         btnRefreshTablas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Estadisticas de Compras y Ventas");
         setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         tb_compras.setModel(new javax.swing.table.DefaultTableModel(
@@ -135,13 +135,13 @@ public class Estadisticas extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Resumen", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
 
         lblInversion.setFont(getFont());
-        lblInversion.setText("Inversión total: $200");
+        lblInversion.setText("Inversión total: $");
 
         lbl_totalventas.setFont(getFont());
-        lbl_totalventas.setText("Ventas Totales: $310");
+        lbl_totalventas.setText("Ventas Totales: $");
 
         lblGanancia.setFont(getFont());
-        lblGanancia.setText("Ganancias: $110");
+        lblGanancia.setText("Ganancias: $");
 
         lbl_filtrar.setFont(getFont());
         lbl_filtrar.setText("Filtrar Por Fechas:");
@@ -151,9 +151,6 @@ public class Estadisticas extends javax.swing.JFrame {
 
         jLabel8.setFont(getFont());
         jLabel8.setText("A:");
-
-        jProgressBar1.setFont(getFont());
-        jProgressBar1.setValue(20);
 
         btnCerrar.setFont(getFont());
         btnCerrar.setText("Cerrar");
@@ -211,7 +208,6 @@ public class Estadisticas extends javax.swing.JFrame {
                         .addComponent(cbx_dia2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbx_mes2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblGanancia)
                     .addComponent(lblInversion)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -220,12 +216,11 @@ public class Estadisticas extends javax.swing.JFrame {
                         .addComponent(cbx_dia1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbx_mes1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(btnFiltrarFecha)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(btnRefreshTablas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(lbl_totalventas, javax.swing.GroupLayout.Alignment.LEADING)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnFiltrarFecha)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnRefreshTablas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lbl_totalventas))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cbx_anio2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -272,9 +267,7 @@ public class Estadisticas extends javax.swing.JFrame {
                 .addComponent(lblInversion)
                 .addGap(18, 18, 18)
                 .addComponent(lblGanancia)
-                .addGap(27, 27, 27)
-                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48)
+                .addGap(89, 89, 89)
                 .addComponent(btnCerrar)
                 .addContainerGap())
         );
@@ -457,7 +450,6 @@ public class Estadisticas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblGanancia;

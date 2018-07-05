@@ -70,16 +70,19 @@ public class Vendedor extends javax.swing.JFrame {
         lbl_cambio = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        btnCerrar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Ventas");
         setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        setUndecorated(true);
         setResizable(false);
 
         lbl_search.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -251,6 +254,20 @@ public class Vendedor extends javax.swing.JFrame {
         });
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/update.png"))); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        btnCerrar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnCerrar.setText("?");
+        btnCerrar.setToolTipText("");
+        btnCerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarActionPerformed(evt);
+            }
+        });
 
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/icon_list.png"))); // NOI18N
         jMenu1.setText("Opciones");
@@ -293,6 +310,15 @@ public class Vendedor extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem4);
 
+        jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        jMenuItem5.setText("Ayuda");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem5);
+
         jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
@@ -314,6 +340,8 @@ public class Vendedor extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(lbl_lista)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnCerrar)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(btn_limpiar))
                                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 942, Short.MAX_VALUE))
@@ -345,7 +373,7 @@ public class Vendedor extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
             .addGroup(layout.createSequentialGroup()
-                .addGap(312, 312, 312)
+                .addGap(372, 372, 372)
                 .addComponent(btn_remove)
                 .addGap(18, 18, 18)
                 .addComponent(btn_add)
@@ -375,7 +403,8 @@ public class Vendedor extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_lista)
-                    .addComponent(btn_limpiar))
+                    .addComponent(btn_limpiar)
+                    .addComponent(btnCerrar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -501,14 +530,14 @@ public class Vendedor extends javax.swing.JFrame {
     }//GEN-LAST:event_jt_efectivoKeyPressed
 
     private void btn_nVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nVentaActionPerformed
-//        try {
-//            Nuevaventa f = new Nuevaventa();
-//            f.setVisible(true);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (ParseException ex) {
-//            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        try {
+            Nuevaventa f = new Nuevaventa();
+            f.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_nVentaActionPerformed
 
     private void txf_buscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txf_buscarKeyPressed
@@ -529,6 +558,25 @@ public class Vendedor extends javax.swing.JFrame {
                  Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
              }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            tablaProds.setModel(tablas.tablaProdVend(model, ""));
+        } catch (SQLException ex) {
+            Logger.getLogger(Vendedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
+        Info f = new Info();
+        f.setVisible(true);
+        
+    }//GEN-LAST:event_btnCerrarActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        Info f = new Info();
+        f.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
     
     
     //------------------------------------Metodo Llenar Lista-------------------------------------------------//
@@ -748,6 +796,7 @@ public class Vendedor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btn_add;
     private javax.swing.JButton btn_limpiar;
     private javax.swing.JButton btn_nVenta;
@@ -761,6 +810,7 @@ public class Vendedor extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jt_efectivo;

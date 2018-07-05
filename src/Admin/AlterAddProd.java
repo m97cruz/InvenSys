@@ -27,7 +27,7 @@ public class AlterAddProd extends javax.swing.JFrame {
     Funciones.Usuarios usuarios = new Funciones.Usuarios();
     Funciones.Productos aProd = new Funciones.Productos();
     Funciones.Tablas tablas = new Funciones.Tablas();
-    DefaultTableModel model;
+    DefaultTableModel modelMarca, modelProv;
     Login login = new Login();
     public boolean insertMode;
     public int idProd;
@@ -57,24 +57,23 @@ public class AlterAddProd extends javax.swing.JFrame {
         FrameMarcas.setVisible(false);
         this.setLocationRelativeTo(null);
         
-        model = (DefaultTableModel) tablaProvLista.getModel();
-        tablaProvLista.getColumnModel().getColumn(0).setMaxWidth(0); //Ocultar la Columna de ID
+        modelProv = (DefaultTableModel) this.tablaProvLista.getModel();
+        modelMarca = (DefaultTableModel) this.tablaMarcas.getModel();
+        
+        tablaProvLista.getColumnModel().getColumn(0).setMaxWidth(50); //Ocultar la Columna de ID
         
         if(insertMode){
             lblCodigo.setText("Codigo: --Nuevo Registro--");
-            model = (DefaultTableModel) tablaMarcas.getModel();
-            tablaMarcas.setModel(aProd.llenarMarcas(model));
-            this.tablaProvLista.setModel(aProd.llenarProvs_(model));
+            
+            tablaMarcas.setModel(aProd.llenarMarcas(modelMarca));
+            this.tablaProvLista.setModel(aProd.llenarProvs_(modelProv, ""));
             
         }else{
             aProd.setCodigo(idProd);
             aProd.selectProd();
             llenarCampos();
-            model = (DefaultTableModel) tablaProvLista.getModel();
-            tablaProvLista.setModel(aProd.llenarProvs_(model));
-            model = (DefaultTableModel) tablaMarcas.getModel();
-            
-            tablaMarcas.setModel(aProd.llenarMarcas(model));
+            this.tablaProvLista.setModel(aProd.llenarProvs_(modelProv, ""));
+            this.tablaMarcas.setModel(aProd.llenarMarcas(modelMarca));
         }      
     }//</editor-fold>
 
@@ -138,6 +137,7 @@ public class AlterAddProd extends javax.swing.JFrame {
         lblDiferencia = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
+        FrameMarcas.setTitle("Seleccionar Marca");
         FrameMarcas.setMinimumSize(new java.awt.Dimension(429, 300));
 
         tablaMarcas.setModel(new javax.swing.table.DefaultTableModel(
@@ -166,8 +166,8 @@ public class AlterAddProd extends javax.swing.JFrame {
         }
 
         txtFindMarca.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtFindMarcaKeyTyped(evt);
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtFindMarcaKeyPressed(evt);
             }
         });
 
@@ -233,6 +233,7 @@ public class AlterAddProd extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Gestionar Producto");
         setUndecorated(true);
 
         lblCodigo.setText("Codigo:");
@@ -349,8 +350,8 @@ public class AlterAddProd extends javax.swing.JFrame {
         }
 
         txtProvFind.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtProvFindKeyTyped(evt);
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtProvFindKeyPressed(evt);
             }
         });
 
@@ -615,7 +616,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 237, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSaveModProd)
@@ -634,8 +635,8 @@ public class AlterAddProd extends javax.swing.JFrame {
                 btnMarca.setText("Seleccionar");
                 marka = false; //falso porque se elimina,... ya no hay proveedor 
             }else{
-                model = (DefaultTableModel) tablaMarcas.getModel();
-                tablaMarcas.setModel(aProd.llenarMarcas(model));
+                
+                tablaMarcas.setModel(aProd.llenarMarcas(modelMarca));
                 txtFindMarca.setText("");
                 this.FrameMarcas.setLocationRelativeTo(null);
                 this.FrameMarcas.setVisible(true);
@@ -782,20 +783,7 @@ public class AlterAddProd extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelModProdActionPerformed
     //</editor-fold>
     
-    //<editor-fold defaultstate="collapsed" desc="Evento KeyTyped para filtro de busqueda">
-    private void txtProvFindKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProvFindKeyTyped
-         // TODO add your handling code here:
-         txtProvFind.addKeyListener(new KeyAdapter() {
-        public void keyReleased(final KeyEvent e){
-            txtProvFind.setText(txtProvFind.getText());
-            repaint();
-            filtro.setRowFilter(RowFilter.regexFilter(txtProvFind.getText().trim(),1));
-        }
-        });
-        filtro = new TableRowSorter(this.tablaProvLista.getModel());
-        this.tablaProvLista.setRowSorter(filtro);
-    }//GEN-LAST:event_txtProvFindKeyTyped
-    //</editor-fold>
+   //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="(Botones)Metodos para Seleccionar Proveedores">
     private void btnProv1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProv1ActionPerformed
@@ -811,8 +799,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                     
          }else{ //En caso de que no exista un Proveeedor Actualmente
              if(fila>=0){
-                 model = (DefaultTableModel) tablaProvLista.getModel();
-                 int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
+                 int id= Integer.valueOf(modelProv.getValueAt(fila, 0).toString());
                  aProd.setDbProv1(id);  //setear el id del Proveedor
                  p1=true; //true por que ahora se setea
                  try {
@@ -841,8 +828,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                     
          }else{ //En caso de que no exista un Proveeedor Actualmente
              if(fila>=0){
-                 model = (DefaultTableModel) tablaProvLista.getModel();
-                 int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
+                 int id= Integer.valueOf(modelProv.getValueAt(fila, 0).toString());
                  aProd.setDbProv2(id);  //setear el id del Proveedor
                  p2=true; //true por que ahora se setea
                  try {
@@ -870,8 +856,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                     
          }else{ //En caso de que no exista un Proveeedor Actualmente
              if(fila>=0){
-                 model = (DefaultTableModel) tablaProvLista.getModel();
-                 int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
+                 int id= Integer.valueOf(modelProv.getValueAt(fila, 0).toString());
                  aProd.setDbProv3(id);  //setear el id del Proveedor
                  p3=true; //true por que ahora se setea
                  try {
@@ -899,8 +884,8 @@ public class AlterAddProd extends javax.swing.JFrame {
                     
          }else{ //En caso de que no exista un Proveeedor Actualmente
              if(fila>=0){
-                 model = (DefaultTableModel) tablaProvLista.getModel();
-                 int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
+                 
+                 int id= Integer.valueOf(modelProv.getValueAt(fila, 0).toString());
                  aProd.setDbProv4(id);  //setear el id del Proveedor
                  p4=true; //true por que ahora se setea
                  try {
@@ -918,31 +903,19 @@ public class AlterAddProd extends javax.swing.JFrame {
     //</editor-fold>
     
     
-    private void txtFindMarcaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFindMarcaKeyTyped
-        txtFindMarca.addKeyListener(new KeyAdapter() {
-        public void keyReleased(final KeyEvent e){
-            txtFindMarca.setText(txtFindMarca.getText());
-            repaint();
-            filtro.setRowFilter(RowFilter.regexFilter(txtFindMarca.getText().trim(),1));
-        }
-        });
-        filtro = new TableRowSorter(this.tablaMarcas.getModel());
-        this.tablaMarcas.setRowSorter(filtro);
-    }//GEN-LAST:event_txtFindMarcaKeyTyped
-
     private void btnMarcaOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcaOkActionPerformed
          int fila = tablaMarcas.getSelectedRow();
          
              if(fila>=0){
-                 model = (DefaultTableModel) tablaMarcas.getModel();
-                 int id= Integer.parseInt(model.getValueAt(fila, 0).toString());
+                 
+                 int id= Integer.parseInt(modelMarca.getValueAt(fila, 0).toString());
+                 tablaMarcas.clearSelection();
                  try {
                     aProd.setMarcaDB(id);  //setear el id del Proveedor
                     marka=true; //true por que ahora se setea
                     btnMarca.setText("Quitar");
                  
                     lblMarca.setText(aProd.getMarcaNombre());
-                    tablaMarcas.clearSelection();
                     FrameMarcas.setVisible(false);
                  } catch (SQLException ex) {
                      Logger.getLogger(AlterAddProd.class.getName()).log(Level.SEVERE, null, ex);
@@ -950,7 +923,6 @@ public class AlterAddProd extends javax.swing.JFrame {
              }else{
                  JOptionPane.showMessageDialog(this.FrameMarcas, "Selecione una Marca de la lista");
              }
-             
          
     }//GEN-LAST:event_btnMarcaOkActionPerformed
 
@@ -964,12 +936,33 @@ public class AlterAddProd extends javax.swing.JFrame {
         if(!marca.equals("")){
             if(aProd.addMarca(marca)){
                 JOptionPane.showMessageDialog(this.FrameMarcas, "¡Marca Agregada!");
-                model = (DefaultTableModel) tablaMarcas.getModel();
+                tablaMarcas.setModel(modelMarca);
             }else{
                 JOptionPane.showMessageDialog(this.FrameMarcas, "No se Pudo Agregar la Marca");
             }
         }
     }//GEN-LAST:event_btnAddMarcaActionPerformed
+
+    private void txtFindMarcaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFindMarcaKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            try {   //Setear nuevamente el model al precionar el enter, capturando la busqueda;
+                tablaMarcas.setModel(tablas.Marcas(modelMarca, this.txtFindMarca.getText()));
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(AlterAddProd.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_txtFindMarcaKeyPressed
+
+    private void txtProvFindKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProvFindKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            try {
+                this.tablaProvLista.setModel(aProd.llenarProvs_(modelProv, txtProvFind.getText()));
+            } catch (SQLException ex) {
+                Logger.getLogger(Marcas.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_txtProvFindKeyPressed
     //</editor-fold>
     
     //-------------------------------Campos para -------------------------------------//
@@ -1043,7 +1036,7 @@ public class AlterAddProd extends javax.swing.JFrame {
             btnMarca.setText("Quitar");
         }else{
             marka=false;
-            lblMarca.setText("Marca: ");
+            lblMarca.setText("");
             btnMarca.setText("Seleccionar");
         }
     }

@@ -124,12 +124,9 @@ Funciones.Usuarios fUser = new Funciones.Usuarios();
                     vend.setVisible(true);
                     this.dispose();
                     break;
-                case "":
-                    JOptionPane.showMessageDialog(this, "El Usuario o la contraseña No Coincide en los registros del sistema");
-                    break;
             }
         }else{
-            JOptionPane.showMessageDialog(this, "El Usuario No Existe en el Sistema");
+            JOptionPane.showMessageDialog(this, "Usuario y Contaseña no Coinciden");
         }
     } catch (SQLException ex) {
         Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
