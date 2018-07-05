@@ -50,6 +50,7 @@ public class Administracion extends javax.swing.JFrame {
         tablaProd.getColumnModel().getColumn(5).setMaxWidth(80);
         tablaProd.getColumnModel().getColumn(4).setMaxWidth(80);
         tablaProd.getColumnModel().getColumn(2).setMaxWidth(80);
+        tablaProd.setDefaultRenderer(Object.class, new Render());
         this.setIconImage(new ImageIcon(getClass().getResource("../Imagenes/iconos/logo.png")).getImage());
     }
 
