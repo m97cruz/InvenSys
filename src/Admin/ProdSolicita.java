@@ -35,9 +35,9 @@ public class ProdSolicita extends javax.swing.JFrame {
         model = (DefaultTableModel) tablaProdSolicita.getModel();
         tablas.tablaProdSolicita(model);
         tablaProdSolicita.getColumnModel().getColumn(0).setMaxWidth(50);
-        tablaProdSolicita.getColumnModel().getColumn(7).setMaxWidth(100); tablaProdSolicita.getColumnModel().getColumn(7).setMinWidth(60);
-        tablaProdSolicita.getColumnModel().getColumn(6).setMaxWidth(60); 
-        tablaProdSolicita.getColumnModel().getColumn(5).setMaxWidth(70); 
+        tablaProdSolicita.getColumnModel().getColumn(7).setMaxWidth(90); tablaProdSolicita.getColumnModel().getColumn(7).setMinWidth(60);
+        tablaProdSolicita.getColumnModel().getColumn(6).setMaxWidth(100);
+        tablaProdSolicita.getColumnModel().getColumn(5).setMaxWidth(70);
         tablaProdSolicita.getColumnModel().getColumn(4).setMaxWidth(80);
         tablaProdSolicita.getColumnModel().getColumn(2).setMaxWidth(100);
     }
@@ -63,11 +63,11 @@ public class ProdSolicita extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Codigo", "Nombre", "Marca", "Proveedor", "Origen", "Destino", "Cantidad", "Total $"
+                "Codigo", "Nombre", "Marca", "Proveedor", "Origen", "Destino", "Precio (U)", "Cantidad", "Total $"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -102,16 +102,18 @@ public class ProdSolicita extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnProdRecibido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnCancelSoli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 730, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 871, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jButton3)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnCancelSoli))
+                            .addComponent(btnProdRecibido, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -124,7 +126,7 @@ public class ProdSolicita extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelSoli)
                     .addComponent(jButton3))
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -140,7 +142,7 @@ public class ProdSolicita extends javax.swing.JFrame {
                 aProd.setCodigo(idReg);
                 String destino = model.getValueAt(tablaProdSolicita.getSelectedRow(), 5).toString();
                try {
-                    aProd.rmovSoliProc(destino);
+                    aProd.rmovSoliProc(destino, model.getValueAt(fila, 3).toString());
                     model = (DefaultTableModel) tablaProdSolicita.getModel();
                     tablas.tablaProdSolicita(model);
                 } catch (SQLException ex) {
@@ -161,17 +163,16 @@ public class ProdSolicita extends javax.swing.JFrame {
             int conf = JOptionPane.showConfirmDialog(this, "Al Confirmar esta Acción, \nse sumará la solicitud a las existencias del producto.\n¿Confirmar?");
             mensaje="";
             if (conf == 0){
-                model = (DefaultTableModel) tablaProdSolicita.getModel();
+                
                 int idReg = Integer.parseInt(model.getValueAt(fila, 0).toString());
                 aProd.setCodigo(idReg);
                 
-                String destino = model.getValueAt(tablaProdSolicita.getSelectedRow(), 5).toString();
+                String destino = model.getValueAt(fila, 5).toString();
                 
                try {
                     aProd.selectProd();
-                    aProd.confirmPedido(destino);
-                    model = (DefaultTableModel) tablaProdSolicita.getModel();
-                    tablas.tablaProdSolicita(model);
+                    aProd.confirmPedido(destino, model.getValueAt(fila, 3).toString());
+                    tablaProdSolicita.setModel(tablas.tablaProdSolicita(model));
                     if(!mensaje.equals("")){
                         JOptionPane.showMessageDialog(this, mensaje);
                     }

@@ -14,10 +14,11 @@ import java.sql.SQLException;
  */
 public class Vendedor_ {
     int id;
-    String fecha;
-    String producto;
-    String lugar;
+    String fecha, producto, lugar, sql;
+    ResultSet rs;
+    DBControl.SQL_fun SQL_fun = new DBControl.SQL_fun();
 
+    //<editor-fold defaultstate="collapsed" desc="Getters y Setters">
     public String getLugar() {
         return lugar;
     }
@@ -28,7 +29,7 @@ public class Vendedor_ {
     int cantidad;
     float total=0.00f;
     
-    DBControl.SQL_fun SQL_fun = new DBControl.SQL_fun();
+    
     
     public int getId() {
         return id;
@@ -69,10 +70,10 @@ public class Vendedor_ {
     public void setTotal(float total) {
         this.total = total;
     }
+    //</editor-fold>
     
-    public void procesarVenta() throws SQLException{
-        String sql="";
-        ResultSet rs=null;
+    
+    public boolean procesarVenta() throws SQLException{
         int canActu=0;
         float totalActu= 0.00f;
         //determinar si este producto ya fue registrado en esta fecha
@@ -81,6 +82,7 @@ public class Vendedor_ {
         if(rs.next()){
             //Si ya hay un registro para este fecha se procedera a actualizarse
             System.out.println("Si existe");
+            
             canActu=rs.getInt("cantidad");
             totalActu=rs.getInt("total");
             canActu+=cantidad;
@@ -95,6 +97,11 @@ public class Vendedor_ {
         }
         //Se procede ha hacer la debida actualizacion del inventario de productos;
         
+        if(lugar.equalsIgnoreCase("Local")){
+            lugar="local_cant";
+        }else{
+            lugar="bodega_cant";
+        }
         
         sql="SELECT "+lugar+" from productos WHERE codigo="+id;
         rs=SQL_fun.select(sql);
@@ -103,6 +110,6 @@ public class Vendedor_ {
         }
         canActu-=cantidad;//hacer la deduccion del inventario
         sql="UPDATE productos SET "+lugar+"="+canActu+" WHERE codigo="+id;
-        SQL_fun.ExecSQL(sql);
+        return SQL_fun.ExecSQL(sql);
     }
 }

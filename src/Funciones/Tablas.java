@@ -5,7 +5,6 @@
  */
 package Funciones;
 
-import Admin.Administracion;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
@@ -19,13 +18,16 @@ import javax.swing.table.DefaultTableModel;
 /*
 */
 public class Tablas {
+    
+    //Utilzando el index de la columna devuelta por la busqueda en el SELECTs, para optimizar, omitiendo que compare nombres
+    
     DBControl.SQL_fun funcion = new DBControl.SQL_fun();
     Funciones.Productos aProd = new Funciones.Productos();
     String sql="";
     ResultSet rs;
     //<editor-fold defaultstate="collapsed" desc="Tablas para Listar Productos">
     public DefaultTableModel adminTablaProductos(DefaultTableModel model, String cadena) throws SQLException{
-        model.setRowCount(0); //Reinicia el Contador de Filas
+        model.setRowCount(0); //Reinicia el Contador de Filas(reiniciar la tabla)
         
         if(cadena.equals("")){
             sql ="SELECT * FROM productos"; 
@@ -88,7 +90,7 @@ public class Tablas {
         sql = "SELECT * FROM prod_solicita";
         model.setRowCount(0);
         rs=funcion.select(sql);
-        String datos[] = new String[8];
+        String datos[] = new String[9];
         while(rs.next()){
             datos[0] = rs.getString(1);
             datos[1] = rs.getString(2);
@@ -98,6 +100,7 @@ public class Tablas {
             datos[5] = rs.getString(6);
             datos[6] = rs.getString(7);
             datos[7] = rs.getString(8);
+            datos[8] = rs.getString(9);
             model.addRow(datos);
         }
         return model;

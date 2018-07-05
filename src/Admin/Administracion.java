@@ -27,6 +27,7 @@ public class Administracion extends javax.swing.JFrame {
     public static boolean insertMode, filtrado=false;
     public static int idProd;
     TableRowSorter filtro;
+    int fila;
     
     //Variables para Realizar los procedimientos:
     float precioCompra, precioVenta, ganancia;
@@ -62,6 +63,15 @@ public class Administracion extends javax.swing.JFrame {
     private void initComponents() {
 
         gRBSolicita = new javax.swing.ButtonGroup();
+        frameSolicitaProd = new javax.swing.JFrame();
+        btnSoliProd = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblSelectProv = new javax.swing.JTable();
+        btnCancelProvSoli = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        tf_preCompra = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jScrollPane1 = new javax.swing.JScrollPane();
         jLabel2 = new javax.swing.JLabel();
         tfFindProd = new javax.swing.JTextField();
@@ -88,6 +98,94 @@ public class Administracion extends javax.swing.JFrame {
         optUsuarios = new javax.swing.JMenuItem();
         optProveedores = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
+
+        btnSoliProd.setText("Solicitar");
+        btnSoliProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSoliProdActionPerformed(evt);
+            }
+        });
+
+        tblSelectProv.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Codigo", "Proveedor"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tblSelectProv);
+
+        btnCancelProvSoli.setText("Cancelar");
+        btnCancelProvSoli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelProvSoliActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Precio de Compra:");
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(3);
+        jTextArea1.setText("*El Precio de Compra ha sido seleccionado automáticamente.\n si el precio de compra a este proveedor es diferente, \npuede ajustar al precio correcto");
+        jScrollPane3.setViewportView(jTextArea1);
+
+        javax.swing.GroupLayout frameSolicitaProdLayout = new javax.swing.GroupLayout(frameSolicitaProd.getContentPane());
+        frameSolicitaProd.getContentPane().setLayout(frameSolicitaProdLayout);
+        frameSolicitaProdLayout.setHorizontalGroup(
+            frameSolicitaProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(frameSolicitaProdLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(frameSolicitaProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, frameSolicitaProdLayout.createSequentialGroup()
+                        .addComponent(jScrollPane2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(frameSolicitaProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnCancelProvSoli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnSoliProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(frameSolicitaProdLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tf_preCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(frameSolicitaProdLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        frameSolicitaProdLayout.setVerticalGroup(
+            frameSolicitaProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(frameSolicitaProdLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(frameSolicitaProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(tf_preCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(frameSolicitaProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(frameSolicitaProdLayout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addComponent(btnSoliProd)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCancelProvSoli))
+                    .addGroup(frameSolicitaProdLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3)
+                .addContainerGap())
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Panel de Administracion");
@@ -351,12 +449,13 @@ public class Administracion extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(tfFindProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnProdSolicita)
-                    .addComponent(btnFindProd)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(tfFindProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnProdSolicita)
+                        .addComponent(btnFindProd)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -379,48 +478,57 @@ public class Administracion extends javax.swing.JFrame {
     
     private void btnSolicitarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarProdActionPerformed
       
-        DefaultTableModel model = (DefaultTableModel) tablaProd.getModel();
-        int fila = tablaProd.getSelectedRow();
+        model = (DefaultTableModel) tablaProd.getModel();
+        fila = tablaProd.getSelectedRow();
         //Obtener el ID de Producto.
         if(fila>=0){
             
             aProd.setCodigo(Integer.valueOf(model.getValueAt(fila, 0).toString()));
             
-            int bodeCant = Integer.parseInt(model.getValueAt(fila, 8).toString());
-            int cant = Integer.parseInt(spinCantSolicita.getValue().toString());
             
-            String marca = model.getValueAt(fila, 2).toString();
-            String provs = model.getValueAt(fila, 3).toString();
-            
-            if(rbBo_Lo.isSelected()){
-                if(cant<=bodeCant){
-                    try {
-                        aProd.selectProd();
-                        if(aProd.solicitarProd("Bodega", "Local", cant, marca, provs)){
-                            JOptionPane.showMessageDialog(this, "Añadido a Solicitudes Pendientes.");
-                        }else{
-                            JOptionPane.showMessageDialog(this, "No se Pudo Añadir la Solicitud");
-                        }
-                    } catch (SQLException ex) {
-                        System.out.println(ex);
-                       Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }else{
-                    JOptionPane.showMessageDialog(this, "La cantidad de Productos Solicitada,\n Supera a las existencias en Bodega");
-                }           
-            }else if(rbPro_Bo.isSelected()){
+            if(Integer.valueOf(spinCantSolicita.getValue().toString()) < 1){
+                JOptionPane.showMessageDialog(this, "Aún no ha especificado una cantidad a solitar");
+            }else{
+                
+                int bodeCant = Integer.parseInt(model.getValueAt(fila, 8).toString());
+        int cant = Integer.parseInt(spinCantSolicita.getValue().toString());
+
+        String marca = model.getValueAt(fila, 2).toString();
+        String provs = model.getValueAt(fila, 3).toString();
+
+        if(rbBo_Lo.isSelected()){
+            if(cant<=bodeCant){
                 try {
-                    
                     aProd.selectProd();
-                    if(aProd.solicitarProd("Proveedor", "Bodega", cant, marca, provs)){
+                    if(aProd.solicitarProd("Bodega", "Local", cant, marca, provs, null)){
                         JOptionPane.showMessageDialog(this, "Añadido a Solicitudes Pendientes.");
+                        tablaProd.clearSelection();
+                        spinCantSolicita.setValue(0);
                     }else{
                         JOptionPane.showMessageDialog(this, "No se Pudo Añadir la Solicitud");
                     }
-                    
                 } catch (SQLException ex) {
-                    Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println(ex);
+                   Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }else{
+                JOptionPane.showMessageDialog(this, "La cantidad de Productos Solicitada,\n Supera a las existencias en Bodega");
+            }
+            
+        }else if(rbPro_Bo.isSelected()){ // Para solicitar de Proveedor  a Bodega
+            try {
+                aProd.selectProd();
+                tblSelectProv.setModel(aProd.getProvProd((DefaultTableModel) tblSelectProv.getModel()));
+                tf_preCompra.setText(String.valueOf(aProd.getPreCompra()));
+                frameSolicitaProd.setSize(585, 305);
+                frameSolicitaProd.setLocationRelativeTo(null);
+                frameSolicitaProd.setVisible(true);
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+                
             }
         }else{
             JOptionPane.showMessageDialog(this, "No ha Seleccionado ningun un Producto");
@@ -430,8 +538,7 @@ public class Administracion extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
         }
-        tablaProd.clearSelection();
-        spinCantSolicita.setValue(0);
+        
         
         
     }//GEN-LAST:event_btnSolicitarProdActionPerformed
@@ -485,7 +592,7 @@ public class Administracion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddProdActionPerformed
 
     private void btnModProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModProdActionPerformed
-        int fila = tablaProd.getSelectedRow();
+        fila = tablaProd.getSelectedRow();
         
         
         JOptionPane.showMessageDialog(this, "Fila: "+fila);
@@ -610,6 +717,42 @@ public class Administracion extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnFindProdActionPerformed
 
+    private void btnSoliProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSoliProdActionPerformed
+        int filaProv = tblSelectProv.getSelectedRow();
+
+        if(filaProv<0){ //Proveedro seleccionado
+            JOptionPane.showMessageDialog(frameSolicitaProd, "¡Seleccione un Proveedor!");
+
+        }else{
+            if(Float.valueOf(tf_preCompra.getText()) < 0.00f){ //Precio mayor que cero
+                JOptionPane.showConfirmDialog(frameSolicitaProd, "El Precio No puede ser menor o igual a $0.00");
+            }else{
+            try {
+                int cant = Integer.valueOf(spinCantSolicita.getValue().toString());
+                String marca = model.getValueAt(fila, 2).toString();
+                String prov = tblSelectProv.getModel().getValueAt(filaProv, 1).toString();
+                Float precio = Float.valueOf(tf_preCompra.getText());
+
+                if(aProd.solicitarProd("Proveedor", "Bodega", cant, marca, prov, precio)){
+                    JOptionPane.showMessageDialog(this, "Añadido a Solicitudes Pendientes.");
+                    tablaProd.clearSelection();
+                    spinCantSolicita.setValue(0);
+                }else{
+                    JOptionPane.showMessageDialog(this, "No se Pudo Añadir la Solicitud");
+                    tablaProd.clearSelection();
+                    spinCantSolicita.setValue(0);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            }
+        }
+    }//GEN-LAST:event_btnSoliProdActionPerformed
+
+    private void btnCancelProvSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelProvSoliActionPerformed
+        frameSolicitaProd.setVisible(false);
+    }//GEN-LAST:event_btnCancelProvSoliActionPerformed
+
     
     
     
@@ -667,17 +810,21 @@ public class Administracion extends javax.swing.JFrame {
 //<editor-fold desc="Declaracion de Variables">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddProd;
+    private javax.swing.JButton btnCancelProvSoli;
     private javax.swing.JButton btnDelProd;
     private javax.swing.JButton btnFindProd;
     private javax.swing.JButton btnModProd;
     private javax.swing.JButton btnProdSolicita;
+    private javax.swing.JButton btnSoliProd;
     private javax.swing.JButton btnSolicitarProd;
+    private javax.swing.JFrame frameSolicitaProd;
     private javax.swing.ButtonGroup gRBSolicita;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -686,6 +833,9 @@ public class Administracion extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenuItem optLogOut;
     private javax.swing.JMenuItem optProveedores;
     private javax.swing.JMenuItem optUsuarios;
@@ -693,7 +843,9 @@ public class Administracion extends javax.swing.JFrame {
     private javax.swing.JRadioButton rbPro_Bo;
     private javax.swing.JSpinner spinCantSolicita;
     public static final javax.swing.JTable tablaProd = new javax.swing.JTable();
+    private javax.swing.JTable tblSelectProv;
     private javax.swing.JTextField tfFindProd;
+    private javax.swing.JTextField tf_preCompra;
     // End of variables declaration//GEN-END:variables
 
     private void Solicitar() {

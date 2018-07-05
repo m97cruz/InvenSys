@@ -9,6 +9,7 @@ import Admin.ProdSolicita;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -351,24 +352,79 @@ public class Productos {
         }
         
         return model;
-    }  //</editor-fold>
+    }
+    
+    public DefaultTableModel getProvProd(DefaultTableModel model) throws SQLException{
+        model.setRowCount(0);
+        String datos[] = new String [2];
+        if(dbProv1>0){
+            sql ="SELECT id, prov_nombre FROM proveedores WHERE id="+dbProv1;
+            rs=funcion.select(sql);
+            while(rs.next()){
+                datos[0] = rs.getString(1);
+                datos[1] = rs.getString(2);
+                model.addRow(datos);
+            }
+        }
+        if(dbProv2>0){
+            sql ="SELECT id, prov_nombre FROM proveedores WHERE id="+dbProv2;
+            rs=funcion.select(sql);
+            while(rs.next()){
+                datos[0] = rs.getString(1);
+                datos[1] = rs.getString(2);
+                model.addRow(datos);
+            }
+        }
+        if(dbProv3>0){
+            sql ="SELECT id, prov_nombre FROM proveedores WHERE id="+dbProv3;
+            rs=funcion.select(sql);
+            while(rs.next()){
+                datos[0] = rs.getString(1);
+                datos[1] = rs.getString(2);
+                model.addRow(datos);
+            }
+        }
+        if(dbProv4>0){
+            sql ="SELECT id, prov_nombre FROM proveedores WHERE id="+dbProv4;
+            rs=funcion.select(sql);
+            while(rs.next()){
+                datos[0] = rs.getString(1);
+                datos[1] = rs.getString(2);
+                model.addRow(datos);
+            }
+        }
+        
+        return model;
+    }
+
+
+//</editor-fold>
        
     
     //--------------------------------//---------------------------//
     
     //<editor-fold defaultstate="collapsed" desc="Metodos para gestionar solicitud de Productos">
-    public boolean solicitarProd(String origen, String destino, int cant, String marcaSend, String provs) throws SQLException{
-        sql ="SELECT cantidad, precio FROM prod_solicita WHERE cod_prod="+codigo+" AND destino='"+destino+"';";
+    public boolean solicitarProd(String origen, String destino, int cant, String marcaSend, String provs, Float precioU) throws SQLException{
         
-        float total = preCompra*cant;
+        float total;
+        if(precioU == null){
+            total = preCompra*cant;
+            precioU=preCompra;
+            
+        }else{
+            total = precioU*cant;
+        }
+        sql ="SELECT cantidad, precio FROM prod_solicita WHERE cod_prod="+codigo+" AND destino='"+destino+"' AND provs='"+provs+"';";
         rs = funcion.select(sql);
         if (rs.next()){
             total= rs.getFloat(2)*(rs.getInt(1)+cant);
             sql = "UPDATE prod_solicita SET cantidad="+(rs.getInt(1)+cant)+", precio="+Float.valueOf(df.format(total))+" WHERE cod_prod="+codigo + " AND destino='"+destino+"'";
         }else{
-            sql="INSERT INTO prod_solicita VALUES("+codigo+", '"+nombre+"', '"+marcaSend+"', '"+provs+"', '"+origen+"', '"+destino+"', "+cant+", "+Float.valueOf(df.format(total))+")";
+            sql="INSERT INTO prod_solicita VALUES("+codigo+", '"+nombre+"', '"+marcaSend+"', '"+provs+"', '"+origen+"', '"+destino+"', "+precioU+", "+cant+", "+Float.valueOf(df.format(total))+")";
         }
+        
         return funcion.ExecSQL(sql);
+               
     }
     
     
@@ -381,21 +437,22 @@ public class Productos {
         return cont;
     }
     
-    public boolean rmovSoliProc(String destino) throws SQLException{
+    public boolean rmovSoliProc(String destino, String prov) throws SQLException{
         
-        sql = "DELETE FROM prod_solicita WHERE cod_prod="+codigo + " AND destino='"+destino+"'";
+        sql = "DELETE FROM prod_solicita WHERE cod_prod="+codigo + " AND destino='"+destino+"' AND provs='"+prov+"'";
         return funcion.ExecSQL(sql);
     }
     
-    public boolean confirmPedido(String destino) throws SQLException{ // Para cofirmar en Tabla Prod Solicita
+    public boolean confirmPedido(String destino, String provs) throws SQLException{ // Para cofirmar en Tabla Prod Solicita
         //Extraer la cantidad actual para luego sumarle
         boolean r=false;
         String sqlUpd = "";
-        int cantidad=0;
-        sql="SELECT cantidad FROM prod_solicita WHERE cod_prod="+codigo + " AND destino='"+destino+"'";
+        int cantidad=0; float total=0.00f;
+        sql="SELECT cantidad, precio FROM prod_solicita WHERE cod_prod="+codigo +" AND destino='"+destino+"' AND provs='"+provs+"'";
         rs = funcion.select(sql);
         while(rs.next()){
             cantidad = rs.getInt(1);
+            total = rs.getFloat(2);
         }
         
         //Determinar tipo de movimiento
@@ -405,7 +462,7 @@ public class Productos {
             if(bodegaCant>=cantidad){
                 sqlUpd="UPDATE productos SET local_cant="+(localCant+cantidad)+", bodega_cant="+(bodegaCant-cantidad) + " WHERE codigo="+codigo;
                 r = funcion.ExecSQL(sqlUpd);
-                rmovSoliProc(destino);
+                rmovSoliProc(destino, provs);
             }else{
                 ProdSolicita.mensaje="¡La Peticion Supera las Existencias en Bodega!";
             }
@@ -414,7 +471,20 @@ public class Productos {
             
             sqlUpd="UPDATE productos SET bodega_cant="+(bodegaCant+cantidad) + " WHERE codigo="+codigo;
             r=funcion.ExecSQL(sqlUpd);
-            rmovSoliProc(destino);
+            
+            //Vamo a Comprobar si en esta madre hay una compra de este mismo producto en este mismo dia
+            sql = "SELECT cantidad, precio FROM compras WHERE fecha='"+LocalDate.now().toString()+"' AND cod_prod="+codigo+" AND proveedor='"+provs+"'";
+            rs = funcion.select(sql);
+            if(!rs.next()){
+                sql="INSERT INTO compras VALUES(null, '"+(LocalDate.now().toString())+"', "+codigo+", '"+nombre+"', '"+provs+"', "+preCompra+", "+cantidad+", "+Float.valueOf(df.format(total))+");";
+
+            }else{
+                sql="UPDATE compras SET cantidad="+(rs.getInt(1)+cantidad)+", precio="+Float.valueOf(df.format(rs.getFloat(2)+total));
+                sql+=" WHERE fecha='"+LocalDate.now().toString()+"' AND cod_prod="+codigo+" AND proveedor='"+provs+"'";
+            }
+            rmovSoliProc(destino, provs);
+            
+            r = funcion.ExecSQL(sql);  
         }
         
         
@@ -441,5 +511,49 @@ public class Productos {
     }
     
     //</editor-fold>
+    
+    
+    //----------------------Esta madre de aca, va a ser para el Modulo del Vendedor ------------------------//
+    
+    public float getTotal(int cantidad, String tipo) throws SQLException{  //Solitica: la cantidad de Productos solicitados. Tipo: Mayoreo, Por Paquete, o Sin Descuento. por defecto es "Sin Descuento"
+        float total = 0.00f;
+        //Primero lo primero, Seleccionar el Producto despues haber seteado antes el ID del enttity class.....
+        this.selectProd();
+        
+        //Seleccionando Modo
+        switch(tipo.toLowerCase()){  //usar esta vaina con un slolo caracter para incrementear eficiencia
+            case "p": //Descuento por paquetes
+                if(cantPack>0){
+                    //aplicar precio por paquete unicamente a los paquetes formados
+                    int sobrante = cantidad % cantPack;
+                    
+                    if(sobrante==0){
+                        total=cantidad*prePack;
+                    } else{
+                        total=(cantidad-sobrante)*prePack;
+                        total+=sobrante*preVenta;
+                    }
+                }else{
+                    total= cantidad*preVenta;
+                }
+                break;
+                
+            case "m": //Precio de mayoreo
+                if(cantPack>0){
+                    if(cantidad>=cantPack){
+                        total=cantidad*prePack;
+                    }else{
+                        total= cantidad*preVenta;
+                    } 
+                }else{
+                    total= cantidad*preVenta;
+                }
+                break;
+        }
+        
+       return total;
+    }
+    
+    
     
 }
