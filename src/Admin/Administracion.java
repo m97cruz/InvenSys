@@ -37,12 +37,9 @@ public class Administracion extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         model = (DefaultTableModel) this.tablaProd.getModel();
         tablaProd.setModel(tablas.adminTablaProductos(model, ""));
-        
-        
         gRBSolicita.add(rbBo_Lo); gRBSolicita.add(rbPro_Bo);
         btnProdSolicita.setText("Solicitudes Pendientes("+aProd.getSoliCant()+")");
         tablaProd.clearSelection();
-        
         tablaProd.getColumnModel().getColumn(0).setMaxWidth(50);
         tablaProd.getColumnModel().getColumn(8).setMaxWidth(80);
         tablaProd.getColumnModel().getColumn(7).setMaxWidth(80);
@@ -193,17 +190,17 @@ public class Administracion extends javax.swing.JFrame {
 
         tablaProd.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Codigo", "Nombre", "Marca", "Proveedor", "Precio Compra", "Precio C/U", "Precio por Paquete", "Local Stock", "Bodega Stock"
+                "Codigo", "Nombre", "Marca", "Proveedor", "Precio Compra", "Precio C/U", "Precio por Paquete", "Local Stock", "Bodega Stock", "minRepo"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

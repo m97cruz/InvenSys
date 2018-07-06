@@ -35,7 +35,7 @@ public class Tablas {
             sql = "SELECT * FROM productos WHERE MATCH(nombre) AGAINST('"+cadena+"');";
         }
         
-        String[] datos = new String[9];
+        String[] datos = new String[10];
 
         rs = funcion.select(sql);
         if(!rs.isBeforeFirst()){
@@ -76,6 +76,7 @@ public class Tablas {
             
             datos[7] = rs.getString(7); //Stock de Local
             datos[8] = rs.getString(8); //Stock de Bodega
+            datos[9] = rs.getString(9); //Minimo de reposicionS
             model.addRow(datos);
         }
         return model;
