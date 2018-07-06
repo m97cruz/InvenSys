@@ -241,7 +241,7 @@ public class AlterAddProd extends javax.swing.JFrame {
         jLabel4.setText("*Nombre:");
 
         lblMarca.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblMarca.setText(" ");
+        lblMarca.setText("...");
 
         btnMarca.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         btnMarca.setText("Seleccionar");
@@ -585,7 +585,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                                     .addComponent(txtProdNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(lblMarca)
-                                        .addGap(18, 18, 18)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(btnMarca)))))
                         .addGap(0, 106, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -616,7 +616,7 @@ public class AlterAddProd extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 237, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSaveModProd)
