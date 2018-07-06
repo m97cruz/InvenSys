@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 29-06-2018 a las 07:10:57
+-- Tiempo de generación: 06-07-2018 a las 01:51:24
 -- Versión del servidor: 10.1.31-MariaDB
 -- Versión de PHP: 5.6.34
 
@@ -31,6 +31,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `compras` (
   `id` int(11) NOT NULL,
   `fecha` date NOT NULL,
+  `cod_prod` int(11) NOT NULL,
   `producto` varchar(255) NOT NULL,
   `proveedor` varchar(255) NOT NULL,
   `pre_compra` decimal(10,2) NOT NULL,
@@ -42,9 +43,11 @@ CREATE TABLE `compras` (
 -- Volcado de datos para la tabla `compras`
 --
 
-INSERT INTO `compras` (`id`, `fecha`, `producto`, `proveedor`, `pre_compra`, `cantidad`, `precio`) VALUES
-(1, '2018-06-18', 'Martillo', 'Distribuidora Lopez', '6.50', 3, '19.50'),
-(2, '2018-06-17', 'Alicates', 'Proveedor Dominic', '5.00', 5, '25.00');
+INSERT INTO `compras` (`id`, `fecha`, `cod_prod`, `producto`, `proveedor`, `pre_compra`, `cantidad`, `precio`) VALUES
+(1, '2018-06-18', 0, 'Martillo', 'Distribuidora Lopez', '6.50', 3, '19.50'),
+(2, '2018-06-17', 0, 'Alicates', 'Proveedor Dominic', '5.00', 5, '25.00'),
+(3, '2018-07-05', 7, 'Destornillador', 'Distribuidora Marquez', '3.00', 4, '12.00'),
+(4, '2018-07-05', 10, 'Libra de clavos 2\"', 'Boom Nena', '0.50', 3, '1.50');
 
 -- --------------------------------------------------------
 
@@ -66,7 +69,8 @@ INSERT INTO `marcas` (`id`, `marca`) VALUES
 (2, 'PRETUL'),
 (3, 'Marca 01'),
 (5, 'Marca'),
-(6, 'Marca 12');
+(6, 'Marca 12'),
+(7, 'Saionara');
 
 -- --------------------------------------------------------
 
@@ -97,13 +101,13 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`codigo`, `nombre`, `pre_compra`, `pre_venta`, `pre_pack`, `cant_pack`, `local_cant`, `bodega_cant`, `repo`, `porce_gan`, `marca`, `proveedor1`, `proveedor2`, `proveedor3`, `proveedor4`) VALUES
-(1, 'Martillo', '6.00', '7.50', '0.00', 0, 10, 10, 3, 0, 1, 0, 0, 0, 0),
-(2, 'Destornillador', '3.00', '3.30', '0.00', 0, 3, 5, 1, 10, 3, 0, 4, 0, 0),
-(6, 'Alicates', '4.00', '4.80', '4.00', 5, 2, 10, 3, 20, 2, 2, 0, 0, 0),
-(7, 'Destornillador', '3.00', '3.30', '0.00', 0, 7, 10, 1, 10, 2, 2, 0, 0, 0),
-(8, 'Cuchara De Construccion', '6.00', '7.14', '0.00', 0, 0, 24, 4, 19, 1, 1, 0, 0, 0),
-(9, 'Alambre de Amarre', '0.50', '0.75', '0.00', 0, 6, 10, 4, 50, 0, 2, 4, 0, 0),
-(10, 'Libra de clavos 2\"', '0.50', '0.75', '0.00', 0, 5, 14, 8, 48, 0, 0, 0, 0, 0);
+(1, 'Martillo', '6.00', '7.50', '0.00', 0, 9, 10, 3, 0, 1, 4, 0, 0, 0),
+(2, 'Destornillador', '3.00', '3.30', '0.00', 0, 6, 12, 1, 10, 3, 0, 4, 0, 0),
+(6, 'Alicates', '4.00', '4.80', '4.00', 5, 2, 12, 3, 20, 2, 2, 0, 0, 0),
+(7, 'Destornillador', '3.00', '3.30', '0.00', 0, 7, 22, 1, 10, 2, 2, 0, 0, 0),
+(8, 'Cuchara De Construccion', '6.00', '7.14', '0.00', 0, 2, 22, 4, 19, 1, 4, 0, 0, 0),
+(9, 'Alambre de Amarre', '0.50', '0.75', '0.00', 0, 7, 12, 4, 50, 0, 2, 4, 0, 0),
+(10, 'Libra de clavos 2\"', '0.50', '0.75', '0.60', 6, 12, 20, 8, 48, 7, 8, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -118,6 +122,7 @@ CREATE TABLE `prod_solicita` (
   `provs` varchar(255) NOT NULL,
   `origen` varchar(10) NOT NULL,
   `destino` varchar(10) NOT NULL,
+  `precio_u` decimal(10,2) NOT NULL,
   `cantidad` int(11) NOT NULL,
   `precio` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -143,7 +148,11 @@ CREATE TABLE `proveedores` (
 
 INSERT INTO `proveedores` (`id`, `prov_nombre`, `encargado`, `telefono`, `direccion`, `correo`) VALUES
 (2, 'Distribuidora Marquez', 'Milena Guzman', '76543344', 'San Salvador', 'distmarq@mail.com'),
-(4, 'Industrias Ferreira', 'Samuel Bercian', '7890-9988', 'San Salvador', 'induferreira@mail.com');
+(4, 'Industrias Ferreira', 'Samuel Bercian', '7890-9988', 'San Salvador', 'induferreira@mail.com'),
+(5, 'prov2', '', '', '', ''),
+(6, 'prov 3', '', '', '', ''),
+(7, 'proveedor a', '', '', '', ''),
+(8, 'Boom Nena', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -206,7 +215,10 @@ INSERT INTO `ventas` (`id`, `fecha`, `producto`, `cantidad`, `total`) VALUES
 (13, '2018-06-18', 'Libra de clavos 2\"', 2, 1.5),
 (14, '2018-06-18', 'Martillo', 1, 7.5),
 (15, '2018-06-19', 'Destornillador', 2, 6.6),
-(16, '2018-06-19', 'Cuchara De Construccion', 1, 7.14);
+(16, '2018-06-19', 'Cuchara De Construccion', 1, 7.14),
+(17, '2018-06-29', 'Libra de clavos 2\"', 5, 3.75),
+(18, '2018-07-01', 'Libra de clavos 2\"', 2, 1.5),
+(19, '2018-07-01', 'Martillo', 3, 21.5);
 
 --
 -- Índices para tablas volcadas
@@ -216,7 +228,8 @@ INSERT INTO `ventas` (`id`, `fecha`, `producto`, `cantidad`, `total`) VALUES
 -- Indices de la tabla `compras`
 --
 ALTER TABLE `compras`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cod_prod` (`cod_prod`);
 
 --
 -- Indices de la tabla `marcas`
@@ -238,6 +251,7 @@ ALTER TABLE `productos` ADD FULLTEXT KEY `NombreFullText` (`nombre`);
 --
 ALTER TABLE `proveedores`
   ADD PRIMARY KEY (`id`);
+ALTER TABLE `proveedores` ADD FULLTEXT KEY `prov_nombre` (`prov_nombre`);
 
 --
 -- Indices de la tabla `usuarios`
@@ -259,13 +273,13 @@ ALTER TABLE `ventas`
 -- AUTO_INCREMENT de la tabla `compras`
 --
 ALTER TABLE `compras`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `marcas`
 --
 ALTER TABLE `marcas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
@@ -277,7 +291,7 @@ ALTER TABLE `productos`
 -- AUTO_INCREMENT de la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
@@ -289,7 +303,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

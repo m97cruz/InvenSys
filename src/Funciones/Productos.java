@@ -340,9 +340,15 @@ public class Productos {
     }
     
     
-    public DefaultTableModel llenarProvs_(DefaultTableModel model) throws SQLException{
+    public DefaultTableModel llenarProvs_(DefaultTableModel model, String cadena) throws SQLException{
         model.setRowCount(0);
-        sql="SELECT id, prov_nombre FROM proveedores";
+        
+        if(cadena.equals("")){
+            sql ="SELECT id, prov_nombre FROM proveedores"; 
+        }else{
+            sql = "SELECT id, prov_nombre FROM proveedores WHERE MATCH(prov_nombre) AGAINST('"+cadena+"');";
+        }
+        
         rs=funcion.select(sql);
         String datos[] = new String[2];
         while(rs.next()){
@@ -417,8 +423,11 @@ public class Productos {
         sql ="SELECT cantidad, precio FROM prod_solicita WHERE cod_prod="+codigo+" AND destino='"+destino+"' AND provs='"+provs+"';";
         rs = funcion.select(sql);
         if (rs.next()){
-            total= rs.getFloat(2)*(rs.getInt(1)+cant);
-            sql = "UPDATE prod_solicita SET cantidad="+(rs.getInt(1)+cant)+", precio="+Float.valueOf(df.format(total))+" WHERE cod_prod="+codigo + " AND destino='"+destino+"'";
+            while(rs.next()){
+                total= rs.getFloat(2)*(rs.getInt(1)+cant);
+                sql = "UPDATE prod_solicita SET cantidad="+(rs.getInt(1)+cant)+", precio="+Float.valueOf(df.format(total))+" WHERE cod_prod="+codigo + " AND destino='"+destino+"'";
+            }
+            
         }else{
             sql="INSERT INTO prod_solicita VALUES("+codigo+", '"+nombre+"', '"+marcaSend+"', '"+provs+"', '"+origen+"', '"+destino+"', "+precioU+", "+cant+", "+Float.valueOf(df.format(total))+")";
         }
@@ -472,17 +481,19 @@ public class Productos {
             sqlUpd="UPDATE productos SET bodega_cant="+(bodegaCant+cantidad) + " WHERE codigo="+codigo;
             r=funcion.ExecSQL(sqlUpd);
             
-            //Vamo a Comprobar si en esta madre hay una compra de este mismo producto en este mismo dia
+            rmovSoliProc(destino, provs);
+            
+            //Vamo a Comprobar si ya existe una compra de este mismo producto en este mismo dia
             sql = "SELECT cantidad, precio FROM compras WHERE fecha='"+LocalDate.now().toString()+"' AND cod_prod="+codigo+" AND proveedor='"+provs+"'";
             rs = funcion.select(sql);
-            if(!rs.next()){
-                sql="INSERT INTO compras VALUES(null, '"+(LocalDate.now().toString())+"', "+codigo+", '"+nombre+"', '"+provs+"', "+preCompra+", "+cantidad+", "+Float.valueOf(df.format(total))+");";
+            sql="INSERT INTO compras VALUES(null, '"+(LocalDate.now().toString())+"', "+codigo+", '"+nombre+"', '"+provs+"', "+preCompra+", "+cantidad+", "+Float.valueOf(df.format(total))+");";
 
-            }else{
+            while(rs.next()){
                 sql="UPDATE compras SET cantidad="+(rs.getInt(1)+cantidad)+", precio="+Float.valueOf(df.format(rs.getFloat(2)+total));
                 sql+=" WHERE fecha='"+LocalDate.now().toString()+"' AND cod_prod="+codigo+" AND proveedor='"+provs+"'";
             }
-            rmovSoliProc(destino, provs);
+
+            
             
             r = funcion.ExecSQL(sql);  
         }

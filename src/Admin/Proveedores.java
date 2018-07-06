@@ -77,7 +77,6 @@ public class Proveedores extends javax.swing.JFrame {
         btnViewProds = new javax.swing.JButton();
 
         interModInsert.setMinimumSize(new java.awt.Dimension(300, 220));
-        interModInsert.setPreferredSize(new java.awt.Dimension(300, 240));
         interModInsert.setSize(new java.awt.Dimension(300, 235));
 
         jLabel3.setText("Nombre:");
@@ -217,25 +216,25 @@ public class Proveedores extends javax.swing.JFrame {
             prodVinculadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(prodVinculadosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 986, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, prodVinculadosLayout.createSequentialGroup()
-                .addContainerGap(371, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnDesvincular)
-                .addGap(42, 42, 42)
+                .addGap(79, 79, 79)
                 .addComponent(btnVincuRegresar)
-                .addGap(305, 305, 305))
+                .addGap(309, 309, 309))
         );
         prodVinculadosLayout.setVerticalGroup(
             prodVinculadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, prodVinculadosLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(prodVinculadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDesvincular)
-                    .addComponent(btnVincuRegresar))
-                .addGap(27, 27, 27))
+                .addGroup(prodVinculadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnVincuRegresar)
+                    .addComponent(btnDesvincular))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);

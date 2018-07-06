@@ -317,7 +317,7 @@ public class Administracion extends javax.swing.JFrame {
             }
         });
 
-        jButton13.setText("Ventas");
+        jButton13.setText("Estadisticas");
         jButton13.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton13ActionPerformed(evt);
@@ -518,7 +518,7 @@ public class Administracion extends javax.swing.JFrame {
                 aProd.selectProd();
                 tblSelectProv.setModel(aProd.getProvProd((DefaultTableModel) tblSelectProv.getModel()));
                 tf_preCompra.setText(String.valueOf(aProd.getPreCompra()));
-                frameSolicitaProd.setSize(585, 305);
+                frameSolicitaProd.setSize(585, 310);
                 frameSolicitaProd.setLocationRelativeTo(null);
                 frameSolicitaProd.setVisible(true);
 
@@ -592,12 +592,10 @@ public class Administracion extends javax.swing.JFrame {
     private void btnModProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModProdActionPerformed
         fila = tablaProd.getSelectedRow();
         
-        
-        JOptionPane.showMessageDialog(this, "Fila: "+fila);
         if(fila >=0){
             this.setIDProdTabla(fila);
             this.insertMode =false;
-            JOptionPane.showMessageDialog(this, "ID Prod: "+ idProd);
+            
             try {
             Admin.AlterAddProd frame = new Admin.AlterAddProd();
             frame.setVisible(true);
@@ -616,7 +614,13 @@ public class Administracion extends javax.swing.JFrame {
     
     
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        
+        try {
+            Usuarios f = new Usuarios();
+            f.setVisible(true);
+            this.dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Administracion.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
@@ -734,7 +738,9 @@ public class Administracion extends javax.swing.JFrame {
                 if(aProd.solicitarProd("Proveedor", "Bodega", cant, marca, prov, precio)){
                     JOptionPane.showMessageDialog(this, "Añadido a Solicitudes Pendientes.");
                     tablaProd.clearSelection();
+                    btnProdSolicita.setText("Solicitudes Pendientes("+aProd.getSoliCant()+")");
                     spinCantSolicita.setValue(0);
+                    
                 }else{
                     JOptionPane.showMessageDialog(this, "No se Pudo Añadir la Solicitud");
                     tablaProd.clearSelection();
@@ -846,8 +852,6 @@ public class Administracion extends javax.swing.JFrame {
     private javax.swing.JTextField tf_preCompra;
     // End of variables declaration//GEN-END:variables
 
-    private void Solicitar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
     //</editor-fold>
 }
